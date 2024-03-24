@@ -1,0 +1,11 @@
+.text-center {
+    text-align: center;
+    align-items: center;
+}
+
+.separator::before {
+    content: "";
+    display: block;
+    height: 10px;
+    margin: 20px 0;
+}
