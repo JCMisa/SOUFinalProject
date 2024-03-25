@@ -108,15 +108,23 @@ if(isset($_POST['submit'])){
                         <div class="form-group">
                             <label>College</label>
                             <select name="college" multiple class="custom-select" value="<?php echo $college_ac; ?>">
-                                <option value="COLLEGE OF COMPUTER STUDIES (CCS)">COLLEGE OF COMPUTER STUDIES (CCS)</option>
-                                <option value="COLLEGE OF ARTS AND SCIENCES (CAS)">COLLEGE OF ARTS AND SCIENCES (CAS)</option>
-                                <option value="COLLEGE OF BUSINESS, ADMINISTRATION AND ACCOUNTANCY (CBAA)">COLLEGE OF BUSINESS, ADMINISTRATION AND ACCOUNTANCY (CBAA)</option>
-                                <option value="COLLEGE OF CRIMINAL JUSTICE EDUCATION (CCJE)">COLLEGE OF CRIMINAL JUSTICE EDUCATION (CCJE)</option>
-                                <option value="COLLEGE OF ENGINEERING (COE)">COLLEGE OF ENGINEERING (COE)</option>
-                                <option value="COLLEGE OF HOSPITALITY MANAGEMENT AND TOURISM (CHMT)">COLLEGE OF HOSPITALITY MANAGEMENT AND TOURISM (CHMT)</option>
-                                <option value="COLLEGE OF INDUSTRIAL TECHNOLOGY (CIT)">COLLEGE OF INDUSTRIAL TECHNOLOGY (CIT)</option>
-                                <option value="COLLEGE OF TEACHER EDUCATION (CTE)">COLLEGE OF TEACHER EDUCATION (CTE)</option>
-                                <option value="SENIOR HIGH SCHOOL (SHS)">SENIOR HIGH SCHOOL (SHS)</option>
+                                <option value="COLLEGE OF COMPUTER STUDIES (CCS)" <?php if($college_ac === "COLLEGE OF COMPUTER STUDIES (CCS)") echo 'selected'; ?>>COLLEGE OF COMPUTER STUDIES (CCS)</option>
+
+                                <option value="COLLEGE OF ARTS AND SCIENCES (CAS)" <?php if($college_ac === "COLLEGE OF ARTS AND SCIENCES (CAS)") echo 'selected'; ?>>COLLEGE OF ARTS AND SCIENCES (CAS)</option>
+
+                                <option value="COLLEGE OF BUSINESS, ADMINISTRATION AND ACCOUNTANCY (CBAA)" <?php if($college_ac === "COLLEGE OF BUSINESS, ADMINISTRATION AND ACCOUNTANCY (CBAA)") echo 'selected'; ?>>COLLEGE OF BUSINESS, ADMINISTRATION AND ACCOUNTANCY (CBAA)</option>
+
+                                <option value="COLLEGE OF CRIMINAL JUSTICE EDUCATION (CCJE)" <?php if($college_ac === "COLLEGE OF CRIMINAL JUSTICE EDUCATION (CCJE)") echo 'selected'; ?>>COLLEGE OF CRIMINAL JUSTICE EDUCATION (CCJE)</option>
+
+                                <option value="COLLEGE OF ENGINEERING (COE)" <?php if($college_ac === "COLLEGE OF ENGINEERING (COE)") echo 'selected'; ?>>COLLEGE OF ENGINEERING (COE)</option>
+
+                                <option value="COLLEGE OF HOSPITALITY MANAGEMENT AND TOURISM (CHMT)" <?php if($college_ac === "COLLEGE OF HOSPITALITY MANAGEMENT AND TOURISM (CHMT)") echo 'selected'; ?>>COLLEGE OF HOSPITALITY MANAGEMENT AND TOURISM (CHMT)</option>
+
+                                <option value="COLLEGE OF INDUSTRIAL TECHNOLOGY (CIT)" <?php if($college_ac === "COLLEGE OF INDUSTRIAL TECHNOLOGY (CIT)") echo 'selected'; ?>>COLLEGE OF INDUSTRIAL TECHNOLOGY (CIT)</option>
+
+                                <option value="COLLEGE OF TEACHER EDUCATION (CTE)" <?php if($college_ac === "COLLEGE OF TEACHER EDUCATION (CTE)") echo 'selected'; ?>>COLLEGE OF TEACHER EDUCATION (CTE)</option>
+
+                                <option value="SENIOR HIGH SCHOOL (SHS)" <?php if($college_ac === "SENIOR HIGH SCHOOL (SHS)") echo 'selected'; ?>>SENIOR HIGH SCHOOL (SHS)</option>
                             </select>
                         </div>
                     </div>
@@ -124,24 +132,41 @@ if(isset($_POST['submit'])){
                         <div class="form-group">
                             <label>Academic Rank</label>
                             <select name="rank" multiple class="custom-select" value="<?php echo $rank_ac; ?>">
-                                <option value="Instructor I">Instructor I</option>
-                                <option value="Instructor II">Instructor II</option>
-                                <option value="Instructor	III">Instructor	III</option>
-                                <option value="Assistant Professor I">Assistant Professor I</option>
-                                <option value="Assistant Professor II">Assistant Professor II</option>
-                                <option value="Assistant Professor III">Assistant Professor III</option>
-                                <option value="Assistant Professor IV">Assistant Professor IV</option>
-                                <option value="Associate Professor I">Associate Professor I</option>
-                                <option value="Associate Professor II">Associate Professor II</option>
-                                <option value="Associate Professor III">Associate Professor III</option>
-                                <option value="Associate Professor IV">Associate Professor IV</option>
-                                <option value="Associate Professor V">Associate Professor V</option>
-                                <option value="Professor I">Professor I</option>
-                                <option value="Professor II">Professor II</option>
-                                <option value="Professor III">Professor III</option>
-                                <option value="Professor IV">Professor IV</option>
-                                <option value="Professor V">Professor V</option>
-                                <option value="Professor VI">Professor VI</option>
+                                <option value="Instructor I" <?php if($rank_ac === "Instructor I") echo 'selected'; ?>>Instructor I</option>
+
+                                <option value="Instructor II" <?php if($rank_ac === "Instructor II") echo 'selected'; ?>>Instructor II</option>
+                                
+                                <option value="Instructor III" <?php if($rank_ac === "Instructor III") echo 'selected'; ?>>Instructor III</option>
+
+                                <option value="Assistant Professor I" <?php if($rank_ac === "Assistant Professor I") echo 'selected'; ?>>Assistant Professor I</option>
+
+                                <option value="Assistant Professor II" <?php if($rank_ac === "Assistant Professor II") echo 'selected'; ?>>Assistant Professor II</option>
+
+                                <option value="Assistant Professor III" <?php if($rank_ac === "Assistant Professor III") echo 'selected'; ?>>Assistant Professor III</option>
+
+                                <option value="Assistant Professor IV" <?php if($rank_ac === "Assistant Professor IV") echo 'selected'; ?>>Assistant Professor IV</option>
+
+                                <option value="Associate Professor I" <?php if($rank_ac === "Associate Professor I") echo 'selected'; ?>>Associate Professor I</option>
+
+                                <option value="Associate Professor II" <?php if($rank_ac === "Associate Professor II") echo 'selected'; ?>>Associate Professor II</option>
+
+                                <option value="Associate Professor III" <?php if($rank_ac === "Associate Professor III") echo 'selected'; ?>>Associate Professor III</option>
+
+                                <option value="Associate Professor IV" <?php if($rank_ac === "Associate Professor IV") echo 'selected'; ?>>Associate Professor IV</option>
+
+                                <option value="Associate Professor V" <?php if($rank_ac === "Associate Professor V") echo 'selected'; ?>>Associate Professor V</option>
+
+                                <option value="Professor I" <?php if($rank_ac === "Professor I") echo 'selected'; ?>>Professor I</option>
+
+                                <option value="Professor II" <?php if($rank_ac === "Professor II") echo 'selected'; ?>>Professor II</option>
+
+                                <option value="Professor III" <?php if($rank_ac === "Professor III") echo 'selected'; ?>>Professor III</option>
+
+                                <option value="Professor IV" <?php if($rank_ac === "Professor IV") echo 'selected'; ?>>Professor IV</option>
+
+                                <option value="Professor V" <?php if($rank_ac === "Professor V") echo 'selected'; ?>>Professor V</option>
+
+                                <option value="Professor VI" <?php if($rank_ac === "Professor VI") echo 'selected'; ?>>Professor VI</option>
                             </select>
                         </div>
                     </div>
@@ -158,7 +183,7 @@ if(isset($_POST['submit'])){
 
                                 for ($year = $startYear; $year <= $endYear; $year++) {
                                     $isDisabled = ($year !== (int)$currentYear) ? 'disabled' : '';
-                                    echo "<option value=\"$year\" $isDisabled>$year</option>";
+                                    echo "<option selected value=\"$year\" $isDisabled>$year</option>";
                                 }
                                 ?>
                             </select>

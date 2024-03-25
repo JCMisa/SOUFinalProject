@@ -66,7 +66,56 @@ if(isset($_GET['details_id'])){
 
 
 <!-- doctype -->
-<?php include_once './reusable/head.php'; ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SOU Management System | Home</title>
+
+  
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../app/plugins/fontawesome-free/css/all.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="../app/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="../app/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="../app/plugins/jqvmap/jqvmap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../app/dist/css/adminlte.min.css">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="../app/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="../app/plugins/daterangepicker/daterangepicker.css">
+  <!-- summernote -->
+  <link rel="stylesheet" href="../app/plugins/summernote/summernote-bs4.min.css">
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <!-- datatables -->
+  <link rel="stylesheet" href="../app/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="../app/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="../app/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+  <style>
+    ul {
+        list-style-type: none;
+    }
+    
+    .header-container img{
+        width: 40px;
+        height: 40px;
+    }
+</style>
+</head>
+
+
+
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -105,102 +154,126 @@ if(isset($_GET['details_id'])){
             <section class="content">
                 <div class="card">
                     <div class="card-body row">
-                        <div class="col-5 text-center d-flex align-items-center justify-content-center">
+                        <div class="col-5">
                             <!-- commitment form, to be continued... -->
-                            <div class="container" id="commitment-container">
-                                <div class="sheet padding-10mm" id="commitment-body">
-                                    <div class="row justify-content-center position-relative" id="commitment-inner">
-                                        <div class="img-left position-absolute">
-                                            <img src="~/images/lspuLogo.png" alt="lspuLogo" class="image">
-                                        </div>
+                            <!-- <div class="container" id="commitment-container">
+                                <div class="row justify-content-center" id="commitment-inner">
+                                    <div class="img-left">
+                                        <img src="../images/lspuLogo.png" alt="lspuLogo" class="image" width="40px" height="40px">
+                                    </div>
 
-                                        <div class="col text-center">
+                                    <div class="row text-center mt-3">
+                                        <div class="col">
                                             <p class="text-sm">Republic of the Philippines</p>
                                             <h4 class="text-sm">Laguna State Polytechnic University</h4>
                                             <p class="text-sm">Province of Laguna</p>
                                         </div>
+                                    </div>
 
-                                        <div class="img-right position-absolute">
-                                            <img src="~/images/Bagong_Pilipinas_logo.png" alt="BPImage" class="image">
-                                        </div>
+                                    <div class="img-right">
+                                        <img src="../images/Bagong_Pilipinas_logo.png" alt="BPImage" class="image" width="40px" height="40px">
+                                    </div>
 
 
-                                        <div class="row text-center">
-                                            <h3 id="osas"><strong>Office of Student Affairs and Services</strong></h3>
-                                            <p><strong>COMMITMENT FORM</strong></p>
-                                        </div>
+                                    <div class="row text-center">
+                                        <h3 id="osas"><strong>Office of Student Affairs and Services</strong></h3>
+                                        <p><strong>COMMITMENT FORM</strong></p>
+                                    </div>
 
-                                        <div class="row text-start px-5">
-                                            <p><strong>THE DIRECTOR/CHAIRPERSON</strong></p>
-                                            <p><strong>OFFICE OF STUDENT AFFAIRS AND SERVICES</strong></p>
-                                            <p><strong>LSPU</strong></p>
+                                    <div class="row text-start px-5">
+                                        <p><strong>THE DIRECTOR/CHAIRPERSON</strong></p>
+                                        <p><strong>OFFICE OF STUDENT AFFAIRS AND SERVICES</strong></p>
+                                        <p><strong>LSPU</strong></p>
 
-                                            <p class="indent"><strong>Thru: The Coordinator, Student Organization Unit</strong></p>
+                                        <p class="indent"><strong>Thru: The Coordinator, Student Organization Unit</strong></p>
 
-                                            <p>Sir,</p>
-                                            <p class="indent">
-                                                This letter is in connection with the application for recognition of <span class="underline">
-                                                    @Model.OrganizationName
-                                                </span>
-                                                as a LSPU Student Organization. I, the undersigned, have committed to serve as the organizations Faculty
-                                                Adviser for the academic year @Model.SchoolYear - @(Model.SchoolYear+1), and will therefore assume full responsibility as provided in the guidelines for the recognition of student organizations.
-                                            </p>
-                                            <p class="indent">
-                                                Furthermore, I certify to the correctness and completeness of the documents attached to the organization
-                                                application for
-                                                recognition.
-                                            </p>
-                                        </div>
+                                        <p>Sir,</p>
+                                        <p class="indent">
+                                            This letter is in connection with the application for recognition of <span class="underline">
+                                                @Model.OrganizationName
+                                            </span>
+                                            as a LSPU Student Organization. I, the undersigned, have committed to serve as the organizations Faculty
+                                            Adviser for the academic year @Model.SchoolYear - @(Model.SchoolYear+1), and will therefore assume full responsibility as provided in the guidelines for the recognition of student organizations.
+                                        </p>
+                                        <p class="indent">
+                                            Furthermore, I certify to the correctness and completeness of the documents attached to the organization
+                                            application for
+                                            recognition.
+                                        </p>
+                                    </div>
 
-                                        <div class="container px-5">
-                                            <div class="d-flex justify-content-between">
-                                                <div class="align-self-end">
-                                                    <!-- Empty div for positioning -->
-                                                </div>
-                                                <div>
-                                                    <!-- Your content -->
-                                                    <div class="text-start  commitment-sign">
-                                                        <p><strong>Very respectfully yours,</strong></p>
+                                    <div class="container px-5">
+                                        <div class="d-flex justify-content-between">
+                                            <div class="align-self-end">
+                                            </div>
+                                            <div>
+                                                <div class="text-start  commitment-sign">
+                                                    <p><strong>Very respectfully yours,</strong></p>
 
-                                                        <div class="inputs">
-                                                            <p>Name: &nbsp; <span class="underline"> @Model.AdvicerName </span></p>
-                                                            <p>Signature: &nbsp; <span class="underline"> _______________ </span></p>
-                                                            <p>College: &nbsp; <span class="underline"> @Model.College.CollegeName </span></p>
-                                                            <p>Academic Rank: &nbsp; <span class="underline"> @Model.AcademicRank.RankName </span></p>
-                                                            <p>Home Address: &nbsp; <span class="underline"> @Model.HomeAddress </span></p>
+                                                    <div class="inputs">
+                                                        <p>Name: &nbsp; <span class="underline"> @Model.AdvicerName </span></p>
+                                                        <p>Signature: &nbsp; <span class="underline"> _______________ </span></p>
+                                                        <p>College: &nbsp; <span class="underline"> @Model.College.CollegeName </span></p>
+                                                        <p>Academic Rank: &nbsp; <span class="underline"> @Model.AcademicRank.RankName </span></p>
+                                                        <p>Home Address: &nbsp; <span class="underline"> @Model.HomeAddress </span></p>
 
-                                                            <p>Contact Number(s): &nbsp; <span class="underline"> @Model.ContactNo </span></p>
-                                                            <p>Date: &nbsp; <span class="underline"> _______________ </span></p>
-                                                        </div>
+                                                        <p>Contact Number(s): &nbsp; <span class="underline"> @Model.ContactNo </span></p>
+                                                        <p>Date: &nbsp; <span class="underline"> _______________ </span></p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="row text-start px-5">
-                                            <p>Noted:</p>
-                                            <p class="indent" id="noted">________________________</p>
-                                            <p class="indent">Dean.Assoc. Dean of College</p>
-                                        </div>
-
-                                        <div class="row text-center" id="coordinators">
-                                            <p>Recommending Approval:</p>
-                                            <p class="underline"><strong>AL JOHN A. VILLAREAL</strong></p>
-                                            <p>Coordinator, Student Organization Unit</p>
-
-                                            <p>Approved / Disapproved:</p>
-                                            <p class="underline"><strong>DR. ALBERTO B. CASTILLO</strong></p>
-                                            <p>Chairperson, Office of Student Affairs and Services</p>
-                                        </div>
-
-                                        <div class="container" id="commitment-footer">
-                                            <ul class="list-unstyled d-flex justify-content-between">
-                                                <li class="text-start">LSPU-OSAS-SF-003</li>
-                                                <li class="text-center">Rev.1</li>
-                                                <li class="text-end">09 November 2020</li>
-                                            </ul>
-                                        </div>
                                     </div>
+
+                                    <div class="row text-start px-5">
+                                        <p>Noted:</p>
+                                        <p class="indent" id="noted">________________________</p>
+                                        <p class="indent">Dean.Assoc. Dean of College</p>
+                                    </div>
+
+                                    <div class="row text-center" id="coordinators">
+                                        <p>Recommending Approval:</p>
+                                        <p class="underline"><strong>AL JOHN A. VILLAREAL</strong></p>
+                                        <p>Coordinator, Student Organization Unit</p>
+
+                                        <p>Approved / Disapproved:</p>
+                                        <p class="underline"><strong>DR. ALBERTO B. CASTILLO</strong></p>
+                                        <p>Chairperson, Office of Student Affairs and Services</p>
+                                    </div>
+
+                                    <div class="container" id="commitment-footer">
+                                        <ul class="list-unstyled d-flex justify-content-between">
+                                            <li class="text-start">LSPU-OSAS-SF-003</li>
+                                            <li class="text-center">Rev.1</li>
+                                            <li class="text-end">09 November 2020</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                            <div class="commitment-container">
+                                <div class="commitment-header text-center d-flex align-items-center justify-content-center">
+                                    <div class="header-container row">
+                                        <ul class="row">
+                                            <li><img src="../images/lspuLogo.png" alt="lspuLogo"></li>
+                                            <li class="mt-3">
+                                                <div class="col">
+                                                    <ul style="margin-left: -50px;">
+                                                        <li><?php echo $rank ?></li>
+                                                        <li><?php echo $college ?></li>
+                                                        <li><?php echo $year ?></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                            <li><img src="../images/Bagong_Pilipinas_logo.png" alt="lspuLogo"></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="commitmenr-body">
+
+                                </div>
+                                <div class="commitment-footer">
+
                                 </div>
                             </div>
                         </div>
@@ -229,15 +302,23 @@ if(isset($_GET['details_id'])){
                                             <div class="form-group">
                                                 <label>College</label>
                                                 <select name="college" multiple class="custom-select" value="<?php echo $college_ac; ?>">
-                                                    <option value="COLLEGE OF COMPUTER STUDIES (CCS)">COLLEGE OF COMPUTER STUDIES (CCS)</option>
-                                                    <option value="COLLEGE OF ARTS AND SCIENCES (CAS)">COLLEGE OF ARTS AND SCIENCES (CAS)</option>
-                                                    <option value="COLLEGE OF BUSINESS, ADMINISTRATION AND ACCOUNTANCY (CBAA)">COLLEGE OF BUSINESS, ADMINISTRATION AND ACCOUNTANCY (CBAA)</option>
-                                                    <option value="COLLEGE OF CRIMINAL JUSTICE EDUCATION (CCJE)">COLLEGE OF CRIMINAL JUSTICE EDUCATION (CCJE)</option>
-                                                    <option value="COLLEGE OF ENGINEERING (COE)">COLLEGE OF ENGINEERING (COE)</option>
-                                                    <option value="COLLEGE OF HOSPITALITY MANAGEMENT AND TOURISM (CHMT)">COLLEGE OF HOSPITALITY MANAGEMENT AND TOURISM (CHMT)</option>
-                                                    <option value="COLLEGE OF INDUSTRIAL TECHNOLOGY (CIT)">COLLEGE OF INDUSTRIAL TECHNOLOGY (CIT)</option>
-                                                    <option value="COLLEGE OF TEACHER EDUCATION (CTE)">COLLEGE OF TEACHER EDUCATION (CTE)</option>
-                                                    <option value="SENIOR HIGH SCHOOL (SHS)">SENIOR HIGH SCHOOL (SHS)</option>
+                                                    <option value="COLLEGE OF COMPUTER STUDIES (CCS)" <?php if($college_ac === "COLLEGE OF COMPUTER STUDIES (CCS)") echo 'selected'; ?>>COLLEGE OF COMPUTER STUDIES (CCS)</option>
+
+                                                    <option value="COLLEGE OF ARTS AND SCIENCES (CAS)" <?php if($college_ac === "COLLEGE OF ARTS AND SCIENCES (CAS)") echo 'selected'; ?>>COLLEGE OF ARTS AND SCIENCES (CAS)</option>
+
+                                                    <option value="COLLEGE OF BUSINESS, ADMINISTRATION AND ACCOUNTANCY (CBAA)" <?php if($college_ac === "COLLEGE OF BUSINESS, ADMINISTRATION AND ACCOUNTANCY (CBAA)") echo 'selected'; ?>>COLLEGE OF BUSINESS, ADMINISTRATION AND ACCOUNTANCY (CBAA)</option>
+
+                                                    <option value="COLLEGE OF CRIMINAL JUSTICE EDUCATION (CCJE)" <?php if($college_ac === "COLLEGE OF CRIMINAL JUSTICE EDUCATION (CCJE)") echo 'selected'; ?>>COLLEGE OF CRIMINAL JUSTICE EDUCATION (CCJE)</option>
+
+                                                    <option value="COLLEGE OF ENGINEERING (COE)" <?php if($college_ac === "COLLEGE OF ENGINEERING (COE)") echo 'selected'; ?>>COLLEGE OF ENGINEERING (COE)</option>
+
+                                                    <option value="COLLEGE OF HOSPITALITY MANAGEMENT AND TOURISM (CHMT)" <?php if($college_ac === "COLLEGE OF HOSPITALITY MANAGEMENT AND TOURISM (CHMT)") echo 'selected'; ?>>COLLEGE OF HOSPITALITY MANAGEMENT AND TOURISM (CHMT)</option>
+
+                                                    <option value="COLLEGE OF INDUSTRIAL TECHNOLOGY (CIT)" <?php if($college_ac === "COLLEGE OF INDUSTRIAL TECHNOLOGY (CIT)") echo 'selected'; ?>>COLLEGE OF INDUSTRIAL TECHNOLOGY (CIT)</option>
+
+                                                    <option value="COLLEGE OF TEACHER EDUCATION (CTE)" <?php if($college_ac === "COLLEGE OF TEACHER EDUCATION (CTE)") echo 'selected'; ?>>COLLEGE OF TEACHER EDUCATION (CTE)</option>
+
+                                                    <option value="SENIOR HIGH SCHOOL (SHS)" <?php if($college_ac === "SENIOR HIGH SCHOOL (SHS)") echo 'selected'; ?>>SENIOR HIGH SCHOOL (SHS)</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -245,24 +326,41 @@ if(isset($_GET['details_id'])){
                                             <div class="form-group">
                                                 <label>Academic Rank</label>
                                                 <select name="rank" multiple class="custom-select" value="<?php echo $rank_ac; ?>">
-                                                    <option value="Instructor I">Instructor I</option>
-                                                    <option value="Instructor II">Instructor II</option>
-                                                    <option value="Instructor	III">Instructor	III</option>
-                                                    <option value="Assistant Professor I">Assistant Professor I</option>
-                                                    <option value="Assistant Professor II">Assistant Professor II</option>
-                                                    <option value="Assistant Professor III">Assistant Professor III</option>
-                                                    <option value="Assistant Professor IV">Assistant Professor IV</option>
-                                                    <option value="Associate Professor I">Associate Professor I</option>
-                                                    <option value="Associate Professor II">Associate Professor II</option>
-                                                    <option value="Associate Professor III">Associate Professor III</option>
-                                                    <option value="Associate Professor IV">Associate Professor IV</option>
-                                                    <option value="Associate Professor V">Associate Professor V</option>
-                                                    <option value="Professor I">Professor I</option>
-                                                    <option value="Professor II">Professor II</option>
-                                                    <option value="Professor III">Professor III</option>
-                                                    <option value="Professor IV">Professor IV</option>
-                                                    <option value="Professor V">Professor V</option>
-                                                    <option value="Professor VI">Professor VI</option>
+                                                    <option value="Instructor I" <?php if($rank_ac === "Instructor I") echo 'selected'; ?>>Instructor I</option>
+
+                                                    <option value="Instructor II" <?php if($rank_ac === "Instructor II") echo 'selected'; ?>>Instructor II</option>
+                                                    
+                                                    <option value="Instructor III" <?php if($rank_ac === "Instructor III") echo 'selected'; ?>>Instructor III</option>
+
+                                                    <option value="Assistant Professor I" <?php if($rank_ac === "Assistant Professor I") echo 'selected'; ?>>Assistant Professor I</option>
+
+                                                    <option value="Assistant Professor II" <?php if($rank_ac === "Assistant Professor II") echo 'selected'; ?>>Assistant Professor II</option>
+
+                                                    <option value="Assistant Professor III" <?php if($rank_ac === "Assistant Professor III") echo 'selected'; ?>>Assistant Professor III</option>
+
+                                                    <option value="Assistant Professor IV" <?php if($rank_ac === "Assistant Professor IV") echo 'selected'; ?>>Assistant Professor IV</option>
+
+                                                    <option value="Associate Professor I" <?php if($rank_ac === "Associate Professor I") echo 'selected'; ?>>Associate Professor I</option>
+
+                                                    <option value="Associate Professor II" <?php if($rank_ac === "Associate Professor II") echo 'selected'; ?>>Associate Professor II</option>
+
+                                                    <option value="Associate Professor III" <?php if($rank_ac === "Associate Professor III") echo 'selected'; ?>>Associate Professor III</option>
+
+                                                    <option value="Associate Professor IV" <?php if($rank_ac === "Associate Professor IV") echo 'selected'; ?>>Associate Professor IV</option>
+
+                                                    <option value="Associate Professor V" <?php if($rank_ac === "Associate Professor V") echo 'selected'; ?>>Associate Professor V</option>
+
+                                                    <option value="Professor I" <?php if($rank_ac === "Professor I") echo 'selected'; ?>>Professor I</option>
+
+                                                    <option value="Professor II" <?php if($rank_ac === "Professor II") echo 'selected'; ?>>Professor II</option>
+
+                                                    <option value="Professor III" <?php if($rank_ac === "Professor III") echo 'selected'; ?>>Professor III</option>
+
+                                                    <option value="Professor IV" <?php if($rank_ac === "Professor IV") echo 'selected'; ?>>Professor IV</option>
+
+                                                    <option value="Professor V" <?php if($rank_ac === "Professor V") echo 'selected'; ?>>Professor V</option>
+
+                                                    <option value="Professor VI" <?php if($rank_ac === "Professor VI") echo 'selected'; ?>>Professor VI</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -279,7 +377,7 @@ if(isset($_GET['details_id'])){
 
                                                     for ($year = $startYear; $year <= $endYear; $year++) {
                                                         $isDisabled = ($year !== (int)$currentYear) ? 'disabled' : '';
-                                                        echo "<option value=\"$year\" $isDisabled>$year</option>";
+                                                        echo "<option selected value=\"$year\" $isDisabled>$year</option>";
                                                     }
                                                     ?>
                                                 </select>
