@@ -8,8 +8,8 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
 
    $name = mysqli_real_escape_string($conn, $_POST['name']);
    $email = mysqli_real_escape_string($conn, $_POST['email']); //real_esape is used to escape any special characters
-   $pass = md5($_POST['password']); //md5 is used to convert the password value to a hash code
-   $cpass = md5($_POST['cpassword']);
+   $pass = $_POST['password'];
+   $cpass = $_POST['cpassword'];
    $user_type = $_POST['user_type'];
 
    $select = " SELECT * FROM user_tbl WHERE email = '$email' && password = '$pass' ";
@@ -109,9 +109,10 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
           </div>
         </div>
 
+        <!-- default is user role -->
         <div class="input-group mb-3">
-          <select name="user_type">
-            <option value="user">user</option>
+          <select name="user_type" hidden>
+            <option value="user" selected>user</option>
             <option value="admin">admin</option>
             <option value="super_admin">super admin</option>
           </select>

@@ -14,9 +14,16 @@
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">List</a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Manage</a>
-      </li>
+      <?php
+      if($user_type === 'super_admin')
+      {
+        echo <<<MANAGE
+          <li class="nav-item d-none d-sm-inline-block">
+            <a href="./manage_user.php" class="nav-link">Manage</a>
+          </li>
+        MANAGE;
+      }
+      ?>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="./identity/logout.php" class="nav-link">Logout</a>
       </li>

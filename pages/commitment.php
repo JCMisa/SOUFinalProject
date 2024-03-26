@@ -41,6 +41,11 @@ if(isset($_POST['submit'])){
     }
 };
 
+if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
+  $user_type = $_SESSION['user_type'];
+  $user_name = $_SESSION['user_name'];
+}
+
 ?>
 
 
@@ -70,7 +75,21 @@ if(isset($_POST['submit'])){
             <div class="container-fluid">
                 <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Commitment Form</h1>
+                    <!-- go back button -->
+                    <div class="row">
+                        <a href="./index.php" class="button">
+                            <div class="button-box">
+                                <span class="button-elem">
+                                <i class="bi bi-arrow-right"></i>
+                                </span>
+                                <span class="button-elem">
+                                <i class="bi bi-arrow-right"></i>
+                                </span>
+                            </div>
+                        </a>
+
+                        <h1 class="m-0">Commitment Form</h1>
+                    </div>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
