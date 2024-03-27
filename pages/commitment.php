@@ -16,6 +16,7 @@ if(isset($_POST['submit'])){
     $college = mysqli_real_escape_string($conn, $_POST['college']);
     $rank = mysqli_real_escape_string($conn, $_POST['rank']);
     $year = $_POST['year'];
+    $status = $_POST['status'];
     $commitment_user_id = $user_id;
 
     
@@ -26,6 +27,8 @@ if(isset($_POST['submit'])){
     if(mysqli_num_rows($result) > 0){ //means there is an existing record where user_id = commitment_user_id and year = current year
 
         $error[] = 'You already submmited a commitment form for this year.';
+        header('location:./error_pages/conflict.php');
+        die();
         //$row = mysqli_fetch_array($result); //get the records that satisfy the result
 
         // $_SESSION['user_id'] = $row['id'];
@@ -34,7 +37,7 @@ if(isset($_POST['submit'])){
         // header('location:../index.php');
         // die();
     }else{
-        $insert = "INSERT INTO commitment_tbl(organization, adviser, address, contact, college, rank, year, user_id) VALUES('$organization','$adviser','$address','$contact','$college','$rank','$year',$commitment_user_id);";
+        $insert = "INSERT INTO commitment_tbl(organization, adviser, address, contact, college, rank, year, user_id, status) VALUES('$organization','$adviser','$address','$contact','$college','$rank','$year',$commitment_user_id,'$status');";
         mysqli_query($conn, $insert);
         header('location:./commitment.php');
         die();
@@ -121,6 +124,9 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                 <div class="form-group">
                     <label for="contact">Contact No.</label>
                     <input type="text" name="contact" class="form-control" id="contact" placeholder="Contact No.">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="status" class="form-control" id="status" placeholder="Current Status" value="pending" hidden>
                 </div>
                 
                 <div class="row">
@@ -232,6 +238,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                             <th>College</th>
                             <th>Academic Rank</th>
                             <th>Academic Year</th>
+                            <th>Status</th>
                             <th>View</th>
                             <th>Edit</th>
                             <th>Delete</th>
@@ -241,8 +248,15 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                         <?php
                             $select_id = " SELECT * FROM commitment_tbl; "; 
                             $result_id = mysqli_query($conn, $select_id);
-                            $row_id = mysqli_fetch_assoc($result_id);
-                            $id = $row_id['id'];
+                            $result_id_count = mysqli_num_rows($result_id);
+                            if($result_id_count > 0){
+                                $row_id = mysqli_fetch_assoc($result_id);
+                                $id = $row_id['id'];
+                            }
+                            else{
+                                $error[] = 'No record available';
+                            }
+                            
 
                             $current_year = (new DateTime)->format("Y");
                             $commitment_user_id = $user_id;
@@ -262,6 +276,18 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                         <td> <?php echo $row['college'] ?> </td>
                                         <td> <?php echo $row['rank'] ?> </td>
                                         <td> <?php echo $row['year'] ?> </td>
+                                        <td> 
+                                            <?php 
+                                                if(strtolower($row['status']) === 'pending')
+                                                {
+                                                    echo '<button type="button" class="btn btn-block bg-gradient-warning btn-sm">PENDING</button>';
+                                                } else if(strtolower($row['status']) === 'success'){
+                                                    echo '<button type="button" class="btn btn-block bg-gradient-success btn-sm"> SUCCESS </button>';
+                                                } else {
+                                                    echo '<button type="button" class="btn btn-block bg-gradient-danger btn-sm">FAILED</button>';
+                                                }
+                                            ?> 
+                                        </td>
                                         <td> <a href="./details_commitment.php?details_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-warning"> View </a> </td>
                                         <td> <a href="./update_commitment.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
                                         <td> <a href="./delete_commitment.php?delete_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-danger"> Delete </a> </td>
@@ -280,6 +306,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                             <th>College</th>
                             <th>Academic Rank</th>
                             <th>Academic Year</th>
+                            <th>Status</th>
                             <th>View</th>
                             <th>Edit</th>
                             <th>Delete</th>

@@ -27,10 +27,9 @@
 <script src="../app/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../app/dist/js/adminlte.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="../app/dist/js/demo.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="../app/dist/js/pages/dashboard.js"></script>
+<!-- custom js -->
+<script src="../js/graphs.js"></script>
+<script src="../js/customize.js"></script>
 
 <!-- datatables -->
 <script src="../app/plugins/datatables/jquery.dataTables.min.js"></script>

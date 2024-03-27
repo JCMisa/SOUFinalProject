@@ -93,6 +93,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
             
             <!-- form -->
             <form action="" method="post">
+                <h5 class="m-0">Create Account</h5>
             <div class="card-body">
                 <div class="form-group">
                     <label for="name">Name</label>
@@ -179,7 +180,6 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th>ID</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Password</th>

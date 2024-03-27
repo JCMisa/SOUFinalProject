@@ -176,13 +176,13 @@ $(function () {
   var pieChartCanvas = $('#sales-chart-canvas').get(0).getContext('2d')
   var pieData = {
     labels: [
-      'Instore Sales',
-      'Download Sales',
-      'Mail-Order Sales'
+      'User',
+      'Admin',
+      'Super Admin'
     ],
     datasets: [
       {
-        data: [30, 12, 20],
+        data: [10, 10, 10],
         backgroundColor: ['#f56954', '#00a65a', '#f39c12']
       }
     ]

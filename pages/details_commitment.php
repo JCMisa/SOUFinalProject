@@ -19,6 +19,7 @@ $contact_ac = $row['contact'];
 $college_ac = $row['college'];
 $rank_ac = $row['rank'];
 $year_ac = $row['year'];
+$status_ac = $row['status'];
 
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
@@ -29,8 +30,9 @@ if(isset($_POST['submit'])){
     $rank = mysqli_real_escape_string($conn, $_POST['rank']);
     $year = $_POST['year'];
     $commitment_user_id = $user_id;
+    $status = $_POST['status'];
 
-    $query = " UPDATE commitment_tbl SET id = $id, organization = '$organization', adviser = '$adviser', address = '$address', contact = '$contact', college = '$college', rank = '$rank', year = '$year' WHERE id = $id; "; 
+    $query = " UPDATE commitment_tbl SET id = $id, organization = '$organization', adviser = '$adviser', address = '$address', contact = '$contact', college = '$college', rank = '$rank', year = '$year', status = '$status' WHERE id = $id; "; 
     $result = mysqli_query($conn, $query);
 
     if($result){
@@ -59,6 +61,7 @@ if(isset($_GET['details_id'])){
     $college = $row['college'];
     $rank = $row['rank'];
     $year = $row['year'];
+    $status = $row['status'];
 }
 
 if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
@@ -270,6 +273,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                         <input type="text" name="contact" class="form-control" id="contact" placeholder="Contact No." value="<?php echo $contact_ac; ?>">
                                     </div>
                                     
+                                    
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
@@ -360,6 +364,24 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                         <div class="form-group">
                                             <input name="commitment_user_id" value="<?php echo $user_id; ?>" class="form-control" id="user_id" disabled hidden>
                                         </div>
+
+                                        <?php
+                                        if($user_type === 'super_admin')
+                                        {
+                                            echo <<<SHOWSTATUS
+                                                <div class="form-group">
+                                                    <label for="status">Status</label>
+                                                    <input type="text" name="status" class="form-control" id="status" value="$status_ac">
+                                                </div>
+                                            SHOWSTATUS;
+                                        } else {
+                                            echo <<<SHOWSTATUS
+                                                <div class="form-group">
+                                                    <input type="text" name="status" class="form-control" id="status" value="$status_ac" hidden>
+                                                </div>
+                                            SHOWSTATUS;
+                                        }
+                                        ?>
                                     </div>
                                 </div>
 

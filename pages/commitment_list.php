@@ -1,0 +1,164 @@
+<?php
+    @include '../configurations/config.php';
+    session_start();
+
+
+    if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
+    $user_type = $_SESSION['user_type'];
+    $user_name = $_SESSION['user_name'];
+}
+?>
+
+<!-- doctype -->
+<?php include_once './reusable/head.php'; ?>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+
+        <!-- Preloader -->
+        <?php include_once './reusable/preloader.php'; ?>
+
+        <!-- Navbar -->
+        <?php include_once './reusable/topNav.php'; ?>
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        <?php include_once './reusable/sideNav.php'; ?>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                <div class="col-sm-6">
+                    <!-- go back button -->
+                    <div class="row">
+                        <a href="./index.php" class="button">
+                            <div class="button-box">
+                                <span class="button-elem">
+                                <i class="bi bi-arrow-right"></i>
+                                </span>
+                                <span class="button-elem">
+                                <i class="bi bi-arrow-right"></i>
+                                </span>
+                            </div>
+                        </a>
+
+                        <h1 class="m-0">Commitment List</h1>
+                    </div>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="./commitment.php">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                    </ol>
+                </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content-header -->
+            
+            <!-- Main content -->
+
+            <!-- table -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Commitment List</h3>
+                </div>
+
+                <div class="card-body">
+                    <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Organization</th>
+                                <th>Adviser</th>
+                                <th>Address</th>
+                                <th>Contact</th>
+                                <th>College</th>
+                                <th>Academic Rank</th>
+                                <th>Academic Year</th>
+                                <th>Status</th>
+                                <th>View</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                $select = " SELECT * FROM commitment_tbl; "; 
+                                $result = mysqli_query($conn, $select);
+                                $result_count = mysqli_num_rows($result);
+
+                                $isDisabled = ($user_type !== 'super_admin') ? 'disabled' : '';
+
+                                if($result_count > 0)
+                                {
+                                    while($row = mysqli_fetch_assoc($result))
+                                    {
+                            ?>
+                                <tr>
+                                    <td> <?php echo $row['organization'] ?> </td>
+                                    <td> <?php echo $row['adviser'] ?> </td>
+                                    <td> <?php echo $row['address'] ?> </td>
+                                    <td> <?php echo $row['contact'] ?> </td>
+                                    <td> <?php echo $row['college'] ?> </td>
+                                    <td> <?php echo $row['rank'] ?> </td>
+                                    <td> <?php echo $row['year'] ?> </td>
+                                    <td> 
+                                        <?php 
+                                            if(strtolower($row['status']) === 'pending')
+                                            {
+                                                echo '<button type="button" class="btn btn-block bg-gradient-warning btn-sm">PENDING</button>';
+                                            } else if(strtolower($row['status']) === 'success'){
+                                                echo '<button type="button" class="btn btn-block bg-gradient-success btn-sm"> SUCCESS </button>';
+                                            } else {
+                                                echo '<button type="button" class="btn btn-block bg-gradient-danger btn-sm">FAILED</button>';
+                                            }
+                                        ?> 
+                                    </td>
+                                    <td> <a href="./details_commitment.php?details_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-warning <?php echo $isDisabled ?>"> View </a> </td>
+                                    <td> <a href="./update_commitment.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-info <?php echo $isDisabled ?>"> Edit </a> </td>
+                                    <td> <a href="./delete_commitment.php?delete_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-danger <?php echo $isDisabled ?>"> Delete </a> </td>
+                                </tr>
+                            <?php
+                                    }
+                                }
+                            ?>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Organization</th>
+                                <th>Adviser</th>
+                                <th>Address</th>
+                                <th>Contact</th>
+                                <th>College</th>
+                                <th>Academic Rank</th>
+                                <th>Academic Year</th>
+                                <th>Status</th>
+                                <th>View</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        <!-- footer -->
+        <?php include_once './reusable/footer.php'; ?>
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+
+    <!-- jQuery -->
+    <?php include_once './reusable/jquery.php'; ?>
+</body>
+</html>

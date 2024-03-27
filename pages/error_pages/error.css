@@ -1,0 +1,129 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    padding-top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #c9d7ec;
+}
+
+nav {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+}
+
+nav .nav__logo .logo_link {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: rgb(30, 103, 172);
+    text-decoration: none;
+}
+
+.container {
+    max-width: 400px;
+    padding: 2rem;
+    margin: auto;
+    display: grid;
+    color: rgb(30, 103, 172);
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.header h1 {
+    font-size: 4rem;
+    font-weight: 900;
+}
+
+.container h3 {
+    font-size: 2rem;
+    font-weight: 900;
+}
+
+.container img {
+    width: 80%;
+    height: 80%;
+    max-width: 300px;
+    max-height: 300px;
+    margin: auto;
+}
+
+.footer {
+    display: grid;
+    gap: 2rem;
+    place-content: baseline;
+}
+
+.footer p {
+    font-variation-settings: 1rem;
+}
+
+.footer .button {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    color: rgb(244, 244, 244);
+    font-size: 1rem;
+    font-weight: 600;
+    background-color: rgb(30, 103, 172);
+    cursor: pointer;
+    transition: .3s;
+}
+
+.footer .button:hover {
+    background-color: rgb(4, 18, 107);
+}
+
+@media (min-width: 640px) {
+    nav {
+        max-width: 1000px;
+    }
+
+    .container {
+        max-width: 1200px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+
+    .container img {
+        max-width: 550px;
+        grid-area: 1/1/3/2;
+    }
+
+    .footer {
+        max-width: 300px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .container {
+        column-gap: 5rem;
+    }
+
+    .header h1 {
+        font-size: 6rem;
+    }
+
+    .header h3 {
+        font-size: 2.5rem;
+    }
+}

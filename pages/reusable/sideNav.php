@@ -84,59 +84,73 @@
             </ul>
           </li>
           <!-- lists sidebar menu -->
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Tables
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="pages/tables/simple.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Application List</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/tables/data.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Renewal List</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/tables/jsgrid.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Commitment List</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/tables/jsgrid.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Plans of Activities List</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+          <?php 
+            if($user_type === 'super_admin' || $user_type === 'admin')
+            {
+              echo <<<LIST
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-table"></i>
+                    <p>
+                      List
+                      <i class="fas fa-angle-left right"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                      <a href="pages/tables/simple.html" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Application List</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="pages/tables/data.html" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Renewal List</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="./commitment_list.php" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Commitment List</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="pages/tables/jsgrid.html" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Plans of Activities List</p>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              LIST;
+            }
+          ?>
           <!-- manage sidebar menu -->
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-copy"></i>
-              <p>
-                Manage
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="pages/layout/top-nav.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>User Accounts</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+          <?php
+            if($user_type === 'super_admin')
+            {
+              echo <<<MANAGE
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-copy"></i>
+                    <p>
+                      Manage
+                      <i class="fas fa-angle-left right"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                      <a href="./manage_user.php" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>User Accounts</p>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              MANAGE;
+            }
+          ?>
           <!-- charts sidebar menu -->
           <li class="nav-item">
             <a href="#" class="nav-link">

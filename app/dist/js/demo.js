@@ -54,7 +54,7 @@
   // Checkboxes
 
   $container.append(
-    '<h5>Customize AdminLTE</h5><hr class="mb-2"/>'
+    '<h5>Customize</h5><hr class="mb-2"/>'
   )
 
   var $dark_mode_checkbox = $('<input />', {
@@ -88,20 +88,7 @@
   var $header_fixed_container = $('<div />', { class: 'mb-1' }).append($header_fixed_checkbox).append('<span>Fixed</span>')
   $container.append($header_fixed_container)
 
-  var $dropdown_legacy_offset_checkbox = $('<input />', {
-    type: 'checkbox',
-    value: 1,
-    checked: $('.main-header').hasClass('dropdown-legacy'),
-    class: 'mr-1'
-  }).on('click', function () {
-    if ($(this).is(':checked')) {
-      $('.main-header').addClass('dropdown-legacy')
-    } else {
-      $('.main-header').removeClass('dropdown-legacy')
-    }
-  })
-  var $dropdown_legacy_offset_container = $('<div />', { class: 'mb-1' }).append($dropdown_legacy_offset_checkbox).append('<span>Dropdown Legacy Offset</span>')
-  $container.append($dropdown_legacy_offset_container)
+
 
   var $no_border_checkbox = $('<input />', {
     type: 'checkbox',
