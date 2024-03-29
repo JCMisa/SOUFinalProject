@@ -50,7 +50,7 @@ if(isset($_GET['details_id'])){
     $name = $row['name'];
     $email = $row['email'];
     $pass = $row['password'];
-    $user_type = $row['user_type'];
+    $user_role = $row['user_type'];
 }
 
 if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
@@ -62,7 +62,14 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
 
 
 <!-- doctype -->
-<?php include_once './reusable/head.php'; ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SOU Management System</title>
+    <?php include_once './reusable/head.php'; ?>
+</head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -120,7 +127,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                             <p>Account Name: <?php echo $name ?></p>
                             <p>Account Email: <?php echo $email ?></p>
                             <p>Account Password: <?php echo $pass ?></p>
-                            <p>Account Role: <?php echo $user_type ?></p>
+                            <p>Account Role: <?php echo $user_role ?></p>
                         </div>
 
                         <div class="col-7">

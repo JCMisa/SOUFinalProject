@@ -9,35 +9,29 @@ if(isset($_SESSION['user_id'])){
 
 $id = $_GET['update_id'];
 
-$sql = " SELECT * FROM commitment_tbl WHERE id = $id; ";
+$sql = " SELECT * FROM renewal_tbl WHERE id = $id; ";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
 
 $organization_ac = $row['organization'];
-$adviser_ac = $row['adviser'];
-$address_ac = $row['address'];
-$contact_ac = $row['contact'];
 $college_ac = $row['college'];
-$rank_ac = $row['rank'];
 $year_ac = $row['year'];
+$president_ac = $row['president'];
 $status_ac = $row['status'];
 
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
-    $adviser = mysqli_real_escape_string($conn, $_POST['adviser']);
-    $address = mysqli_real_escape_string($conn, $_POST['address']);
-    $contact = mysqli_real_escape_string($conn, $_POST['contact']);
     $college = mysqli_real_escape_string($conn, $_POST['college']);
-    $rank = mysqli_real_escape_string($conn, $_POST['rank']);
     $year = $_POST['year'];
-    $commitment_user_id = $user_id;
+    $president = mysqli_real_escape_string($conn, $_POST['president']);
     $status = $_POST['status'];
+    $renewal_user_id = $user_id;
 
-    $query = " UPDATE commitment_tbl SET id = $id, organization = '$organization', adviser = '$adviser', address = '$address', contact = '$contact', college = '$college', rank = '$rank', year = '$year', status = '$status' WHERE id = $id; "; 
+    $query = " UPDATE renewal_tbl SET id = $id, organization = '$organization', college = '$college', year = '$year', president = '$president', status = '$status' WHERE id = $id; "; 
     $result = mysqli_query($conn, $query);
 
     if($result){
-        header('location:./commitment.php');
+        header('location:./renewal.php');
         die();
     }else{
         die('Connect Error (' . mysqli_connect_errno() . ') '. mysqli_connect_error());
@@ -85,7 +79,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                     <div class="col-sm-6">
                         <!-- go back button -->
                         <div class="row">
-                            <a href="./commitment.php" class="button">
+                            <a href="./renewal.php" class="button">
                                 <div class="button-box">
                                     <span class="button-elem">
                                     <i class="bi bi-arrow-right"></i>
@@ -96,7 +90,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                 </div>
                             </a>
                             
-                            <h1 class="m-0">Update Commitment Form</h1>
+                            <h1 class="m-0">Update Renewal Form</h1>
                         </div>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
@@ -119,18 +113,26 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                     <input type="text" name="organization" class="form-control" id="org" placeholder="Organization Name" value="<?php echo $organization_ac; ?>">
                 </div>
                 <div class="form-group">
-                    <label for="adviser">Adviser Name</label>
-                    <input type="text" name="adviser" class="form-control" id="adviser" placeholder="Adviser Name" value="<?php echo $adviser_ac; ?>">
+                    <label for="president">President Name</label>
+                    <input type="text" name="president" class="form-control" id="president" placeholder="Organization President Name" value="<?php echo $president_ac; ?>">
                 </div>
-                <div class="form-group">
-                    <label for="address">Home Address</label>
-                    <input type="text" name="address" class="form-control" id="address" placeholder="Home Address" value="<?php echo $address_ac; ?>">
-                </div>
-                <div class="form-group">
-                    <label for="contact">Contact No.</label>
-                    <input type="text" name="contact" class="form-control" id="contact" placeholder="Contact No." value="<?php echo $contact_ac; ?>">
-                </div>
-                
+                <?php
+                if($user_type === 'super_admin')
+                {
+                    echo <<<SHOWSTATUS
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <input type="text" name="status" class="form-control" id="status" value="$status_ac">
+                        </div>
+                    SHOWSTATUS;
+                } else {
+                    echo <<<SHOWSTATUS
+                        <div class="form-group">
+                            <input type="text" name="status" class="form-control" id="status" value="$status_ac" hidden>
+                        </div>
+                    SHOWSTATUS;
+                }
+                ?>
                 
                 <div class="row">
                     <div class="col-sm-6">
@@ -159,50 +161,6 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label>Academic Rank</label>
-                            <select name="rank" multiple class="custom-select" value="<?php echo $rank_ac; ?>">
-                                <option value="Instructor I" <?php if($rank_ac === "Instructor I") echo 'selected'; ?>>Instructor I</option>
-
-                                <option value="Instructor II" <?php if($rank_ac === "Instructor II") echo 'selected'; ?>>Instructor II</option>
-                                
-                                <option value="Instructor III" <?php if($rank_ac === "Instructor III") echo 'selected'; ?>>Instructor III</option>
-
-                                <option value="Assistant Professor I" <?php if($rank_ac === "Assistant Professor I") echo 'selected'; ?>>Assistant Professor I</option>
-
-                                <option value="Assistant Professor II" <?php if($rank_ac === "Assistant Professor II") echo 'selected'; ?>>Assistant Professor II</option>
-
-                                <option value="Assistant Professor III" <?php if($rank_ac === "Assistant Professor III") echo 'selected'; ?>>Assistant Professor III</option>
-
-                                <option value="Assistant Professor IV" <?php if($rank_ac === "Assistant Professor IV") echo 'selected'; ?>>Assistant Professor IV</option>
-
-                                <option value="Associate Professor I" <?php if($rank_ac === "Associate Professor I") echo 'selected'; ?>>Associate Professor I</option>
-
-                                <option value="Associate Professor II" <?php if($rank_ac === "Associate Professor II") echo 'selected'; ?>>Associate Professor II</option>
-
-                                <option value="Associate Professor III" <?php if($rank_ac === "Associate Professor III") echo 'selected'; ?>>Associate Professor III</option>
-
-                                <option value="Associate Professor IV" <?php if($rank_ac === "Associate Professor IV") echo 'selected'; ?>>Associate Professor IV</option>
-
-                                <option value="Associate Professor V" <?php if($rank_ac === "Associate Professor V") echo 'selected'; ?>>Associate Professor V</option>
-
-                                <option value="Professor I" <?php if($rank_ac === "Professor I") echo 'selected'; ?>>Professor I</option>
-
-                                <option value="Professor II" <?php if($rank_ac === "Professor II") echo 'selected'; ?>>Professor II</option>
-
-                                <option value="Professor III" <?php if($rank_ac === "Professor III") echo 'selected'; ?>>Professor III</option>
-
-                                <option value="Professor IV" <?php if($rank_ac === "Professor IV") echo 'selected'; ?>>Professor IV</option>
-
-                                <option value="Professor V" <?php if($rank_ac === "Professor V") echo 'selected'; ?>>Professor V</option>
-
-                                <option value="Professor VI" <?php if($rank_ac === "Professor VI") echo 'selected'; ?>>Professor VI</option>
-                            </select>
-                        </div>
-                    </div>
-
-                   
-                    <div class="col-sm-6">
-                        <div class="form-group">
                             <label>Academic Year</label>
                             <select name="year" multiple class="custom-select" value="<?php echo $year_ac; ?>">
                                 <?php
@@ -220,39 +178,9 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                     </div>
 
                     <div class="form-group">
-                        <input name="commitment_user_id" value="<?php echo $user_id; ?>" class="form-control" id="user_id" disabled hidden>
+                        <input name="renewal_user_id" value="<?php echo $user_id; ?>" class="form-control" id="user_id" disabled hidden>
                     </div>
-
-                    <?php
-                    if($user_type === 'super_admin')
-                    {
-                        echo <<<SHOWSTATUS
-                            <div class="form-group">
-                                <label for="status">Status</label>
-                                <input type="text" name="status" class="form-control" id="status" value="$status_ac">
-                            </div>
-                        SHOWSTATUS;
-                    } else {
-                        echo <<<SHOWSTATUS
-                            <div class="form-group">
-                                <input type="text" name="status" class="form-control" id="status" value="$status_ac" hidden>
-                            </div>
-                        SHOWSTATUS;
-                    }
-                    ?>
                 </div>
-                <!-- <div class="form-group">
-                    <label for="exampleInputFile">File input</label>
-                    <div class="input-group">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="exampleInputFile">
-                            <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                        </div>
-                        <div class="input-group-append">
-                            <span class="input-group-text">Upload</span>
-                        </div>
-                    </div>
-                </div> -->
             </div>
 
             <div class="card-footer">

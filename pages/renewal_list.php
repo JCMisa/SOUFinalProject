@@ -52,7 +52,7 @@
                             </div>
                         </a>
 
-                        <h1 class="m-0">Commitment List</h1>
+                        <h1 class="m-0">Renewal List</h1>
                     </div>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
@@ -71,7 +71,7 @@
             <!-- table -->
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Commitment List</h3>
+                    <h3 class="card-title">Renewal List</h3>
                 </div>
 
                 <div class="card-body">
@@ -79,12 +79,9 @@
                         <thead>
                             <tr>
                                 <th>Organization</th>
-                                <th>Adviser</th>
-                                <th>Address</th>
-                                <th>Contact</th>
                                 <th>College</th>
-                                <th>Academic Rank</th>
                                 <th>Academic Year</th>
+                                <th>President</th>
                                 <th>Status</th>
                                 <th>View</th>
                                 <th>Edit</th>
@@ -93,7 +90,7 @@
                         </thead>
                         <tbody>
                             <?php
-                                $select = " SELECT * FROM commitment_tbl; "; 
+                                $select = " SELECT * FROM renewal_tbl; "; 
                                 $result = mysqli_query($conn, $select);
                                 $result_count = mysqli_num_rows($result);
 
@@ -106,12 +103,9 @@
                             ?>
                                 <tr>
                                     <td> <?php echo $row['organization'] ?> </td>
-                                    <td> <?php echo $row['adviser'] ?> </td>
-                                    <td> <?php echo $row['address'] ?> </td>
-                                    <td> <?php echo $row['contact'] ?> </td>
                                     <td> <?php echo $row['college'] ?> </td>
-                                    <td> <?php echo $row['rank'] ?> </td>
                                     <td> <?php echo $row['year'] ?> </td>
+                                    <td> <?php echo $row['president'] ?> </td>
                                     <td> 
                                         <?php 
                                             if(strtolower($row['status']) === 'pending')
@@ -124,9 +118,9 @@
                                             }
                                         ?> 
                                     </td>
-                                    <td> <a href="./details_commitment.php?details_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-warning <?php echo $isDisabled ?>"> View </a> </td>
-                                    <td> <a href="./update_commitment.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-info <?php echo $isDisabled ?>"> Edit </a> </td>
-                                    <td> <a href="./delete_commitment.php?delete_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-danger <?php echo $isDisabled ?>"> Delete </a> </td>
+                                    <td> <a href="./details_renewal.php?details_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-warning <?php echo $isDisabled ?>"> View </a> </td>
+                                    <td> <a href="./update_renewal.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-info <?php echo $isDisabled ?>"> Edit </a> </td>
+                                    <td> <a href="./delete_renewal.php?delete_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-danger <?php echo $isDisabled ?>"> Delete </a> </td>
                                 </tr>
                             <?php
                                     }
@@ -136,12 +130,9 @@
                         <tfoot>
                             <tr>
                                 <th>Organization</th>
-                                <th>Adviser</th>
-                                <th>Address</th>
-                                <th>Contact</th>
                                 <th>College</th>
-                                <th>Academic Rank</th>
                                 <th>Academic Year</th>
+                                <th>President</th>
                                 <th>Status</th>
                                 <th>View</th>
                                 <th>Edit</th>

@@ -11,7 +11,14 @@ $name = "JC";
 ?>
 
 <!-- doctype -->
-<?php include_once './reusable/head.php'; ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SOU Management System</title>
+    <?php include_once './reusable/head.php'; ?>
+</head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -53,21 +60,31 @@ $name = "JC";
       $registration_count = $row[0];
 
       // get the total number of commitment form submitted
-      $commitments = mysqli_query($conn, " SELECT COUNT(*) FROM commitment_tbl ");
+      $commitments = mysqli_query($conn, " SELECT COUNT(*) FROM commitment_tbl; ");
       $commitment_row = mysqli_fetch_array($commitments);
       $commitments_count = $commitment_row[0];
 
+      // get the total number of application form submitted
+      $applications = mysqli_query($conn, " SELECT COUNT(*) FROM application_tbl; ");
+      $application_row = mysqli_fetch_array($applications);
+      $applications_count = $application_row[0];
+
+      // get the total number of renewal form submitted
+      $renewals = mysqli_query($conn, " SELECT COUNT(*) FROM renewal_tbl; ");
+      $renewal_row = mysqli_fetch_array($renewals);
+      $renewals_count = $renewal_row[0];
+
       // get the number of user roles (user, admin, super_admin)
       // users
-      $user_roles = mysqli_query($conn, " SELECT COUNT(*) FROM user_tbl WHERE user_type = 'user' ");
+      $user_roles = mysqli_query($conn, " SELECT COUNT(*) FROM user_tbl WHERE user_type = 'user'; ");
       $user_roles_row = mysqli_fetch_array($user_roles);
       $user_roles_count = $user_roles_row[0];
       //admins
-      $admin_roles = mysqli_query($conn, " SELECT COUNT(*) FROM user_tbl WHERE user_type = 'admin' ");
+      $admin_roles = mysqli_query($conn, " SELECT COUNT(*) FROM user_tbl WHERE user_type = 'admin'; ");
       $admin_roles_row = mysqli_fetch_array($admin_roles);
       $admin_roles_count = $admin_roles_row[0];
       //super_admins
-      $super_admin_roles = mysqli_query($conn, " SELECT COUNT(*) FROM user_tbl WHERE user_type = 'super_admin' ");
+      $super_admin_roles = mysqli_query($conn, " SELECT COUNT(*) FROM user_tbl WHERE user_type = 'super_admin'; ");
       $super_admin_roles_row = mysqli_fetch_array($super_admin_roles);
       $super_admin_roles_count = $super_admin_roles_row[0];
 
@@ -113,7 +130,7 @@ $name = "JC";
                       <!-- small box -->
                       <div class="small-box bg-info">
                         <div class="inner">
-                          <h3>150</h3>
+                          <h3>$applications_count</h3>
 
                           <p>Application Form</p>
                         </div>
@@ -128,7 +145,7 @@ $name = "JC";
                       <!-- small box -->
                       <div class="small-box bg-danger">
                         <div class="inner">
-                          <h3>65</h3>
+                          <h3>$renewals_count</h3>
 
                           <p>Renewal Form</p>
                         </div>
@@ -167,14 +184,14 @@ $name = "JC";
                     <div class="card-footer bg-transparent">
                       <div class="row">
                         <div class="col-3 text-center">
-                          <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"
+                          <input type="text" class="knob" data-readonly="true" value="$applications_count" data-width="60" data-height="60"
                                 data-fgColor="#39CCCC">
 
                           <div class="text-white">Application</div>
                         </div>
                         <!-- ./col -->
                         <div class="col-3 text-center">
-                          <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"
+                          <input type="text" class="knob" data-readonly="true" value="$renewals_count" data-width="60" data-height="60"
                                 data-fgColor="#39CCCC">
 
                           <div class="text-white">Renewal</div>

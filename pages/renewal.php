@@ -10,36 +10,25 @@ if(isset($_SESSION['user_id'])){
 
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
-    $adviser = mysqli_real_escape_string($conn, $_POST['adviser']);
-    $address = mysqli_real_escape_string($conn, $_POST['address']);
-    $contact = mysqli_real_escape_string($conn, $_POST['contact']);
     $college = mysqli_real_escape_string($conn, $_POST['college']);
-    $rank = mysqli_real_escape_string($conn, $_POST['rank']);
     $year = $_POST['year'];
+    $president = mysqli_real_escape_string($conn, $_POST['president']);
     $status = $_POST['status'];
-    $commitment_user_id = $user_id;
-
+    $renewal_user_id = $user_id;
     
     $current_year = (new DateTime)->format("Y");
-    $select = " SELECT * FROM commitment_tbl WHERE user_id = '$commitment_user_id' && year = '$current_year'; ";
+    $select = " SELECT * FROM renewal_tbl WHERE user_id = '$renewal_user_id' && year = '$current_year'; ";
     $result = mysqli_query($conn, $select);
 
-    if(mysqli_num_rows($result) > 0){ //means there is an existing record where user_id = commitment_user_id and year = current year
+    if(mysqli_num_rows($result) > 0){ //means there is an existing record where user_id = renewal_user_id and year = current year
 
-        $error[] = 'You already submmited a commitment form for this year.';
+        $error[] = 'You already submmited a renewal form for this year.';
         header('location:./error_pages/conflict.php');
         die();
-        //$row = mysqli_fetch_array($result); //get the records that satisfy the result
-
-        // $_SESSION['user_id'] = $row['id'];
-        // $_SESSION['user_name'] = $row['name'];
-        // $_SESSION['user_type'] = $row['user_type'];
-        // header('location:../index.php');
-        // die();
     }else{
-        $insert = "INSERT INTO commitment_tbl(organization, adviser, address, contact, college, rank, year, user_id, status) VALUES('$organization','$adviser','$address','$contact','$college','$rank','$year',$commitment_user_id,'$status');";
+        $insert = "INSERT INTO renewal_tbl(organization, college, year, president, status, user_id) VALUES('$organization','$college','$year','$president','$status',$renewal_user_id);";
         mysqli_query($conn, $insert);
-        header('location:./commitment.php');
+        header('location:./renewal.php');
         die();
     }
 };
@@ -98,13 +87,13 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                             </div>
                         </a>
 
-                        <h1 class="m-0">Commitment Form</h1>
+                        <h1 class="m-0">Renewal Form</h1>
                     </div>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="./commitment.php">Commitment</a></li>
-                    <li class="breadcrumb-item active">Form</li>
+                    <li class="breadcrumb-item"><a href="./index.php">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
                     </ol>
                 </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -121,16 +110,8 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                     <input type="text" name="organization" class="form-control" id="org" placeholder="Organization Name">
                 </div>
                 <div class="form-group">
-                    <label for="adviser">Adviser Name</label>
-                    <input type="text" name="adviser" class="form-control" id="adviser" placeholder="Adviser Name">
-                </div>
-                <div class="form-group">
-                    <label for="address">Home Address</label>
-                    <input type="text" name="address" class="form-control" id="address" placeholder="Home Address">
-                </div>
-                <div class="form-group">
-                    <label for="contact">Contact No.</label>
-                    <input type="text" name="contact" class="form-control" id="contact" placeholder="Contact No.">
+                    <label for="president">President Name</label>
+                    <input type="text" name="president" class="form-control" id="president" placeholder="Organization President Name">
                 </div>
                 <div class="form-group">
                     <input type="text" name="status" class="form-control" id="status" placeholder="Current Status" value="pending" hidden>
@@ -155,33 +136,6 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label>Academic Rank</label>
-                            <select name="rank" multiple class="custom-select">
-                                <option value="Instructor I">Instructor I</option>
-                                <option value="Instructor II">Instructor II</option>
-                                <option value="Instructor	III">Instructor	III</option>
-                                <option value="Assistant Professor I">Assistant Professor I</option>
-                                <option value="Assistant Professor II">Assistant Professor II</option>
-                                <option value="Assistant Professor III">Assistant Professor III</option>
-                                <option value="Assistant Professor IV">Assistant Professor IV</option>
-                                <option value="Associate Professor I">Associate Professor I</option>
-                                <option value="Associate Professor II">Associate Professor II</option>
-                                <option value="Associate Professor III">Associate Professor III</option>
-                                <option value="Associate Professor IV">Associate Professor IV</option>
-                                <option value="Associate Professor V">Associate Professor V</option>
-                                <option value="Professor I">Professor I</option>
-                                <option value="Professor II">Professor II</option>
-                                <option value="Professor III">Professor III</option>
-                                <option value="Professor IV">Professor IV</option>
-                                <option value="Professor V">Professor V</option>
-                                <option value="Professor VI">Professor VI</option>
-                            </select>
-                        </div>
-                    </div>
-
-                   
-                    <div class="col-sm-6">
-                        <div class="form-group">
                             <label>Academic Year</label>
                             <select name="year" multiple class="custom-select">
                                 <?php
@@ -199,21 +153,9 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                     </div>
 
                     <div class="form-group">
-                        <input name="commitment_user_id" value="<?php echo $user_id; ?>" class="form-control" id="user_id" disabled hidden>
+                        <input name="renewal_user_id" value="<?php echo $user_id; ?>" class="form-control" id="user_id" disabled hidden>
                     </div>
                 </div>
-                <!-- <div class="form-group">
-                    <label for="exampleInputFile">File input</label>
-                    <div class="input-group">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="exampleInputFile">
-                            <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                        </div>
-                        <div class="input-group-append">
-                            <span class="input-group-text">Upload</span>
-                        </div>
-                    </div>
-                </div> -->
             </div>
 
             <div class="card-footer">
@@ -231,7 +173,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
             <!-- table -->
             <div class="card">
             <div class="card-header">
-            <h3 class="card-title">Commitment List</h3>
+            <h3 class="card-title">Renewal List</h3>
             </div>
 
             <div class="card-body">
@@ -239,12 +181,9 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                     <thead>
                         <tr>
                             <th>Organization</th>
-                            <th>Adviser</th>
-                            <th>Address</th>
-                            <th>Contact</th>
                             <th>College</th>
-                            <th>Academic Rank</th>
                             <th>Academic Year</th>
+                            <th>President</th>
                             <th>Status</th>
                             <th>View</th>
                             <th>Edit</th>
@@ -253,7 +192,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                     </thead>
                     <tbody>
                         <?php
-                            $select_id = " SELECT * FROM commitment_tbl; "; 
+                            $select_id = " SELECT * FROM renewal_tbl; "; 
                             $result_id = mysqli_query($conn, $select_id);
                             $result_id_count = mysqli_num_rows($result_id);
                             if($result_id_count > 0){
@@ -266,8 +205,8 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                             
 
                             $current_year = (new DateTime)->format("Y");
-                            $commitment_user_id = $user_id;
-                            $select_filter = " SELECT * FROM commitment_tbl WHERE user_id = '$commitment_user_id' ";
+                            $renewal_user_id = $user_id;
+                            $select_filter = " SELECT * FROM renewal_tbl WHERE user_id = '$renewal_user_id' ";
                             $select_filter_result = mysqli_query($conn, $select_filter);
                             $resultCheck = mysqli_num_rows($select_filter_result);
                             if($resultCheck > 0)
@@ -277,12 +216,9 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                         ?>
                                     <tr>
                                         <td> <?php echo $row['organization'] ?> </td>
-                                        <td> <?php echo $row['adviser'] ?> </td>
-                                        <td> <?php echo $row['address'] ?> </td>
-                                        <td> <?php echo $row['contact'] ?> </td>
                                         <td> <?php echo $row['college'] ?> </td>
-                                        <td> <?php echo $row['rank'] ?> </td>
                                         <td> <?php echo $row['year'] ?> </td>
+                                        <td> <?php echo $row['president'] ?> </td>
                                         <td> 
                                             <?php 
                                                 if(strtolower($row['status']) === 'pending')
@@ -295,9 +231,9 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                                 }
                                             ?> 
                                         </td>
-                                        <td> <a href="./details_commitment.php?details_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-warning"> View </a> </td>
-                                        <td> <a href="./update_commitment.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
-                                        <td> <a href="./delete_commitment.php?delete_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-danger"> Delete </a> </td>
+                                        <td> <a href="./details_renewal.php?details_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-warning"> View </a> </td>
+                                        <td> <a href="./update_renewal.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
+                                        <td> <a href="./delete_renewal.php?delete_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-danger"> Delete </a> </td>
                                     </tr>
                         <?php
                                 }
@@ -307,12 +243,9 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                     <tfoot>
                         <tr>
                             <th>Organization</th>
-                            <th>Adviser</th>
-                            <th>Address</th>
-                            <th>Contact</th>
                             <th>College</th>
-                            <th>Academic Rank</th>
                             <th>Academic Year</th>
+                            <th>President</th>
                             <th>Status</th>
                             <th>View</th>
                             <th>Edit</th>
