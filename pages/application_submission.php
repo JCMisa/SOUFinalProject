@@ -1,0 +1,143 @@
+<?php
+    @include '../configurations/config.php';
+    session_start();
+
+    $sql = " SELECT * FROM application_upload; ";
+    $result = mysqli_query($conn, $sql);
+    $files = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+
+    if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
+    $user_type = $_SESSION['user_type'];
+    $user_name = $_SESSION['user_name'];
+}
+?>
+
+<!-- doctype -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SOU Management System</title>
+    <?php include_once './reusable/head.php'; ?>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+
+        <!-- Preloader -->
+        <?php include_once './reusable/preloader.php'; ?>
+
+        <!-- Navbar -->
+        <?php include_once './reusable/topNav.php'; ?>
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        <?php include_once './reusable/sideNav.php'; ?>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                <div class="col-sm-6">
+                    <!-- go back button -->
+                    <div class="row">
+                        <a href="./index.php" class="button">
+                            <div class="button-box">
+                                <span class="button-elem">
+                                <i class="bi bi-arrow-right"></i>
+                                </span>
+                                <span class="button-elem">
+                                <i class="bi bi-arrow-right"></i>
+                                </span>
+                            </div>
+                        </a>
+
+                        <h1 class="m-0">Application Submissions</h1>
+                    </div>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="./commitment.php">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                    </ol>
+                </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content-header -->
+            
+            <!-- Main content -->
+
+            <!-- table -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Application Submission List</h3>
+                </div>
+
+                <div class="card-body">
+                    <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>File Name</th>
+                                <th>Uploader</th>
+                                <th>Size</th>
+                                <th>Attempts</th>
+                                <th>Download</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($files as $file): ?>
+                            <tr>
+                                <td> <?php echo $file['id']; ?> </td>
+                                <td> <?php echo $file['name']; ?> </td>
+                                <td> <?php echo $file['uploader'] ?> </td>
+                                <td> <?php echo $file['size'] / 1000 . "KB"; ?> </td>
+                                <td> <?php echo $file['downloads']; ?> </td>
+                                <td> 
+                                    <a href="./download_application_upload.php?file_id='<?php echo $file['id'] ?>'" class="btn btn-block btn-outline-success"> Download </a> 
+                                </td>
+                                <td> 
+                                    <a href="./delete_application_upload.php?delete_id='<?php echo $file['id'] ?>'" class="btn btn-block btn-outline-danger"> Delete </a> 
+                                </td>
+                            </tr>
+
+                            <?php endforeach; ?>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>ID</th>
+                                <th>File Name</th>
+                                <th>Uploader</th>
+                                <th>Size</th>
+                                <th>Attempts</th>
+                                <th>Download</th>
+                                <th>Delete</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        <!-- footer -->
+        <?php include_once './reusable/footer.php'; ?>
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+
+    <!-- jQuery -->
+    <?php include_once './reusable/jquery.php'; ?>
+</body>
+</html>

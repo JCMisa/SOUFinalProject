@@ -8,6 +8,11 @@ if(isset($_SESSION['user_id'])){
     $user_id = $_SESSION['user_id'];
 }
 
+if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
+  $user_type = $_SESSION['user_type'];
+  $user_name = $_SESSION['user_name'];
+}
+
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
     $president = mysqli_real_escape_string($conn, $_POST['president']);
@@ -34,10 +39,73 @@ if(isset($_POST['submit'])){
     }
 };
 
-if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
-  $user_type = $_SESSION['user_type'];
-  $user_name = $_SESSION['user_name'];
+
+
+// if(isset($_POST['upload'])) {
+//     $file = $_FILES['file'];
+
+//     $fileName = $_FILES['file']['name'];
+//     $fileTmpName = $_FILES['file']['tmp_name'];
+//     $fileSize = $_FILES['file']['size'];
+//     $fileError = $_FILES['file']['error'];
+//     $fileType = $_FILES['file']['type'];
+
+//     $fileExt = explode('.', $fileName);
+//     $fileActualExt = strtolower(end($fileExt));
+
+//     $allowed = array('pdf', 'jpg', 'jpeg', 'png');
+
+//     if(in_array($fileActualExt, $allowed)) {
+//         if($fileError === 0) {
+//             if($fileSize < 1000000) {
+//                 $fileNameNew = uniqid('', true).".".$fileActualExt;
+
+//                 $fileDestination = 'downloads/'.$fileNameNew;
+//                 move_uploaded_file($fileTmpName, $fileDestination);
+//                 header("Location: ./index.php");
+//             } else {
+//                 echo "Your file is too big!";
+//             }
+//         } else {
+//             echo "There was an error uploading your file!";
+//         }
+//     } else {
+//         echo "You cannot upload files of this type!";
+//     }
+// }
+
+
+
+
+if(isset($_POST['save']))
+{
+    $filename = $_FILES['application_file']['name'];
+    $destination = '../application_uploads/' . $filename;
+    $extension = pathinfo($filename, PATHINFO_EXTENSION);
+    $file = $_FILES['application_file']['tmp_name'];
+    $size = $_FILES['application_file']['size'];
+
+    if(!in_array($extension, ['PDF', 'pdf', 'png', 'zip', 'docx'])) {
+        echo "You cannot upload files of this type";
+    }
+    else {
+        $select = " SELECT * FROM application_upload WHERE user_id = '$user_id' && name = '$filename'; ";
+        $result = mysqli_query($conn, $select);
+        if(move_uploaded_file($file, $destination) && !mysqli_num_rows($result) > 0) {
+            $sql = " INSERT INTO application_upload (name, size, downloads, uploader, user_id) VALUES('$filename', '$size', 0, '$user_name', $user_id); ";
+
+            if(mysqli_query($conn, $sql)) {
+                echo "file uploaded successfully";
+                header("Location: ./application.php");
+            }else{
+                echo "failed to upload file";
+            }
+        }else {
+            header('Location: ./error_pages/conflict.php');
+        }
+    }
 }
+
 
 ?>
 
@@ -236,6 +304,24 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                 </table>
             </div>
             </div>
+
+            <br>
+            <br>
+            <br>
+
+            <!-- submission -->
+
+            <form action="" method="post" enctype="multipart/form-data">
+                <div class="card-body">
+                    <div class="card-header">
+                        <h3 class="card-title">Upload Application</h3>
+                    </div>
+                    <div class="form-group">
+                        <input type="file" name="application_file" id="application_file">
+                        <button type="submit" name="save">Upload</button>
+                    </div>
+                </div>
+            </form>
 
             <!-- /.content -->
         </div>

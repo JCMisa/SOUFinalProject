@@ -76,103 +76,205 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
     <?php include_once './reusable/head.php'; ?>
 
     <style>
-    /*application form design goes here*/
-    p {
-        margin-top: -15px;
-    }
+        /*application form design goes here*/
+        p {
+            margin-top: -15px;
+        }
 
-    ul {
-        list-style-type: none;
-    }
+        ul {
+            list-style-type: none;
+        }
 
-    .indent {
-        text-indent: 15px;
-    }
+        .indent {
+            text-indent: 15px;
+        }
 
-    .underline {
-        text-decoration: underline;
-    }
+        .underline {
+            text-decoration: underline;
+        }
 
-    .application-container{
-        width: 100%;
-        height: 100%;
-        font-size: 10px;
-    }
+        .application-container{
+            width: 100%;
+            height: 100%;
+            font-size: 10px;
+        }
 
-    .application-header-text{
-        margin: 0 auto;
-        text-align: center;
-    }
+        .application-header-text{
+            margin: 0 auto;
+            text-align: center;
+        }
 
-    .application-header-img{
-        position: absolute;
-        top: 0;
-    }
+        .application-header-text .lspu {
+            font-family: Old English Text MT;
+            font-size: 14px;
+        }
 
-    .application-header-img .images {
-        gap: 78%;
-    }
+        .application-header-img{
+            width: 100%;
+        }
 
-    .application-header-sub-text {
-        margin-top: 5px;
-        text-align: center;
-    }
+        .application-header-img .images {
+            margin-top: -50px;
+            display: flex;
+            justify-content: space-between;
+        }
 
-    .application-header-sub-text .subtext-2 {
-        margin-top: 5px;
-        font-size: 11px;
-    }
+        .application-header-sub-text {
+            margin-top: 5px;
+            text-align: center;
+        }
 
-    .application-body {
-        margin-top: 5px;
-    }
+        .application-header-sub-text .subtext-2 {
+            margin-top: 5px;
+            font-size: 11px;
+        }
 
-    .application-body .app-date {
-        text-align: end;
-    }
+        .application-body {
+            margin-top: 5px;
+        }
 
-    .application-body .app-date .app-date-p {
-        margin-right: 11px;
-    }
+        .application-body .app-date {
+            text-align: end;
+            margin-top: 15px;
+        }
 
-    .application-body .app-body-director {
-        margin-top: 5px;
-    }
+        .application-body .app-date .app-date-p {
+            margin-right: 11px;
+        }
 
-    .application-body .app-body-content {
-        font-size: 8px;
-    }
+        .application-body .app-body-director {
+            margin-top: 5px;
+        }
 
-    .application-body .respect {
-        text-align: end;
-        position: relative;
-    }
+        .application-body .app-body-content {
+            font-size: 8px;
+        }
 
-    .application-body .respect .respect-content {
-        width: auto;
-        max-width: 400px;
-        position: absolute;
-        right: 0;
-        text-align: start;
-    }
+        .application-body .respect {
+            text-align: end;
+            position: relative;
+        }
 
-    .application-body .noted {
-        margin-top: 100px;
-    }
+        .application-body .respect .respect-content {
+            width: auto;
+            max-width: 400px;
+            position: absolute;
+            right: 15px;
+            text-align: start;
+        }
 
-    .application-body .dean {
-        text-align: end;
-    }
+        .application-body .noted {
+            margin-top: 100px;
+        }
 
-    .application-footer {
-        margin-top: 5px;
-        text-align: center;
-    }
+        .application-body .dean {
+            text-align: end;
+        }
 
-    .application-footer .footer ul {
-        gap: 120px;
-    }
-</style>
+        .application-footer {
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        .application-footer .footer ul {
+            gap: 120px;
+        }
+
+        @media print {
+            .application-form, .main-footer {
+                display: none;
+            }
+
+            p {
+                margin-top: -8px;
+            }
+
+            .application-container {
+                font-size: 20px;
+                width: 100vw;
+                height: 100vh;
+                padding-right: 35px;
+            }
+
+            .application-header {
+                margin-top: 20px;
+            }
+
+            .application-header-text p {
+                margin-top: -10px;
+            }
+
+            .application-header-text .lspu {
+                font-size: 25px;
+            }
+
+            .application-header-img {
+                width: 90%;
+            }
+
+            .application-header-img .images {
+                margin-top: -120px;
+            }
+
+            .application-header-img .images .img-1 {
+                margin-left: 40px;
+            }
+
+            .application-header-img .images img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .application-header-sub-text {
+                margin-top: 70px;
+            }
+
+            .application-header-sub-text .subtext-2 {
+                font-size: 25px;
+            }
+
+            .application-body .app-body-director  {
+                margin-top: -20px;
+            }
+
+            .application-body .app-date {
+                margin-right: 60px;
+            }
+
+            .application-body .app-date .app-date-p {
+                margin-right: 19px;
+            }
+
+            .application-body .app-body-content {
+                font-size: 18px;
+            }
+
+            .application-body .noted {
+                margin-top: 17rem;
+            }
+
+            .application-body .noted .indent {
+                text-indent: 30px;
+            }
+
+            .application-body .respect .respect-content {
+                right: 30px;
+            }
+
+            .application-body .dean {
+                margin-right: 40px;
+            }
+
+            .application-footer {
+                margin-top: 3rem;
+            }
+
+            .application-footer .footer ul {
+                margin-top: 10px;
+                gap: 350px;
+            }
+        }
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -234,15 +336,15 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                     <div class="application-header-text row">
                                         <div class="col">
                                             <p>Republic of the Philippines</p>
-                                            <p><strong>Laguna State Polytechnic University</strong></p>
+                                            <p class="lspu"><strong>Laguna State Polytechnic University</strong></p>
                                             <p>Province of Laguna</p>
                                         </div>
                                     </div>
 
                                     <div class="application-header-img col">
                                         <div class="images row">
-                                            <img src="../images/lspuLogo.png" alt="lspuLogo" width="40px" height="40px">
-                                            <img src="../images/Bagong_Pilipinas_logo.png" alt="lspuLogo" width="40px" height="40px">
+                                            <img class="img-1" src="../images/lspuLogo.png" alt="lspuLogo" width="40px" height="40px">
+                                            <img class="img-2" src="../images/Bagong_Pilipinas_logo.png" alt="lspuLogo" width="40px" height="40px">
                                         </div>
                                     </div>
 
@@ -333,7 +435,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                 </div>
                             </div>
                         </div>
-                        <div class="col-7">
+                        <div class="col-7 application-form">
                             <form action="" method="post">
                                 <div class="card-body">
                                     <div class="form-group">

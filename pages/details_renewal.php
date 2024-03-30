@@ -79,56 +79,201 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
     <?php include_once './reusable/head.php'; ?>
 
     <style>
-    /*application form design goes here*/
-    .application-container{
-        width: 100%;
-        height: 100%;
-        font-size: 10px;
-    }
+        /*renewal form design goes here*/
+        p {
+            margin-top: -15px;
+        }
 
-    .application-header-text{
-        margin: 0 auto;
-        text-align: center;
-        line-height: 1px;
-    }
+        ul {
+            list-style-type: none;
+        }
 
-    .application-header-img{
-        position: absolute;
-        top: 0;
-    }
+        .indent {
+            text-indent: 15px;
+        }
 
-    .application-header-img .images {
-        gap: 78%;
-    }
+        .underline {
+            text-decoration: underline;
+        }
 
-    .application-header-sub-text {
-        margin-top: 5px;
-        text-align: center;
-    }
+        .renewal-container{
+            width: 100%;
+            height: 100%;
+            font-size: 10px;
+        }
 
-    .application-header-sub-text .subtext-2 {
-        margin-top: 5px;
-        font-size: 11px;
-    }
+        .renewal-header-text{
+            margin: 0 auto;
+            text-align: center;
+        }
 
-    .application-body {
-        margin-top: 5px;
-    }
+        .renewal-header-text .lspu {
+            font-family: Old English Text MT;
+            font-size: 14px;
+        }
 
-    .application-body .app-date {
-        text-align: end;
-        line-height: 1px;
-    }
+        .renewal-header-img{
+            width: 100%;
+        }
 
-    .application-body .app-date .app-date-p {
-        margin-right: 11px;
-    }
+        .renewal-header-img .images {
+            margin-top: -50px;
+            display: flex;
+            justify-content: space-between;
+        }
 
-    .application-body .app-body-director {
-        margin-top: 5px;
-        line-height: 1px;
-    }
-</style>
+        .renewal-header-sub-text {
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        .renewal-header-sub-text .subtext-2 {
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .renewal-body {
+            margin-top: 5px;
+        }
+
+        .renewal-body .app-body-director {
+            margin-top: 25px;
+        }
+
+        .renewal-body .app-body-content {
+            font-size: 10px;
+        }
+
+        .renewal-body .respect {
+            text-align: end;
+            position: relative;
+        }
+
+        .renewal-body .respect .respect-content {
+            width: auto;
+            max-width: 400px;
+            position: absolute;
+            right: 15px;
+            text-align: start;
+        }
+
+        .renewal-body .noted {
+            margin-top: 100px;
+        }
+
+        .renewal-body .dean {
+            text-align: end;
+        }
+
+        .renewal-footer {
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        .renewal-footer .approval {
+            margin-top: 35px;
+        }
+
+        .renewal-footer .footer ul {
+            gap: 120px;
+        }
+
+        @media print {
+            .renewal-form, .main-footer {
+                display: none;
+            }
+
+            p {
+                margin-top: -8px;
+            }
+
+            .renewal-container {
+                font-size: 20px;
+                width: 100vw;
+                height: 100vh;
+                padding-right: 47px;
+            }
+
+            .renewal-header {
+                margin-top: 30px;
+            }
+
+            .renewal-header-text p {
+                margin-top: -10px;
+                font-size: 25px;
+            }
+
+            .renewal-header-text .lspu {
+                font-size: 35px;
+            }
+
+            .renewal-header-img {
+                width: 90%;
+            }
+
+            .renewal-header-img .images {
+                margin-top: -120px;
+            }
+
+            .renewal-header-img .images .img-1 {
+                margin-left: 60px;
+            }
+
+            .renewal-header-img .images img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .renewal-header-sub-text {
+                margin-top: 70px;
+            }
+
+            .renewal-header-sub-text .subtext-2 {
+                font-size: 35px;
+            }
+
+            .renewal-body .app-body-director  {
+                margin-top: 25px;
+            }
+
+            .renewal-body .app-date {
+                margin-right: 60px;
+            }
+
+            .renewal-body .app-date .app-date-p {
+                margin-right: 19px;
+            }
+
+            .renewal-body .app-body-content {
+                font-size: 25px;
+            }
+
+            .renewal-body .noted {
+                margin-top: 17rem;
+            }
+
+            .renewal-body .noted .indent {
+                text-indent: 30px;
+            }
+
+            .renewal-body .respect .respect-content {
+                right: 30px;
+            }
+
+            .renewal-body .dean {
+                margin-right: 40px;
+            }
+
+            .renewal-footer {
+                margin-top: 3rem;
+            }
+
+            .renewal-footer .footer ul {
+                margin-top: 10px;
+                gap: 350px;
+            }
+        }
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -185,48 +330,99 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                         <div class="col-5">
                             <!-- commitment form, to be continued... -->
 
-                            <div class="application-container">
-                                <div class="application-header">
-                                    <div class="application-header-text row">
+                            <div class="renewal-container">
+                                <div class="renewal-header">
+                                    <div class="renewal-header-text row">
                                         <div class="col">
                                             <p>Republic of the Philippines</p>
-                                            <p><strong>Laguna State Polytechnic University</strong></p>
+                                            <p class="lspu"><strong>Laguna State Polytechnic University</strong></p>
                                             <p>Province of Laguna</p>
                                         </div>
                                     </div>
 
-                                    <div class="application-header-img col">
+                                    <div class="renewal-header-img col">
                                         <div class="images row">
-                                            <img src="../images/lspuLogo.png" alt="lspuLogo" width="40px" height="40px">
-                                            <img src="../images/Bagong_Pilipinas_logo.png" alt="lspuLogo" width="40px" height="40px">
+                                            <img class="img-1" src="../images/lspuLogo.png" alt="lspuLogo" width="40px" height="40px">
+                                            <img class="img-2" src="../images/Bagong_Pilipinas_logo.png" alt="lspuLogo" width="40px" height="40px">
                                         </div>
                                     </div>
 
-                                    <div class="application-header-sub-text">
+                                    <div class="renewal-header-sub-text">
                                         <h6 class="subtext-2"><strong>OFFICE OF STUDENT AFFAIRS AND SERVICES</strong></h6>
-                                        <h6 class="subtext-2"><strong>APPLICATION FOR RECOGNITION/RENEWAL OF ACCREDITED STUDENT ORGANIZATION</strong></h6>
+                                        <h6 class="subtext-2"><strong>RENEWAL FORM</strong></h6>
                                     </div>
                                 </div>
 
-                                <div class="application-body">
-                                    <div class="app-date">
-                                        <p>___________</p>
-                                        <p class="app-date-p">Date</p>
-                                    </div>
-
+                                <div class="renewal-body">
                                     <div class="app-body-director">
                                         <p><strong>THE DIRECTOR/CHAIRPERSON</strong></p>
-                                        <p>Office of Student Affairs and Services</p>
-                                        <p>LSPU</p>
+                                        <p><strong>Office of Student Affairs and Services</strong></p>
+                                        <p><strong>LSPU</strong></p>
+                                    </div>
+
+                                    <p class="indent">
+                                        <strong>Thru: The Coordinator, Student Organization Unit</strong>
+                                    </p>
+
+                                    <p class="sir">Sir:</p>
+
+                                    <div class="app-body-content">
+                                        <p class="indent">
+                                            The <span class="underline"><?php $organization ?></span> wishes to seek renewal of its recognition to function as a Student Organization in the College of <span class="underline"><?php echo $college ?></span> for Academic Year <span class="underline"><?php echo $year ?></span> - <span class="underline"><?php echo $year+1 ?></span>.
+                                        </p>
+                                        <p class="indent">
+                                            In this connection, we respectfully request your good office to grant us permission to operate in our institution, subject to the existing rules & regulation of our University.
+                                        </p>
+                                        <p class="indent">
+                                            Thank you very much.
+                                        </p>
+
+                                        <div class="respect">
+                                            <div class="respect-content">
+                                                <p>Very respectfully yours,</p>
+                                                <p class="underline"><?php echo $president ?></p>
+                                                <p>Organization President</p>
+                                                <p class="underline"><?php echo $organization ?></p>
+                                                <p>Name of Organization</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="noted">
+                                            <p>Noted:</p>
+                                            <p>___________________________</p>
+                                            <p>Adviser, Student Organization</p>
+                                        </div>
+
+                                        <div class="dean">
+                                            <p>____________________________</p>
+                                            <p>Dean/Assoc. Dean of College</p>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="application-footer">
+                                <div class="renewal-footer">
+                                    <div class="approval">
+                                        <p>Recommending Approval:</p>
+                                        <p class="underline">AL JOHN A. VILLAREAL</p>
+                                        <p>Coordinator, Student Organization Unit</p>
 
+                                        <p>Approved/Disapproved:</p>
+
+                                        <p class="underline">DR. ALBERTO B. CASTILLO</p>
+                                        <p>Chairperson, Office of Student Affairs and Services</p>
+                                    </div>
+
+                                    <div class="footer row">
+                                        <ul class="row">
+                                            <li>LSPU-OSAS-SF-002</li>
+                                            <li>Rev. 1</li>
+                                            <li><?php echo date('d-F-Y') ?></li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-7">
+                        <div class="col-7 renewal-form">
                             <form action="" method="post">
                                 <div class="card-body">
                                     <div class="form-group">
@@ -306,6 +502,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
 
                                 <div class="card-footer">
                                     <button type="submit" name="submit" class="btn btn-block btn-outline-info"> Edit </button>
+                                    
                                     <?php 
                                     $renewal_user_id = $user_id;
                                     $select_filter = " SELECT * FROM renewal_tbl WHERE user_id = '$renewal_user_id' ";
@@ -313,6 +510,16 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                     $row = mysqli_fetch_assoc($select_filter_result)
                                     ?>
                                     <a href="./delete_renewal.php?delete_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-danger"> Delete </a>
+
+                                    <a href="#" class="btn btn-block btn-outline-success" id="print_application"> Convert to PDF </a>
+
+                                    <script>
+                                        let printApp = document.getElementById("print_application")
+
+                                        printApp.addEventListener("click", function () {
+                                            window.print();
+                                        })
+                                    </script>
                                 </div>
                             </form>
                         </div>

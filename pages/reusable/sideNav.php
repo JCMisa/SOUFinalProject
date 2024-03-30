@@ -76,13 +76,56 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/forms/validation.html" class="nav-link">
+                <a href="./plan.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Plans of Activities</p>
+                  <p>Plan of Activities</p>
                 </a>
               </li>
             </ul>
           </li>
+          <!-- form submissions sidebar menu -->
+          <?php 
+            if($user_type === 'super_admin')
+            {
+              echo <<<SUBMISSIONS
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-table"></i>
+                    <p>
+                      Form Submissions
+                      <i class="fas fa-angle-left right"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                      <a href="./application_submission.php" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Application</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="./renewal_list.php" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Renewal</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="./commitment_list.php" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Commitment</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="pages/tables/jsgrid.html" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Plans of Activities</p>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              SUBMISSIONS;
+            }
+          ?>
           <!-- lists sidebar menu -->
           <?php 
             if($user_type === 'super_admin' || $user_type === 'admin')
