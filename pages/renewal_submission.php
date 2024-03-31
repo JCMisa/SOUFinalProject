@@ -2,7 +2,7 @@
     @include '../configurations/config.php';
     session_start();
 
-    $sql = " SELECT * FROM application_upload WHERE form_type = 'application' ; ";
+    $sql = " SELECT * FROM application_upload WHERE form_type = 'renewal'; ";
     $result = mysqli_query($conn, $sql);
     $files = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
@@ -56,7 +56,7 @@
                             </div>
                         </a>
 
-                        <h1 class="m-0">Application Submissions</h1>
+                        <h1 class="m-0">Renewal Submissions</h1>
                     </div>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
@@ -75,7 +75,7 @@
             <!-- table -->
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Application Submission List</h3>
+                    <h3 class="card-title">Renewal Submission List</h3>
                 </div>
 
                 <div class="card-body">
@@ -111,19 +111,19 @@
                                         }
                                     ?> 
                                 </td>
-                                <td> <?php echo $file['uploader'] ?> </td>
-                                <td> <?php echo $file['form_type'] ?> </td>
+                                <td> <?php echo $file['uploader']; ?> </td>
+                                <td> <?php echo $file['form_type']; ?> </td>
                                 <td> <?php echo $file['size'] / 1000 . "KB"; ?> </td>
                                 <td> <?php echo $file['downloads']; ?> </td>
 
                                 <td> 
-                                    <a href="./download_application_upload.php?file_id='<?php echo $file['id'] ?>'" class="btn btn-block btn-outline-success"> Download </a> 
+                                    <a href="./download_application_upload.php?file_id=<?php echo $file['id']; ?>" class="btn btn-block btn-outline-success"> Download </a> 
                                 </td>
                                 <td>
-                                    <a href="./update_application_upload.php?details_id='<?php echo $file['id'] ?>'" class="btn btn-block btn-outline-info"> Status </a>
+                                    <a href="./update_renewal_upload.php?details_id='<?php echo $file['id']; ?>'" class="btn btn-block btn-outline-info"> Status </a>
                                 </td>
                                 <td> 
-                                    <a href="./delete_application_upload.php?delete_id='<?php echo $file['id'] ?>'" class="btn btn-block btn-outline-danger"> Delete </a> 
+                                    <a href="./delete_application_upload.php?delete_id='<?php echo $file['id']; ?>'" class="btn btn-block btn-outline-danger"> Delete </a> 
                                 </td>
                             </tr>
 

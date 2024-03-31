@@ -8,6 +8,11 @@ if(isset($_SESSION['user_id'])){
     $user_id = $_SESSION['user_id'];
 }
 
+if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
+  $user_type = $_SESSION['user_type'];
+  $user_name = $_SESSION['user_name'];
+}
+
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
     $college = mysqli_real_escape_string($conn, $_POST['college']);
@@ -33,9 +38,33 @@ if(isset($_POST['submit'])){
     }
 };
 
-if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
-  $user_type = $_SESSION['user_type'];
-  $user_name = $_SESSION['user_name'];
+if(isset($_POST['save']))
+{
+    $filename = $_FILES['application_file']['name'];
+    $destination = '../application_uploads/' . $filename;
+    $extension = pathinfo($filename, PATHINFO_EXTENSION);
+    $file = $_FILES['application_file']['tmp_name'];
+    $size = $_FILES['application_file']['size'];
+
+    if(!in_array($extension, ['PDF', 'pdf', 'png', 'zip', 'docx'])) {
+        echo "You cannot upload files of this type";
+    }
+    else {
+        if(move_uploaded_file($file, $destination)) {
+            $status = $_POST['status_upload'];
+            $form_type = $_POST['form_type'];
+            $sql = " INSERT INTO application_upload (name, size, downloads, uploader, status, user_id, form_type) VALUES('$filename', '$size', 0, '$user_name', '$status', $user_id, '$form_type'); ";
+
+            if(mysqli_query($conn, $sql)) {
+                echo "file uploaded successfully";
+                header("Location: ./renewal.php");
+            }else{
+                echo "failed to upload file";
+            }
+        }else {
+            header('Location: ./error_pages/conflict.php');
+        }
+    }
 }
 
 ?>
@@ -254,6 +283,118 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                     </tfoot>
                 </table>
             </div>
+            </div>
+
+            <br>
+            <br>
+            <br>
+
+            <!-- submission -->
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Upload Renewal Form (With Signature)</h3>
+                </div>
+                <form action="" method="post" enctype="multipart/form-data">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <input type="text" name="status_upload" class="form-control" value="pending" hidden>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <select name="form_type" multiple class="custom-select" hidden>
+                                    <option value="application" disabled>Application</option>
+                                    <option value="renewal" selected>Renewal</option>
+                                    <option value="commitment" disabled>Commitment</option>
+                                    <option value="plan_of_activities" disabled>Plan of Activities</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputFile">Upload File</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" name="application_file" id="application_file">
+                                </div>
+                                <div class="input-group-append">
+                                    <button type="submit" name="save" class="input-group-text btn btn-block bg-gradient-success btn-sm">Upload</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Renewal Submission List</h3>
+                </div>
+
+                <div class="card-body">
+                    <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>File Name</th>
+                                <th>Status</th>
+                                <th>Uploader</th>
+                                <th>Form Type</th>
+                                <th>Size</th>
+                                <th>Attempts</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                $select_filter = " SELECT * FROM application_upload WHERE user_id = '$user_id' AND form_type = 'renewal'; ";
+                                $select_filter_result = mysqli_query($conn, $select_filter);
+                                $resultCheck = mysqli_num_rows($select_filter_result);
+                                if($resultCheck > 0)
+                                {
+                                    while($row = mysqli_fetch_assoc($select_filter_result))
+                                    {
+                            ?>
+                                        <tr>
+                                            <td> <?php echo $row['id'] ?> </td>
+                                            <td> <?php echo $row['name'] ?> </td>
+                                            <td> 
+                                                <?php 
+                                                    if(strtolower($row['status']) === 'pending')
+                                                    {
+                                                        echo '<button type="button" class="btn btn-block bg-gradient-warning btn-sm">PENDING</button>';
+                                                    } else if(strtolower($row['status']) === 'success'){
+                                                        echo '<button type="button" class="btn btn-block bg-gradient-success btn-sm"> SUCCESS </button>';
+                                                    } else {
+                                                        echo '<button type="button" class="btn btn-block bg-gradient-danger btn-sm">FAILED</button>';
+                                                    }
+                                                ?> 
+                                            </td>
+                                            <td> <?php echo $row['uploader'] ?> </td>
+                                            <td> <?php echo $row['form_type'] ?> </td>
+                                            <td> <?php echo $row['size'] / 1000 . "KB"; ?> </td>
+                                            <td> <?php echo $row['downloads'] ?> </td>
+                                            
+                                            <td> <a href="./delete_application_upload.php?delete_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-danger"> Delete </a>  </td>
+                                        </tr>
+                            <?php
+                                    }
+                                }
+                            ?>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>ID</th>
+                                <th>File Name</th>
+                                <th>Status</th>
+                                <th>Uploader</th>
+                                <th>Form Type</th>
+                                <th>Size</th>
+                                <th>Attempts</th>
+                                <th>Delete</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
 
             <!-- /.content -->

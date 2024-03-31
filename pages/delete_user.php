@@ -16,7 +16,10 @@ if(isset($_GET['delete_id'])){
     $sql4 = " DELETE FROM renewal_tbl WHERE user_id = $id; "; //to also delete all records of user 
     $result4 = mysqli_query($conn, $sql4);
 
-    if($result && $result2 && $result3 && $result4){
+    $sql5 = " DELETE FROM application_upload WHERE user_id = $id; "; //to also delete all records of user 
+    $result5 = mysqli_query($conn, $sql5);
+
+    if($result && $result2 && $result3 && $result4 && $result5){
         header('location:./manage_user.php');
         die();
     }else{

@@ -433,23 +433,9 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                         <label for="president">President Name</label>
                                         <input type="text" name="president" class="form-control" id="president" placeholder="Organization President Name" value="<?php echo $president_ac; ?>">
                                     </div>
-                                    <?php
-                                    if($user_type === 'super_admin')
-                                    {
-                                        echo <<<SHOWSTATUS
-                                            <div class="form-group">
-                                                <label for="status">Status</label>
-                                                <input type="text" name="status" class="form-control" id="status" value="$status_ac">
-                                            </div>
-                                        SHOWSTATUS;
-                                    } else {
-                                        echo <<<SHOWSTATUS
-                                            <div class="form-group">
-                                                <input type="text" name="status" class="form-control" id="status" value="$status_ac" hidden>
-                                            </div>
-                                        SHOWSTATUS;
-                                    }
-                                    ?>
+                                    <div class="form-group">
+                                        <input type="text" name="status" class="form-control" id="status" value="<?php echo $status_ac ?>" hidden>
+                                    </div>
                                     
                                     <div class="row">
                                         <div class="col-sm-6">

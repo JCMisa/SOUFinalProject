@@ -470,23 +470,9 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                             <input name="application_user_id" value="<?php echo $user_id; ?>" class="form-control" id="user_id" disabled hidden>
                                         </div>
 
-                                        <?php
-                                        if($user_type === 'super_admin')
-                                        {
-                                            echo <<<SHOWSTATUS
-                                                <div class="form-group">
-                                                    <label for="status">Status</label>
-                                                    <input type="text" name="status" class="form-control" id="status" value="$status_ac">
-                                                </div>
-                                            SHOWSTATUS;
-                                        } else {
-                                            echo <<<SHOWSTATUS
-                                                <div class="form-group">
-                                                    <input type="text" name="status" class="form-control" id="status" value="$status_ac" hidden>
-                                                </div>
-                                            SHOWSTATUS;
-                                        }
-                                        ?>
+                                        <div class="form-group">
+                                            <input type="text" name="status" class="form-control" id="status" value="<?php echo $status_ac ?>" hidden>
+                                        </div>
                                     </div>
                                 </div>
 

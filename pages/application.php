@@ -92,7 +92,9 @@ if(isset($_POST['save']))
         $select = " SELECT * FROM application_upload WHERE user_id = '$user_id' && name = '$filename'; ";
         $result = mysqli_query($conn, $select);
         if(move_uploaded_file($file, $destination) && !mysqli_num_rows($result) > 0) {
-            $sql = " INSERT INTO application_upload (name, size, downloads, uploader, user_id) VALUES('$filename', '$size', 0, '$user_name', $user_id); ";
+            $status = $_POST['status_upload'];
+            $form_type = $_POST['form_type'];
+            $sql = " INSERT INTO application_upload (name, size, downloads, uploader, status, user_id, form_type) VALUES('$filename', '$size', 0, '$user_name', '$status', $user_id, '$form_type'); ";
 
             if(mysqli_query($conn, $sql)) {
                 echo "file uploaded successfully";
@@ -121,6 +123,8 @@ if(isset($_POST['save']))
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SOU Management System</title>
     <?php include_once './reusable/head.php'; ?>
+
+    <style></style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -311,17 +315,128 @@ if(isset($_POST['save']))
 
             <!-- submission -->
 
-            <form action="" method="post" enctype="multipart/form-data">
+            <!-- <form action="" method="post" enctype="multipart/form-data">
                 <div class="card-body">
                     <div class="card-header">
-                        <h3 class="card-title">Upload Application</h3>
+                        <h3 class="card-title">Submit Application Form</h3>
                     </div>
                     <div class="form-group">
                         <input type="file" name="application_file" id="application_file">
-                        <button type="submit" name="save">Upload</button>
+                        <button type="submit" name="save" class="btn btn-inline bg-gradient-success btn-sm">Upload</button>
                     </div>
                 </div>
-            </form>
+            </form> -->
+
+            
+
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Upload Application Form (With Signature)</h3>
+                </div>
+                <form action="" method="post" enctype="multipart/form-data">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <input type="text" name="status_upload" class="form-control" value="pending" hidden>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <select name="form_type" multiple class="custom-select" hidden>
+                                    <option value="application" selected>Application</option>
+                                    <option value="renewal" disabled>Renewal</option>
+                                    <option value="commitment" disabled>Commitment</option>
+                                    <option value="plan_of_activities" disabled>Plan of Activities</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputFile">Upload File</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" name="application_file" id="application_file">
+                                </div>
+                                <div class="input-group-append">
+                                    <button type="submit" name="save" class="input-group-text btn btn-block bg-gradient-success btn-sm">Upload</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Application Submission List</h3>
+                </div>
+
+                <div class="card-body">
+                    <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>File Name</th>
+                                <th>Status</th>
+                                <th>Uploader</th>
+                                <th>Form Type</th>
+                                <th>Size</th>
+                                <th>Attempts</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                $select_filter = " SELECT * FROM application_upload WHERE user_id = '$user_id' AND form_type = 'application'; ";
+                                $select_filter_result = mysqli_query($conn, $select_filter);
+                                $resultCheck = mysqli_num_rows($select_filter_result);
+                                if($resultCheck > 0)
+                                {
+                                    while($row = mysqli_fetch_assoc($select_filter_result))
+                                    {
+                            ?>
+                                        <tr>
+                                            <td> <?php echo $row['id'] ?> </td>
+                                            <td> <?php echo $row['name'] ?> </td>
+                                            <td> 
+                                                <?php 
+                                                    if(strtolower($row['status']) === 'pending')
+                                                    {
+                                                        echo '<button type="button" class="btn btn-block bg-gradient-warning btn-sm">PENDING</button>';
+                                                    } else if(strtolower($row['status']) === 'success'){
+                                                        echo '<button type="button" class="btn btn-block bg-gradient-success btn-sm"> SUCCESS </button>';
+                                                    } else {
+                                                        echo '<button type="button" class="btn btn-block bg-gradient-danger btn-sm">FAILED</button>';
+                                                    }
+                                                ?> 
+                                            </td>
+                                            <td> <?php echo $row['uploader'] ?> </td>
+                                            <td> <?php echo $row['form_type'] ?> </td>
+                                            <td> <?php echo $row['size'] / 1000 . "KB"; ?> </td>
+                                            <td> <?php echo $row['downloads'] ?> </td>
+                                            
+                                            <td> <a href="./delete_application_upload.php?delete_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-danger"> Delete </a>  </td>
+                                        </tr>
+                            <?php
+                                    }
+                                }
+                            ?>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>ID</th>
+                                <th>File Name</th>
+                                <th>Status</th>
+                                <th>Uploader</th>
+                                <th>Form Type</th>
+                                <th>Size</th>
+                                <th>Attempts</th>
+                                <th>Delete</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
 
             <!-- /.content -->
         </div>

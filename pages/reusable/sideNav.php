@@ -104,13 +104,13 @@
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="./renewal_list.php" class="nav-link">
+                      <a href="./renewal_submission.php" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Renewal</p>
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="./commitment_list.php" class="nav-link">
+                      <a href="./commitment_submission.php" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Commitment</p>
                       </a>

@@ -8,7 +8,7 @@ if(isset($_GET['delete_id'])){
     $result = mysqli_query($conn, $sql);
 
     if($result){
-        header('location:./application_submission.php');
+        header('location:./index.php');
         die();
     }else{
         die('Connect Error (' . mysqli_connect_errno() . ') '. mysqli_connect_error());
