@@ -85,6 +85,7 @@
                                 <th>ID</th>
                                 <th>File Name</th>
                                 <th>Status</th>
+                                <th>Submission Year</th>
                                 <th>Uploader</th>
                                 <th>Form Type</th>
                                 <th>Size</th>
@@ -111,6 +112,7 @@
                                         }
                                     ?> 
                                 </td>
+                                <td> <?php echo $file['year'] ?> </td>
                                 <td> <?php echo $file['uploader'] ?> </td>
                                 <td> <?php echo $file['form_type'] ?> </td>
                                 <td> <?php echo $file['size'] / 1000 . "KB"; ?> </td>
@@ -134,6 +136,7 @@
                                 <th>ID</th>
                                 <th>File Name</th>
                                 <th>Status</th>
+                                <th>Submission Year</th>
                                 <th>Uploader</th>
                                 <th>Form Type</th>
                                 <th>Size</th>

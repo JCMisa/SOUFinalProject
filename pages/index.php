@@ -88,6 +88,19 @@ $name = "JC";
       $super_admin_roles_row = mysqli_fetch_array($super_admin_roles);
       $super_admin_roles_count = $super_admin_roles_row[0];
 
+      // get the total number of commitment submissions
+      $application_submissions = mysqli_query($conn, " SELECT COUNT(*) FROM application_upload WHERE form_type = 'application'; ");
+      $application_submissions_row = mysqli_fetch_array($application_submissions);
+      $application_submissions_count = $application_submissions_row[0];
+
+      $renewal_submissions = mysqli_query($conn, " SELECT COUNT(*) FROM application_upload WHERE form_type = 'renewal'; ");
+      $renewal_submissions_row = mysqli_fetch_array($renewal_submissions);
+      $renewal_submissions_count = $renewal_submissions_row[0];
+
+      $commitment_submissions = mysqli_query($conn, " SELECT COUNT(*) FROM application_upload WHERE form_type = 'commitment'; ");
+      $commitment_submissions_row = mysqli_fetch_array($commitment_submissions);
+      $commitment_submissions_count = $commitment_submissions_row[0];
+
       if($user_type === 'super_admin' || $user_type === 'admin')
       {
         echo 
@@ -135,7 +148,7 @@ $name = "JC";
                           <p>Application Form</p>
                         </div>
                         <div class="icon">
-                          <i class="ion ion-bag"></i>
+                          <i class="ion ion-plus"></i>
                         </div>
                         <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                       </div>
@@ -166,7 +179,7 @@ $name = "JC";
                     <div class="card-header border-0">
                       <h3 class="card-title">
                         <i class="fas fa-th mr-1"></i>
-                        Form Statistics
+                        Form Submission Statistics
                       </h3>
 
                       <div class="card-tools">
@@ -184,21 +197,21 @@ $name = "JC";
                     <div class="card-footer bg-transparent">
                       <div class="row">
                         <div class="col-3 text-center">
-                          <input type="text" class="knob" data-readonly="true" value="$applications_count" data-width="60" data-height="60"
+                          <input type="text" class="knob" data-readonly="true" value="$application_submissions_count" data-width="60" data-height="60"
                                 data-fgColor="#39CCCC">
 
                           <div class="text-white">Application</div>
                         </div>
                         <!-- ./col -->
                         <div class="col-3 text-center">
-                          <input type="text" class="knob" data-readonly="true" value="$renewals_count" data-width="60" data-height="60"
+                          <input type="text" class="knob" data-readonly="true" value="$renewal_submissions_count" data-width="60" data-height="60"
                                 data-fgColor="#39CCCC">
 
                           <div class="text-white">Renewal</div>
                         </div>
                         <!-- ./col -->
                         <div class="col-3 text-center">
-                          <input type="text" class="knob" data-readonly="true" value="$commitments_count" data-width="60" data-height="60"
+                          <input type="text" class="knob" data-readonly="true" value="$commitment_submissions_count" data-width="60" data-height="60"
                                 data-fgColor="#39CCCC">
 
                           <div class="text-white">Commitment</div>
@@ -206,7 +219,7 @@ $name = "JC";
                         <!-- ./col -->
                         <!-- ./col -->
                         <div class="col-3 text-center">
-                          <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"
+                          <input type="text" class="knob" data-readonly="true" value="0" data-width="60" data-height="60"
                                 data-fgColor="#39CCCC">
 
                           <div class="text-white">Plans of Activities</div>
@@ -380,7 +393,7 @@ $name = "JC";
                       <p>Application</p>
                     </div>
                     <div class="icon">
-                      <i class="ion ion-bag"></i>
+                      <i class="ion ion-plus"></i>
                     </div>
                     <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                   </div>

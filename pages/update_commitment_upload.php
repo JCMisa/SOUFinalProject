@@ -13,13 +13,14 @@ $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
 
 $status_ac = $row['status'];
+$year = $row['year'];
 $uploader_user_id = $row['user_id'];
 
 if(isset($_POST['submit'])){
     $status = $_POST['status'];
 
     $query = " UPDATE application_upload SET status = '$status' WHERE id = $id; "; 
-    $query2 = " UPDATE commitment_tbl SET status = '$status' WHERE user_id = $uploader_user_id; ";
+    $query2 = " UPDATE commitment_tbl SET status = '$status' WHERE user_id = $uploader_user_id AND year = '$year'; ";
     $result = mysqli_query($conn, $query);
     $result2 = mysqli_query($conn, $query2);
 

@@ -89,12 +89,15 @@ if(isset($_POST['save']))
         echo "You cannot upload files of this type";
     }
     else {
-        $select = " SELECT * FROM application_upload WHERE user_id = '$user_id' && name = '$filename'; ";
+        $current_year = (new DateTime)->format("Y");
+        $select = " SELECT * FROM application_upload WHERE form_type = 'application' && year = '$current_year'; ";
         $result = mysqli_query($conn, $select);
         if(move_uploaded_file($file, $destination) && !mysqli_num_rows($result) > 0) {
             $status = $_POST['status_upload'];
             $form_type = $_POST['form_type'];
-            $sql = " INSERT INTO application_upload (name, size, downloads, uploader, status, user_id, form_type) VALUES('$filename', '$size', 0, '$user_name', '$status', $user_id, '$form_type'); ";
+            $year = (new DateTime)->format("Y");
+
+            $sql = " INSERT INTO application_upload (name, size, downloads, uploader, status, year, user_id, form_type) VALUES('$filename', '$size', 0, '$user_name', '$status', '$year', $user_id, '$form_type'); ";
 
             if(mysqli_query($conn, $sql)) {
                 echo "file uploaded successfully";
@@ -378,6 +381,7 @@ if(isset($_POST['save']))
                                 <th>ID</th>
                                 <th>File Name</th>
                                 <th>Status</th>
+                                <th>Submission Year</th>
                                 <th>Uploader</th>
                                 <th>Form Type</th>
                                 <th>Size</th>
@@ -410,6 +414,7 @@ if(isset($_POST['save']))
                                                     }
                                                 ?> 
                                             </td>
+                                            <td> <?php echo $row['year'] ?> </td>
                                             <td> <?php echo $row['uploader'] ?> </td>
                                             <td> <?php echo $row['form_type'] ?> </td>
                                             <td> <?php echo $row['size'] / 1000 . "KB"; ?> </td>
@@ -427,6 +432,7 @@ if(isset($_POST['save']))
                                 <th>ID</th>
                                 <th>File Name</th>
                                 <th>Status</th>
+                                <th>Submission Year</th>
                                 <th>Uploader</th>
                                 <th>Form Type</th>
                                 <th>Size</th>
