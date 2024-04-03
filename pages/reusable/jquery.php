@@ -1,34 +1,18 @@
-<script src="../app/plugins/jquery/jquery.min.js"></script>
+
+<script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
 <!-- jQuery UI 1.11.4 -->
-<script src="../app/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
   $.widget.bridge('uibutton', $.ui.button)
 </script>
 
-
-<!-- Bootstrap 4 -->
-<!-- <script src="../app/plugins/bootstrap/js/bootstrap.bundle.min.js"></script> -->
-<!-- ChartJS (merged inside app.min.js) -->
-<!-- <script src="../app/plugins/chart.js/Chart.min.js"></script> -->
-<!-- Sparkline -->
-<script src="../app/plugins/sparklines/sparkline.js"></script>
-<!-- JQVMap -->
-<!-- <script src="../app/plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="../app/plugins/jqvmap/maps/jquery.vmap.usa.js"></script> -->
-<!-- jQuery Knob Chart (merged inside app.min.js) -->
-<!-- <script src="../app/plugins/jquery-knob/jquery.knob.min.js"></script> -->
 <!-- daterangepicker -->
-<script src="../app/plugins/moment/moment.min.js"></script>
-<!-- <script src="../app/plugins/daterangepicker/daterangepicker.js"></script> -->
-<!-- Tempusdominus Bootstrap 4 (merged inside app.min.js) -->
-<!-- <script src="../app/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script> -->
-<!-- Summernote -->
-<!-- <script src="../app/plugins/summernote/summernote-bs4.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 <!-- overlayScrollbars -->
-<script src="../app/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/2.7.0/browser/overlayscrollbars.browser.es6.min.js"></script>
 <!-- AdminLTE App -->
-<script src="../app/dist/js/adminlte.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
 <!-- custom js -->
 <script src="../js/app.min.js"></script>
 <script src="../js/graphs.js"></script>
@@ -42,9 +26,9 @@
 <script src="../app/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 <script src="../app/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
 <script src="../app/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="../app/plugins/jszip/jszip.min.js"></script>
-<script src="../app/plugins/pdfmake/pdfmake.min.js"></script>
-<script src="../app/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js"></script>
 <script src="../app/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="../app/plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="../app/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
