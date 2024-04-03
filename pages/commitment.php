@@ -62,7 +62,7 @@ if(isset($_POST['save']))
     }
     else {
         $current_year = (new DateTime)->format("Y");
-        $select = " SELECT * FROM application_upload WHERE form_type = 'commitment' && year = '$current_year'; ";
+        $select = " SELECT * FROM application_upload WHERE form_type = 'commitment' && year = '$current_year' && user_id = $user_id; ";
         $result = mysqli_query($conn, $select);
         if(move_uploaded_file($file, $destination)  && !mysqli_num_rows($result) > 0) {
             $status = $_POST['status_upload'];
