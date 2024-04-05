@@ -76,7 +76,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./plan.php" class="nav-link">
+                <a href="./plans.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Plan of Activities</p>
                 </a>
@@ -159,7 +159,7 @@
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="pages/tables/jsgrid.html" class="nav-link">
+                      <a href="./plans_list.php" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Plans of Activities List</p>
                       </a>
