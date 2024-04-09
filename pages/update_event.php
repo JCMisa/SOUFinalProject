@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 @include '../configurations/config.php';
 session_start();
 
@@ -6,61 +7,37 @@ if(isset($_SESSION['user_id'])){
     $user_id = $_SESSION['user_id'];
 }
 
-
 $id = $_GET['update_id'];
 
-$sql = " SELECT * FROM user_tbl WHERE id = $id; ";
+$sql = " SELECT * FROM events_tbl WHERE id = $id; ";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
 
-$name_ac = $row['name'];
-$email_ac = $row['email'];
-$password_ac = $row['password'];
-$user_type_ac = $row['user_type'];
-
+$title_ac = $row['title'];
+$description_ac = $row['description'];
 
 if(isset($_POST['submit'])){
-    $name = mysqli_real_escape_string($conn, $_POST['name']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $pass = $_POST['password'];
-    $user_type = $_POST['user_type'];
+    $title = $_POST['title'];
+    $description = $_POST['description'];
 
-    $query = " UPDATE user_tbl SET id = $id, name = '$name', email = '$email', password = '$pass', user_type = '$user_type' WHERE id = $id; "; 
+    $query = " UPDATE events_tbl SET id = $id, title = '$title', description = '$description' WHERE id = $id; "; 
     $result = mysqli_query($conn, $query);
 
     if($result){
-        header('location:./manage_user.php?');
+        header('location:./index.php');
         die();
     }else{
+        header('location:./error_pages/error.php');
         die('Connect Error (' . mysqli_connect_errno() . ') '. mysqli_connect_error());
     }
-}
-
-if(isset($_GET['update_id'])){
-    $id = $_GET['update_id'];
-
-    $sql = " SELECT * FROM user_tbl WHERE id = $id; ";
-    $result = mysqli_query($conn, $sql);
-    if(mysqli_num_rows($result) <= 0)
-    {
-        $error[] = 'No record with id: '.$id;
-    }
-    $row = mysqli_fetch_assoc($result);
-
-    $id = $row['id'];
-    $name = $row['name'];
-    $email = $row['email'];
-    $pass = $row['password'];
-    $user_type = $row['user_type'];
 }
 
 if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
   $user_type = $_SESSION['user_type'];
   $user_name = $_SESSION['user_name'];
 }
+
 ?>
-
-
 
 
 
@@ -74,7 +51,6 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
   <title>SOU Management System</title>
     <?php include_once './reusable/head.php'; ?>
 </head>
-
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -97,7 +73,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                     <div class="col-sm-6">
                         <!-- go back button -->
                         <div class="row">
-                            <a href="./manage_user.php" class="button">
+                            <a href="./index.php" class="button">
                                 <div class="button-box">
                                     <span class="button-elem">
                                     <i class="bi bi-arrow-right"></i>
@@ -108,7 +84,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                 </div>
                             </a>
                             
-                            <h1 class="m-0">Update Account</h1>
+                            <h1 class="m-0">Update Event</h1>
                         </div>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
@@ -127,49 +103,19 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
             <form action="" method="post">
             <div class="card-body">
                 <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" name="name" class="form-control" id="name" placeholder="Name" value="<?php echo $name_ac; ?>">
+                    <label for="title">Event Title</label>
+                    <input type="text" name="title" class="form-control" id="title" placeholder="Enter short title" value="<?php echo $title_ac; ?>">
                 </div>
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" name="email" class="form-control" id="email" placeholder="sample@email.com" value="<?php echo $email_ac; ?>">
+                    <label for="description">Event Description</label>
+                    <input type="text" name="description" class="form-control" id="description" placeholder="Enter event description" value="<?php echo $description_ac; ?>">
                 </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" name="password" class="form-control" id="password" placeholder="Password" value="<?php echo $password_ac; ?>">
-                </div>
-                
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Role</label>
-                            <select name="user_type" multiple class="custom-select" value="<?php echo $user_type_ac; ?>">>
-                                <option value="user" <?php if($user_type_ac === "user") echo 'selected'; ?>>user</option>
-                                <option value="admin" <?php if($user_type_ac === "admin") echo 'selected'; ?>>admin</option>
-                                <option value="super_admin" <?php if($user_type_ac === "super_admin") echo 'selected'; ?>>super admin</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <!-- <div class="form-group">
-                    <label for="exampleInputFile">File input</label>
-                    <div class="input-group">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="exampleInputFile">
-                            <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                        </div>
-                        <div class="input-group-append">
-                            <span class="input-group-text">Upload</span>
-                        </div>
-                    </div>
-                </div> -->
             </div>
 
             <div class="card-footer">
                 <button type="submit" name="submit" class="btn btn-primary">Update</button>
             </div>
             </form>
-            
             
             <!-- /.content -->
         </div>
@@ -184,7 +130,8 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
         </aside>
         <!-- /.control-sidebar -->
     </div>
-<!-- ./wrapper -->
+
+    <!-- ./wrapper -->
 
 <!-- jQuery -->
 <?php include_once './reusable/jquery.php'; ?>

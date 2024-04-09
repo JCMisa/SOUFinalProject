@@ -18,6 +18,26 @@ $name = "JC";
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SOU Management System</title>
     <?php include_once './reusable/head.php'; ?>
+
+    <style>
+      .events-body {
+        max-height: 650px;
+        overflow-y: auto;
+        padding: 20px;
+      }
+
+      ::-webkit-scrollbar {
+          width: 7px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+          background: #888;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+          background: #555;
+      }
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -74,6 +94,11 @@ $name = "JC";
       $renewal_row = mysqli_fetch_array($renewals);
       $renewals_count = $renewal_row[0];
 
+      // get the total number of plan of activities form submitted
+      $plans = mysqli_query($conn, " SELECT COUNT(*) FROM plans; ");
+      $plan_row = mysqli_fetch_array($plans);
+      $plans_count = $plan_row[0];
+
       // get the number of user roles (user, admin, super_admin)
       // users
       $user_roles = mysqli_query($conn, " SELECT COUNT(*) FROM user_tbl WHERE user_type = 'user'; ");
@@ -88,18 +113,22 @@ $name = "JC";
       $super_admin_roles_row = mysqli_fetch_array($super_admin_roles);
       $super_admin_roles_count = $super_admin_roles_row[0];
 
-      // get the total number of commitment submissions
+      // get the total number of application submissions
       $application_submissions = mysqli_query($conn, " SELECT COUNT(*) FROM application_upload WHERE form_type = 'application'; ");
       $application_submissions_row = mysqli_fetch_array($application_submissions);
       $application_submissions_count = $application_submissions_row[0];
 
+      // get the total number of renewal submissions
       $renewal_submissions = mysqli_query($conn, " SELECT COUNT(*) FROM application_upload WHERE form_type = 'renewal'; ");
       $renewal_submissions_row = mysqli_fetch_array($renewal_submissions);
       $renewal_submissions_count = $renewal_submissions_row[0];
 
+      // get the total number of commitment submissions
       $commitment_submissions = mysqli_query($conn, " SELECT COUNT(*) FROM application_upload WHERE form_type = 'commitment'; ");
       $commitment_submissions_row = mysqli_fetch_array($commitment_submissions);
       $commitment_submissions_count = $commitment_submissions_row[0];
+
+      
 
       if($user_type === 'super_admin' || $user_type === 'admin')
       {
@@ -219,7 +248,7 @@ $name = "JC";
                         <!-- ./col -->
                         <!-- ./col -->
                         <div class="col-3 text-center">
-                          <input type="text" class="knob" data-readonly="true" value="0" data-width="60" data-height="60"
+                          <input type="text" class="knob" data-readonly="true" value="$plans_count" data-width="60" data-height="60"
                                 data-fgColor="#39CCCC">
 
                           <div class="text-white">Plans of Activities</div>
@@ -422,6 +451,10 @@ $name = "JC";
         USERCONTENT;
       }
     ?>
+
+    <div class="events">
+      <?php include_once './reusable/events.php'; ?>
+    </div>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->

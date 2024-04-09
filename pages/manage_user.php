@@ -11,6 +11,7 @@ if(isset($_POST['submit'])){
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $pass = $_POST['password'];
     $cpass = $_POST['cpassword'];
+    $organization = $_POST['organization'];
     $user_type = $_POST['user_type'];
 
     $select = " SELECT * FROM user_tbl WHERE email = '$email' && password = '$pass' ";
@@ -26,6 +27,15 @@ if(isset($_POST['submit'])){
         }else{
             $insert = "INSERT INTO user_tbl(name, email, password, user_type) VALUES('$name','$email','$pass','$user_type')";
             mysqli_query($conn, $insert);
+
+            $user_id = mysqli_insert_id($conn);
+
+            foreach ($organization as $org) {
+                $org = mysqli_real_escape_string($conn, $org);
+                $sql = " INSERT INTO organization_tbl (user_id, organization) VALUES ('$user_id', '$org'); ";
+                $result = mysqli_query($conn, $sql);
+            }
+
             header('location:./manage_user.php');
             die();
         }
@@ -130,6 +140,28 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                             </select>
                         </div>
                     </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Organization</label>
+                            <?php 
+                            $sql = "SELECT id, name FROM organizations";
+                            $result = mysqli_query($conn, $sql);   
+                            ?>
+                            <select name="organization[]" multiple class="custom-select" id="organizations">
+                                <option value="none" disabled>--Select Organization--</option>
+                                <?php 
+                                if($resultCheck = mysqli_num_rows($result)) {
+                                while($row = mysqli_fetch_assoc($result)) {
+                                ?>
+                                    <option value="<?php echo $row['name'] ?>"><?php echo $row['name'] ?></option>
+                                <?php 
+                                }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -154,6 +186,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                             <th>Name</th>
                             <th>Email</th>
                             <th>Password</th>
+                            <th>Organization</th>
                             <th>Role</th>
                             <th>View</th>
                             <th>Edit</th>
@@ -162,23 +195,53 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                     </thead>
                     <tbody>
                         <?php
-                            $select_all_user = " SELECT * FROM user_tbl; "; 
-                            $result_all = mysqli_query($conn, $select_all_user);
-                            $resultCheck = mysqli_num_rows($result_all);
+                            $sql = " SELECT user_tbl.id AS user_id, 
+                            user_tbl.name, 
+                            user_tbl.email, 
+                            user_tbl.password, 
+                            user_tbl.user_type,
+                            organization_tbl.organization
+                            FROM user_tbl 
+                            INNER JOIN organization_tbl ON user_tbl.id = organization_tbl.user_id
+                            ; ";
 
-                            if($resultCheck > 0)
+                            $result = mysqli_query($conn, $sql);
+                            
+
+
+                            if(mysqli_num_rows($result) > 0)
                             {
-                                while($row = mysqli_fetch_assoc($result_all))
+                                $users = array();
+                                while($row = mysqli_fetch_assoc($result))
+                                {
+                                    if(!isset($users[$row['user_id']])) {
+                                        $users[$row['user_id']] = array(
+                                            'name' => $row['name'],
+                                            'email' => $row['email'],
+                                            'password' => $row['password'],
+                                            'user_type' => $row['user_type'],
+                                            'organization_tbl' => array()
+                                        );
+                                    }
+
+                                    if (!in_array($row['organization'], $users[$row['user_id']]['organization_tbl'])) {
+                                        $users[$row['user_id']]['organization_tbl'][] = $row['organization'];
+                                    }
+                                }
+
+                                foreach ($users as $user_id => $user)
                                 {
                         ?>
                                     <tr>
-                                        <td> <?php echo $row['name'] ?> </td>
-                                        <td> <?php echo $row['email'] ?> </td>
-                                        <td> <?php echo $row['password'] ?> </td>
-                                        <td> <?php echo $row['user_type'] ?> </td>
-                                        <td> <a href="./details_user.php?details_id=<?php echo $row['id'] ?>" class="btn btn-block btn-outline-warning"> View </a> </td>
-                                        <td> <a href="./update_user.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
-                                        <td> <a href="./delete_user.php?delete_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-danger"> Delete </a> </td>
+                                        <td> <?php echo $user['name'] ?> </td>
+                                        <td> <?php echo $user['email'] ?> </td>
+                                        <td> <?php echo $user['password'] ?> </td>
+                                        <td> <?php echo implode("<hr>", $user['organization_tbl']) ?> </td>
+                                        <td> <?php echo $user['user_type'] ?> </td>
+
+                                        <td> <a href="./details_user.php?details_id=<?php echo $user_id ?>" class="btn btn-block btn-outline-warning"> View </a> </td>
+                                        <td> <a href="./update_user.php?update_id='<?php echo $user_id ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
+                                        <td> <a href="./delete_user.php?delete_id='<?php echo $user_id ?>'" class="btn btn-block btn-outline-danger"> Delete </a> </td>
                                     </tr>
                         <?php
                                 }
@@ -190,6 +253,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                             <th>Name</th>
                             <th>Email</th>
                             <th>Password</th>
+                            <th>Organization</th>
                             <th>Role</th>
                             <th>View</th>
                             <th>Edit</th>
@@ -219,5 +283,15 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
 
 <!-- jQuery -->
 <?php include_once './reusable/jquery.php'; ?>
+<script>
+    var select = document.getElementById('organizations');
+    select.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        var select = this;
+        var index = Array.from(select.options).findIndex(option => option === e.target);
+        select.options[index].selected = !select.options[index].selected;
+        return false;
+    });
+</script>
 </body>
 </html>

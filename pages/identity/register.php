@@ -10,6 +10,7 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
    $email = mysqli_real_escape_string($conn, $_POST['email']); //real_esape is used to escape any special characters
    $pass = $_POST['password'];
    $cpass = $_POST['cpassword'];
+   $organization = $_POST['organization'];
    $user_type = $_POST['user_type'];
 
    $select = " SELECT * FROM user_tbl WHERE email = '$email' && password = '$pass' ";
@@ -27,6 +28,15 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
       }else{
          $insert = "INSERT INTO user_tbl(name, email, password, user_type) VALUES('$name','$email','$pass','$user_type')";
          mysqli_query($conn, $insert);
+
+         $user_id = mysqli_insert_id($conn);
+
+         foreach ($organization as $org) {
+            $org = mysqli_real_escape_string($conn, $org);
+            $sql = " INSERT INTO organization_tbl (user_id, organization) VALUES ('$user_id', '$org'); ";
+            $result = mysqli_query($conn, $sql);
+          }
+
          header('location:login.php');
          die();
       }
@@ -111,7 +121,25 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
           </div>
         </div>
 
-        <!-- default is user role -->
+        <div class="input-group mb-3">
+          <?php 
+          $sql = "SELECT id, name FROM organizations";
+          $result = mysqli_query($conn, $sql);   
+          ?>
+          <select name="organization[]" multiple class="custom-select" id="organizations">
+            <option value="none" disabled>--Select Organization--</option>
+            <?php 
+            if($resultCheck = mysqli_num_rows($result)) {
+              while($row = mysqli_fetch_assoc($result)) {
+            ?>
+                <option value="<?php echo $row['name'] ?>"><?php echo $row['name'] ?></option>
+            <?php 
+              }
+            }
+            ?>
+          </select>
+        </div>
+
         <div class="input-group mb-3">
           <select name="user_type" hidden>
             <option value="user" selected>user</option>
@@ -174,5 +202,15 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
   <script src="../js/app.min.js"></script>
   <script src="../js/graphs.js"></script>
   <script src="../js/customize.js"></script>
+  <script>
+    var select = document.getElementById('organizations');
+    select.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        var select = this;
+        var index = Array.from(select.options).findIndex(option => option === e.target);
+        select.options[index].selected = !select.options[index].selected;
+        return false;
+    });
+  </script>
 </body>
 </html>

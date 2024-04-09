@@ -362,6 +362,8 @@ if(isset($_POST['submit'])){
                                     if (!in_array($row['budget'], $plans[$row['plan_id']]['target_budget'])) {
                                         $plans[$row['plan_id']]['target_budget'][] = $row['budget'];
                                     }
+                                    // array_push($plans[$row['plan_id']]['target_budget'], $row['budget']);
+                                    
                                 }
 
                                 foreach ($plans as $plan_id => $plan)
@@ -393,7 +395,7 @@ if(isset($_POST['submit'])){
                                         <td> <?php echo implode("<hr>", $plan['target_budget']) ?> </td>
 
                                         <td> <a href="./details_renewal.php?details_id='<?php echo $plan_id ?>'" class="btn btn-block btn-outline-warning"> View </a> </td>
-                                        <td> <a href="./update_renewal.php?update_id='<?php echo $plan_id ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
+                                        <td> <a href="./update_plans.php?update_id='<?php echo $plan_id ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
                                         <td> <a href="./delete_plans.php?delete_id='<?php echo $plan_id ?>'" class="btn btn-block btn-outline-danger"> Delete </a> </td>
                                     </tr>
                         <?php

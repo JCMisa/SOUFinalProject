@@ -60,12 +60,12 @@
 <body>
     <section class="content">
         <div class="error-page">
-            <h2 class="headline text-danger">409</h2>
+            <h2 class="headline text-warning"> 404</h2>
             <div class="error-content">
-                <h3><i class="fas fa-exclamation-triangle text-danger"></i> Oops! Your request could not be completed.</h3>
+                <h3><i class="fas fa-exclamation-triangle text-warning"></i> Oops! Page not found.</h3>
                 <p>
-                There is a conflict with the current state of the resource.
-                It might be because you've already added a form for this school year. Meanwhile, you may <a href="../index.php">return to dashboard</a> or try selecting a destination.
+                    We could not find the page you were looking for.
+                    Meanwhile, you may <a href="../index.php">return to dashboard</a> or try using the search form.
                 </p>
                 <form class="search-form" method="post">
                     <div class="input-group">
@@ -77,7 +77,7 @@
                             <option value="plans-form">Plan of Activities</option>
                         </select>
                         <div class="input-group-append">
-                            <button type="submit" name="submit" class="btn btn-danger"><i class="fas fa-search"></i>
+                            <button type="submit" name="submit" class="btn btn-warning"><i class="fas fa-search"></i>
                             </button>
                         </div>
                     </div>

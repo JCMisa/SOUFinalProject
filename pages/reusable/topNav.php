@@ -13,7 +13,7 @@
       {
         echo <<<MANAGE
           <li class="nav-item d-none d-sm-inline-block">
-            <a href="./manage_user.php" class="nav-link">Manage</a>
+            <a href="./manage_user.php" class="nav-link">Accounts</a>
           </li>
         MANAGE;
       }
