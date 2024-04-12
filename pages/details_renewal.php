@@ -495,7 +495,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                     $select_filter_result = mysqli_query($conn, $select_filter);
                                     $row = mysqli_fetch_assoc($select_filter_result)
                                     ?>
-                                    <a href="./delete_renewal.php?delete_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-danger"> Delete </a>
+                                    <a href="./delete_renewal.php?delete_id='<?php echo $row['id'] ?>'" class="delete btn btn-block btn-outline-danger"> Delete </a>
 
                                     <a href="#" class="btn btn-block btn-outline-success" id="print_application"> Convert to PDF </a>
 

@@ -137,7 +137,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                         <td> <?php echo $row['id'] ?> </td>
                                         <td> <?php echo $row['name'] ?> </td>
                                         <td> <a href="./update_org.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
-                                        <td> <a href="./delete_org.php?delete_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-danger"> Delete </a> </td>
+                                        <td> <a href="./delete_org.php?delete_id='<?php echo $row['id'] ?>'" class="delete btn btn-block btn-outline-danger"> Delete </a> </td>
                                     </tr>
                         <?php
                                 }

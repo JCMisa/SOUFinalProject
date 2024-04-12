@@ -126,7 +126,7 @@
                                     </td>
                                     <td> <a href="./details_commitment.php?details_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-warning <?php echo $isDisabled ?>"> View </a> </td>
                                     <td> <a href="./update_commitment.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-info <?php echo $isDisabled ?>"> Edit </a> </td>
-                                    <td> <a href="./delete_commitment.php?delete_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-danger <?php echo $isDisabled ?>"> Delete </a> </td>
+                                    <td> <a href="./delete_commitment.php?delete_id='<?php echo $row['id'] ?>'" class="delete btn btn-block btn-outline-danger <?php echo $isDisabled ?>"> Delete </a> </td>
                                 </tr>
                             <?php
                                     }

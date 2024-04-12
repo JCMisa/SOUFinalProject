@@ -331,7 +331,7 @@ if(isset($_POST['save']))
                                         </td>
                                         <td> <a href="./details_commitment.php?details_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-warning"> View </a> </td>
                                         <td> <a href="./update_commitment.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
-                                        <td> <a href="./delete_commitment.php?delete_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-danger"> Delete </a> </td>
+                                        <td> <a href="./delete_commitment.php?delete_id='<?php echo $row['id'] ?>'" class="delete btn btn-block btn-outline-danger"> Delete </a> </td>
                                     </tr>
                         <?php
                                 }

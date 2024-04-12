@@ -396,7 +396,7 @@ if(isset($_POST['submit'])){
 
                                         <td> <a href="./details_renewal.php?details_id='<?php echo $plan_id ?>'" class="btn btn-block btn-outline-warning"> View </a> </td>
                                         <td> <a href="./update_plans.php?update_id='<?php echo $plan_id ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
-                                        <td> <a href="./delete_plans.php?delete_id='<?php echo $plan_id ?>'" class="btn btn-block btn-outline-danger"> Delete </a> </td>
+                                        <td> <a href="./delete_plans.php?delete_id='<?php echo $plan_id ?>'" class="delete btn btn-block btn-outline-danger"> Delete </a> </td>
                                     </tr>
                         <?php
                                 }

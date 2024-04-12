@@ -241,7 +241,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
 
                                         <td> <a href="./details_user.php?details_id=<?php echo $user_id ?>" class="btn btn-block btn-outline-warning"> View </a> </td>
                                         <td> <a href="./update_user.php?update_id='<?php echo $user_id ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
-                                        <td> <a href="./delete_user.php?delete_id='<?php echo $user_id ?>'" class="btn btn-block btn-outline-danger"> Delete </a> </td>
+                                        <td> <a href="./delete_user.php?delete_id='<?php echo $user_id ?>'" class="delete btn btn-block btn-outline-danger"> Delete </a> </td>
                                     </tr>
                         <?php
                                 }

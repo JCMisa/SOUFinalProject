@@ -18,7 +18,7 @@ if(isset($_POST['submit']))
 }
 ?>
 
-<div class="card">
+<div class="card" id="eventsTable">
     <div class="card-header">
         <h3 class="card-title"> 
             <?php
@@ -75,7 +75,17 @@ if(isset($_POST['submit']))
                 <?php 
                     $isHidden = ($user_type !== "super_admin") ? "d-none" : "";
 
-                    $sql = " SELECT * FROM events_tbl; "; 
+                    $sql_count = " SELECT COUNT(*) AS count FROM events_tbl; ";
+                    $result_counter = mysqli_query($conn, $sql_count);
+                    $row_count = mysqli_fetch_assoc($result_counter);
+                    $count = $row_count['count'];
+                    if($count > 5) {
+                        $sql_delete = " DELETE FROM events_tbl WHERE id = (SELECT MIN(id) FROM events_tbl); ";
+                        $result_delete = mysqli_query($conn, $sql_delete);
+                    }
+
+
+                    $sql = " SELECT * FROM events_tbl ORDER BY id DESC; "; 
                     $result = mysqli_query($conn, $sql);
                     $result_count = mysqli_num_rows($result);
 
@@ -97,7 +107,7 @@ if(isset($_POST['submit']))
                                 </p>
                                 <div class="<?php echo $isHidden ?>">
                                     <a href="./update_event.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-info"> Edit </a>
-                                    <a href="./delete_event.php?delete_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-danger"> Delete </a>
+                                    <a href="./delete_event.php?delete_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-danger delete"> Delete </a>
                                 </div>
                             </div>
                 <?php
@@ -151,3 +161,5 @@ if(isset($_POST['submit']))
     </div>
     </div>
 </div>
+
+

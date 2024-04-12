@@ -168,7 +168,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                     $result = mysqli_query($conn, $sql);
                                     $row = mysqli_fetch_assoc($result);
                                     ?>
-                                    <a href="./delete_user.php?delete_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-danger"> Delete </a>
+                                    <a href="./delete_user.php?delete_id='<?php echo $row['id'] ?>'" class="delete btn btn-block btn-outline-danger"> Delete </a>
                                 </div>
                             </form>
                         </div>

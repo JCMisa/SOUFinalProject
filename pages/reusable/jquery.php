@@ -13,10 +13,48 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/2.7.0/browser/overlayscrollbars.browser.es6.min.js"></script>
 <!-- AdminLTE App -->
 <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
+
+
+
+<!-- sweet alert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  $('.delete').on('click', function (e) {
+    e.preventDefault();
+
+    const href = $(this).attr('href');
+
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.value) {
+              document.location.href = href;
+              // Swal.fire({
+              // title: "Deleted!",
+              // text: "Your record has been deleted.",
+              // icon: "success"
+              // });
+            }
+        });
+  });
+</script>
+
+
+
+
 <!-- custom js -->
 <script src="../js/app.min.js"></script>
 <script src="../js/graphs.js"></script>
 <script src="../js/customize.js"></script>
+<!-- <script src="../js/sweetAlert.js"></script> -->
+
+
 
 
 <!-- datatables -->
@@ -48,3 +86,4 @@
     });
   });
 </script>
+

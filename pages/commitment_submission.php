@@ -125,7 +125,7 @@
                                     <a href="./update_commitment_upload.php?details_id='<?php echo $file['id'] ?>'" class="btn btn-block btn-outline-info"> Status </a>
                                 </td>
                                 <td> 
-                                    <a href="./delete_application_upload.php?delete_id='<?php echo $file['id'] ?>'" class="btn btn-block btn-outline-danger"> Delete </a> 
+                                    <a href="./delete_application_upload.php?delete_id='<?php echo $file['id'] ?>'" class="delete btn btn-block btn-outline-danger"> Delete </a> 
                                 </td>
                             </tr>
 
