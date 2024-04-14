@@ -8,13 +8,48 @@ if(isset($_POST['submit']))
     $title = $_POST['event_title'];
     $description = $_POST['event_description'];
     $date = $_POST['date'];
-
-    $sql = " INSERT INTO events_tbl(title, description, date) VALUES('$title', '$description', '$date'); ";
-    $result = mysqli_query($conn, $sql);
-    if(!$result){
-        header('location:./error_pages/error.php');
-        die();
+    if($_FILES["image"]["error"] === 4)
+    {
+        echo " <script> alert('No Image Found'); </script> ";
     }
+    else
+    {
+        $fileName = $_FILES["image"]["name"];
+        $fileSize = $_FILES["image"]["size"];
+        $tmpName = $_FILES["image"]["tmp_name"];
+
+        $validImageExtension = ['jpg', 'jpeg', 'png'];
+        $imageExtension = explode('.', $fileName);
+        $imageExtension = strtolower(end($imageExtension));
+        if(!in_array($imageExtension, $validImageExtension))
+        {
+            echo " <script> alert('Invalid Image Type'); </script> ";
+        }
+        else if($fileSize > 2000000)
+        {
+            echo " <script> alert('Image Size is Too Large'); </script> ";
+        }
+        else
+        {
+            $newImageName = uniqid('', true) . '.' . $imageExtension;
+
+            move_uploaded_file($tmpName, 'event_images/'.$newImageName);
+
+            $sql = " INSERT INTO events_tbl(title, description, date, image) VALUES('$title', '$description', '$date', '$newImageName'); ";
+            $result = mysqli_query($conn, $sql);
+            if(!$result){
+                header('location:./error_pages/error.php');
+                die();
+            }
+        }
+    }
+
+    // $sql = " INSERT INTO events_tbl(title, description, date) VALUES('$title', '$description', '$date'); ";
+    // $result = mysqli_query($conn, $sql);
+    // if(!$result){
+    //     header('location:./error_pages/error.php');
+    //     die();
+    // }
 }
 ?>
 
@@ -94,22 +129,27 @@ if(isset($_POST['submit']))
                         while($row = mysqli_fetch_assoc($result))
                         {
                 ?>
-                            <div class="post clearfix">
-                                <div class="user-block">
-                                    <span class="font-weight-bold text-primary" style="font-size: 20px;"> <?php echo $row['title']; ?> </span>
-                                    <span class="description">Date posted: <?php echo $row['date']; ?> </span>
-                                </div>
+                            <div style="background-image: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0)), url('event_images/<?php echo $row['image'] ?>'); background-repeat: no-repeat; background-position: center; background-size: cover; padding-bottom: 40px;">
+                                <div class="post clearfix">
+                                    <div class="user-block">
+                                        <span class="font-weight-bold text-primary" style="font-size: 20px;"> <?php echo $row['title']; ?> </span>
+                                        <span class="description">Date posted: <?php echo $row['date']; ?> </span>
+                                    </div>
 
-                                <p>
-                                    <?php 
-                                        echo $row['description'];
-                                    ?>
-                                </p>
-                                <div class="<?php echo $isHidden ?>">
-                                    <a href="./update_event.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-info"> Edit </a>
-                                    <a href="./delete_event.php?delete_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-danger delete"> Delete </a>
+                                    <p>
+                                        <?php 
+                                            echo $row['description'];
+                                        ?>
+                                    </p>
                                 </div>
                             </div>
+                            <br>
+                            <div class="<?php echo $isHidden ?>">
+                                <a href="./update_event.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-info"> Edit </a>
+                                <a href="./delete_event.php?delete_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-danger delete"> Delete </a>
+                            </div>
+                            <br>
+                            <br>
                 <?php
                         }
                     }
@@ -140,15 +180,24 @@ if(isset($_POST['submit']))
         <?php 
             $isDisabled = ($user_type !== "super_admin") ? "disabled" : "";
         ?>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <div class="card-body">
                 <div class="form-group">
                     <label for="title">Event Title</label>
-                    <input type="text" name="event_title" class="form-control" id="title" placeholder="Enter short title" <?php echo $isDisabled ?>>
+                    <input required type="text" name="event_title" class="form-control" id="title" placeholder="Enter short title" <?php echo $isDisabled ?>>
                 </div>
                 <div class="form-group">
                     <label for="pres">Event Description</label>
                     <input type="text" name="event_description" class="form-control" id="pres" placeholder="Enter event description" <?php echo $isDisabled ?>>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputFile">Event Image</label>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="exampleInputFile" name="image" accept=".jpg, .jpeg, .png">
+                            <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <input type="text" name="date" value="<?php echo date("F d, Y"); ?>" class="form-control" id="date" hidden <?php echo $isDisabled ?>>
