@@ -5,8 +5,8 @@ if(isset($_SESSION['user_id'])){
 
 if(isset($_POST['submit']))
 {
-    $title = $_POST['event_title'];
-    $description = $_POST['event_description'];
+    $title = mysqli_real_escape_string($conn, $_POST['event_title']);
+    $description = mysqli_real_escape_string($conn, $_POST['event_description']);
     $date = $_POST['date'];
     if($_FILES["image"]["error"] === 4)
     {

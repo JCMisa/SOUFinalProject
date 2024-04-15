@@ -6,6 +6,12 @@
     if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
     $user_type = $_SESSION['user_type'];
     $user_name = $_SESSION['user_name'];
+
+    if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin' && $_SESSION['user_type'] != 'admin') {
+        // If the user is not an super admin, redirect them to a access denied page
+        header('Location: ./error_pages/denied.php');
+        die();
+    }
 }
 ?>
 

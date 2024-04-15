@@ -56,6 +56,12 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
   $user_type = $_SESSION['user_type'];
   $user_name = $_SESSION['user_name'];
 }
+
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
+    // If the user is not an super admin, redirect them to a access denied page
+    header('Location: ./error_pages/denied.php');
+    die();
+}
 ?>
 
 
@@ -157,8 +163,12 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                     {
                                         echo <<<SHOWSTATUS
                                             <div class="form-group">
-                                                <label for="status">Status</label>
-                                                <input type="text" name="status" class="form-control" id="status" value="$status_ac">
+                                                <label>Status</label>
+                                                <select name="status" multiple class="custom-select" value="$status_ac">
+                                                    <option value="pending">Pending</option>
+                                                    <option value="success">Success</option>
+                                                    <option value="failed">Failed</option>
+                                                </select>
                                             </div>
                                         SHOWSTATUS;
                                     } else {

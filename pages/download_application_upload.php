@@ -31,4 +31,10 @@
             exit;
         }
     }
+
+    if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
+        // If the user is not an super admin, redirect them to a access denied page
+        header('Location: ./error_pages/denied.php');
+        die();
+    }
 ?>

@@ -8,8 +8,8 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
 
    $name = mysqli_real_escape_string($conn, $_POST['name']);
    $email = mysqli_real_escape_string($conn, $_POST['email']); //real_esape is used to escape any special characters
-   $pass = $_POST['password'];
-   $cpass = $_POST['cpassword'];
+   $pass = mysqli_real_escape_string($conn, $_POST['password']);
+   $cpass = mysqli_real_escape_string($conn, $_POST['cpassword']);
    $organization = $_POST['organization'];
    $user_type = $_POST['user_type'];
 
@@ -69,7 +69,17 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <!-- bootstrap icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    .register-page {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url('../../images/lspu_bg.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
 </head>
+
 <body class="hold-transition register-page">
   <?php
     if(isset($error)){

@@ -8,9 +8,9 @@ if(isset($_POST['submit'])){
 
    $name = mysqli_real_escape_string($conn, $_POST['name']);
    $email = mysqli_real_escape_string($conn, $_POST['email']);
-   $pass = $_POST['password'];
-   $cpass = $_POST['cpassword'];
-   $user_type = $_POST['user_type'];
+   $pass = mysqli_real_escape_string($conn, $_POST['password']);
+   $cpass = mysqli_real_escape_string($conn, $_POST['cpassword']);
+   $user_type = mysqli_real_escape_string($conn, $_POST['user_type']);
 
    $select = " SELECT * FROM user_tbl WHERE email = '$email' && password = '$pass' ";
 
@@ -53,6 +53,15 @@ if(isset($_POST['submit'])){
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <!-- bootstrap icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    .login-page {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url('../../images/lspu_bg.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
 </head>
 
 <body class="hold-transition login-page">

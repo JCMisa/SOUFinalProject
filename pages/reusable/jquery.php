@@ -7,6 +7,8 @@
   $.widget.bridge('uibutton', $.ui.button)
 </script>
 
+<!-- chartjs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>
 <!-- daterangepicker -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 <!-- overlayScrollbars -->
