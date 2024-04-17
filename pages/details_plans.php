@@ -8,28 +8,37 @@ if(isset($_SESSION['user_id'])){
 
 $id = $_GET['details_id'];
 
-$sql = " SELECT * FROM renewal_tbl WHERE id = $id; ";
+$sql = "SELECT * FROM plans WHERE user_id = $user_id";
 $result = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($result);
+$plan = mysqli_fetch_assoc($result);
 
-$organization_ac = $row['organization'];
-$college_ac = $row['college'];
-$year_ac = $row['year'];
-$president_ac = $row['president'];
-$status_ac = $row['status'];
+$organization_ac = $plan['organization'];
+$president_ac = $plan['president'];
+$secretary_ac = $plan['secretary'];
+$year_ac = $plan['year'];
+$status_ac = $plan['status'];
+
+
+
+$sql = "SELECT objective FROM objectives WHERE plan_id = " . $plan['id'];
+$result = mysqli_query($conn, $sql);
+$objectives = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+
+
 
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
-    $college = mysqli_real_escape_string($conn, $_POST['college']);
     $president = mysqli_real_escape_string($conn, $_POST['president']);
+    $secretary = mysqli_real_escape_string($conn, $_POST['secretary']);
     $status = $_POST['status'];
-    $renewal_user_id = $user_id;
+    $plans_user_id = $user_id;
 
-    $query = " UPDATE renewal_tbl SET id = $id, organization = '$organization', college = '$college', president = '$president', status = '$status' WHERE id = $id; "; 
+    $query = " UPDATE plans SET id = $id, organization = '$organization', president = '$president', secretary = '$secretary', status = '$status' WHERE id = $id; "; 
     $result = mysqli_query($conn, $query);
 
     if($result){
-        header('location:./renewal.php');
+        header('location:./plans.php');
         die();
     }else{
         die('Connect Error (' . mysqli_connect_errno() . ') '. mysqli_connect_error());
@@ -39,7 +48,7 @@ if(isset($_POST['submit'])){
 if(isset($_GET['details_id'])){
     $id = $_GET['details_id'];
 
-    $sql = " SELECT * FROM renewal_tbl WHERE id = $id; ";
+    $sql = " SELECT * FROM plans WHERE id = $id; ";
     $result = mysqli_query($conn, $sql);
     if(mysqli_num_rows($result) <= 0)
     {
@@ -48,9 +57,9 @@ if(isset($_GET['details_id'])){
     $row = mysqli_fetch_assoc($result);
 
     $organization = $row['organization'];
-    $college = $row['college'];
     $year = $row['year'];
     $president = $row['president'];
+    $secretary = $row['secretary'];
     $status = $row['status'];
 }
 
@@ -126,9 +135,18 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
             text-align: center;
         }
 
+        .renewal-header-sub-text .org-name {
+            font-size: 14px;
+        }
+
         .renewal-header-sub-text .subtext-2 {
             margin-top: 5px;
             font-size: 14px;
+        }
+
+        .renewal-header-sub-text .subtext-3 {
+            margin-top: 5px;
+            font-size: 12px;
         }
 
         .renewal-body {
@@ -157,11 +175,23 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
         }
 
         .renewal-body .noted {
+            text-align: start;
             margin-top: 100px;
+        }
+
+        .renewal-body .adviser {
+            text-align: start;
+            margin-top: 50px;
+        }
+
+        .renewal-body .secretary {
+            text-align: end;
+            margin-top: -115px;
         }
 
         .renewal-body .dean {
             text-align: end;
+            margin-top: 50px;
         }
 
         .renewal-footer {
@@ -174,7 +204,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
         }
 
         .renewal-footer .footer ul {
-            gap: 120px;
+            gap: 200px;
         }
 
         @media print {
@@ -227,8 +257,16 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                 margin-top: 70px;
             }
 
+            .renewal-header-sub-text .org-name {
+                font-size: 26px;
+            }
+
             .renewal-header-sub-text .subtext-2 {
                 font-size: 35px;
+            }
+
+            .renewal-header-sub-text .subtext-3 {
+                font-size: 20px;
             }
 
             .renewal-body .app-body-director  {
@@ -248,7 +286,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
             }
 
             .renewal-body .noted {
-                margin-top: 17rem;
+                margin-top: 7rem;
             }
 
             .renewal-body .noted .indent {
@@ -259,12 +297,21 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                 right: 30px;
             }
 
+            .renewal-body .secretary {
+                margin-right: 40px;
+                margin-top: -230px;
+            }
+
             .renewal-body .dean {
                 margin-right: 40px;
             }
 
             .renewal-footer {
                 margin-top: 3rem;
+            }
+
+            .renewal-footer .approval {
+                margin-top: 150px;
             }
 
             .renewal-footer .footer ul {
@@ -296,7 +343,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                     <div class="col-sm-6">
                         <!-- go back button -->
                         <div class="row">
-                            <a href="./renewal.php" class="button">
+                            <a href="./plans.php" class="button">
                                 <div class="button-box">
                                     <span class="button-elem">
                                     <i class="bi bi-arrow-right"></i>
@@ -307,7 +354,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                 </div>
                             </a>
                             
-                            <h1 class="m-0">Renewal Form Details</h1>
+                            <h1 class="m-0">Plans Form Details</h1>
                         </div>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
@@ -326,7 +373,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
             <section class="content">
                 <div class="card">
                     <div class="card-body row">
-                        <div class="col-5">
+                        <div class="col-7">
                             <!-- commitment form, to be continued... -->
 
                             <div class="renewal-container">
@@ -347,49 +394,142 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                     </div>
 
                                     <div class="renewal-header-sub-text">
-                                        <h6 class="subtext-2"><strong>OFFICE OF STUDENT AFFAIRS AND SERVICES</strong></h6>
-                                        <h6 class="subtext-2"><strong>RENEWAL FORM</strong></h6>
+                                        <span class="underline org-name"> <?php echo $organization_ac ?> </span>
+                                        <h6 class="subtext-3" style="margin-top: -2px;"><strong>Name of Organization</strong></h6>
+                                        <h6 class="subtext-2"><strong>PLAN OF ACTIVITIES</strong></h6>
+                                        <h6 class="subtext-3"><strong> Semester AY <span class="underline"> <?php echo $year_ac ?> - <span class="underline"> <?php echo $year_ac + 1 ?> </span>  </strong></h6>
                                     </div>
                                 </div>
 
+                                <br>
+                                
                                 <div class="renewal-body">
-                                    <div class="app-body-director">
-                                        <p><strong>THE DIRECTOR/CHAIRPERSON</strong></p>
-                                        <p><strong>Office of Student Affairs and Services</strong></p>
-                                        <p><strong>LSPU</strong></p>
+                                    <div class="card">
+
+                                    <div class="card-body p-0">
+                                        <table class="table table-sm" style="border: 1px solid black;">
+                                            <thead>
+                                                <tr>
+                                                    <th style="border-right: 1px solid black; border-bottom: 1px solid black;"> OBJECTIVE </th>
+                                                    <th style="border-right: 1px solid black; border-bottom: 1px solid black;"> ACTIVITIES </th>
+                                                    <th style="border-right: 1px solid black; border-bottom: 1px solid black;"> BRIEF DESCRIPTION </th>
+                                                    <th style="border-right: 1px solid black; border-bottom: 1px solid black;"> PERSONS INVOLVED </th>
+                                                    <th style="border-right: 1px solid black; border-bottom: 1px solid black;"> TARGET DATE </th>
+                                                    <th style="border-bottom: 1px solid black;"> BUDGET </th>
+                                                </tr>
+                                            </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="border-right: 1px solid black;">
+                                                    <?php 
+                                                        $sql = "SELECT * FROM objectives WHERE plan_id = $id";
+                                                        $result = mysqli_query($conn, $sql);
+                                                        
+                                                        while($row = mysqli_fetch_assoc($result))
+                                                        {
+                                                    ?>
+                                                            <?php echo $row['objective'] ?>
+                                                            <hr>
+                                                    <?php 
+                                                        }
+                                                    ?>
+                                                </td>
+
+                                                <td style="border-right: 1px solid black;">
+                                                    <?php 
+                                                        $sql = "SELECT * FROM activities WHERE plan_id = $id";
+                                                        $result = mysqli_query($conn, $sql);
+                                                        
+                                                        while($row = mysqli_fetch_assoc($result))
+                                                        {
+                                                    ?>
+                                                            <?php echo $row['activity'] ?>
+                                                            <hr>
+                                                    <?php 
+                                                        }
+                                                    ?>
+                                                </td>
+
+                                                <td style="border-right: 1px solid black;">
+                                                    <?php 
+                                                        $sql = "SELECT * FROM brief_description WHERE plan_id = $id";
+                                                        $result = mysqli_query($conn, $sql);
+                                                        
+                                                        while($row = mysqli_fetch_assoc($result))
+                                                        {
+                                                    ?>
+                                                            <?php echo $row['description'] ?>
+                                                            <hr>
+                                                    <?php 
+                                                        }
+                                                    ?>
+                                                </td>
+
+                                                <td style="border-right: 1px solid black;">
+                                                    <?php 
+                                                        $sql = "SELECT * FROM persons_involved WHERE plan_id = $id";
+                                                        $result = mysqli_query($conn, $sql);
+                                                        
+                                                        while($row = mysqli_fetch_assoc($result))
+                                                        {
+                                                    ?>
+                                                            <?php echo $row['person'] ?>
+                                                            <hr>
+                                                    <?php 
+                                                        }
+                                                    ?>
+                                                </td>
+
+                                                <td style="border-right: 1px solid black;">
+                                                    <?php 
+                                                        $sql = "SELECT * FROM target_date WHERE plan_id = $id";
+                                                        $result = mysqli_query($conn, $sql);
+                                                        
+                                                        while($row = mysqli_fetch_assoc($result))
+                                                        {
+                                                    ?>
+                                                            <?php echo $row['date'] ?>
+                                                            <hr>
+                                                    <?php 
+                                                        }
+                                                    ?>
+                                                </td>
+
+                                                <td style="border-right: 1px solid black;">
+                                                    <?php 
+                                                        $sql = "SELECT * FROM target_budget WHERE plan_id = $id";
+                                                        $result = mysqli_query($conn, $sql);
+                                                        
+                                                        while($row = mysqli_fetch_assoc($result))
+                                                        {
+                                                    ?>
+                                                            <?php echo $row['budget'] ?>
+                                                            <hr>
+                                                    <?php 
+                                                        }
+                                                    ?>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        </table>
                                     </div>
 
-                                    <p class="indent">
-                                        <strong>Thru: The Coordinator, Student Organization Unit</strong>
-                                    </p>
-
-                                    <p class="sir">Sir:</p>
+                                    </div>
 
                                     <div class="app-body-content">
-                                        <p class="indent">
-                                            The <span class="underline"><?php $organization ?></span> wishes to seek renewal of its recognition to function as a Student Organization in the College of <span class="underline"><?php echo $college ?></span> for Academic Year <span class="underline"><?php echo $year ?></span> - <span class="underline"><?php echo $year+1 ?></span>.
-                                        </p>
-                                        <p class="indent">
-                                            In this connection, we respectfully request your good office to grant us permission to operate in our institution, subject to the existing rules & regulation of our University.
-                                        </p>
-                                        <p class="indent">
-                                            Thank you very much.
-                                        </p>
-
-                                        <div class="respect">
-                                            <div class="respect-content">
-                                                <p>Very respectfully yours,</p>
-                                                <p class="underline"><?php echo $president ?></p>
-                                                <p>Organization President</p>
-                                                <p class="underline"><?php echo $organization ?></p>
-                                                <p>Name of Organization</p>
-                                            </div>
+                                        <div class="noted">
+                                            <p class="underline"> <?php echo $president_ac ?> </p>
+                                            <p>Organization President</p>
                                         </div>
 
-                                        <div class="noted">
-                                            <p>Noted:</p>
-                                            <p>___________________________</p>
-                                            <p>Adviser, Student Organization</p>
+                                        <div class="adviser">
+                                            <p>____________________________</p>
+                                            <p>Faculty Adviser(s)</p>
+                                        </div>
+
+                                        <div class="secretary">
+                                            <p class="underline"> <?php echo $secretary_ac ?> </p>
+                                            <p>Organization Secretary</p>
                                         </div>
 
                                         <div class="dean">
@@ -413,7 +553,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
 
                                     <div class="footer row">
                                         <ul class="row">
-                                            <li>LSPU-OSAS-SF-002</li>
+                                            <li>LSPU-OSAS-SF-004</li>
                                             <li>Rev. 1</li>
                                             <li><?php echo date('d-F-Y') ?></li>
                                         </ul>
@@ -421,7 +561,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                 </div>
                             </div>
                         </div>
-                        <div class="col-7 renewal-form">
+                        <div class="col-5 renewal-form">
                             <form action="" method="post">
                                 <div class="card-body">
                                     <div class="form-group">
@@ -433,38 +573,16 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                         <input type="text" name="president" class="form-control" id="president" placeholder="Organization President Name" value="<?php echo $president_ac; ?>">
                                     </div>
                                     <div class="form-group">
+                                        <label for="secretary">Secretary Name</label>
+                                        <input type="text" name="secretary" class="form-control" id="secretary" placeholder="Organization Secretary Name" value="<?php echo $secretary_ac; ?>">
+                                    </div>
+
+                                    <div class="form-group">
                                         <input type="text" name="status" class="form-control" id="status" value="<?php echo $status_ac ?>" hidden>
                                     </div>
                                     
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label>College</label>
-                                                <select name="college" multiple class="custom-select" value="<?php echo $college_ac; ?>">
-                                                    <option value="COLLEGE OF COMPUTER STUDIES (CCS)" <?php if($college_ac === "COLLEGE OF COMPUTER STUDIES (CCS)") echo 'selected'; ?>>COLLEGE OF COMPUTER STUDIES (CCS)</option>
-
-                                                    <option value="COLLEGE OF ARTS AND SCIENCES (CAS)" <?php if($college_ac === "COLLEGE OF ARTS AND SCIENCES (CAS)") echo 'selected'; ?>>COLLEGE OF ARTS AND SCIENCES (CAS)</option>
-
-                                                    <option value="COLLEGE OF BUSINESS, ADMINISTRATION AND ACCOUNTANCY (CBAA)" <?php if($college_ac === "COLLEGE OF BUSINESS, ADMINISTRATION AND ACCOUNTANCY (CBAA)") echo 'selected'; ?>>COLLEGE OF BUSINESS, ADMINISTRATION AND ACCOUNTANCY (CBAA)</option>
-
-                                                    <option value="COLLEGE OF CRIMINAL JUSTICE EDUCATION (CCJE)" <?php if($college_ac === "COLLEGE OF CRIMINAL JUSTICE EDUCATION (CCJE)") echo 'selected'; ?>>COLLEGE OF CRIMINAL JUSTICE EDUCATION (CCJE)</option>
-
-                                                    <option value="COLLEGE OF ENGINEERING (COE)" <?php if($college_ac === "COLLEGE OF ENGINEERING (COE)") echo 'selected'; ?>>COLLEGE OF ENGINEERING (COE)</option>
-
-                                                    <option value="COLLEGE OF HOSPITALITY MANAGEMENT AND TOURISM (CHMT)" <?php if($college_ac === "COLLEGE OF HOSPITALITY MANAGEMENT AND TOURISM (CHMT)") echo 'selected'; ?>>COLLEGE OF HOSPITALITY MANAGEMENT AND TOURISM (CHMT)</option>
-
-                                                    <option value="COLLEGE OF INDUSTRIAL TECHNOLOGY (CIT)" <?php if($college_ac === "COLLEGE OF INDUSTRIAL TECHNOLOGY (CIT)") echo 'selected'; ?>>COLLEGE OF INDUSTRIAL TECHNOLOGY (CIT)</option>
-
-                                                    <option value="COLLEGE OF TEACHER EDUCATION (CTE)" <?php if($college_ac === "COLLEGE OF TEACHER EDUCATION (CTE)") echo 'selected'; ?>>COLLEGE OF TEACHER EDUCATION (CTE)</option>
-
-                                                    <option value="SENIOR HIGH SCHOOL (SHS)" <?php if($college_ac === "SENIOR HIGH SCHOOL (SHS)") echo 'selected'; ?>>SENIOR HIGH SCHOOL (SHS)</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <input name="renewal_user_id" value="<?php echo $user_id; ?>" class="form-control" id="user_id" disabled hidden>
-                                        </div>
+                                    <div class="form-group">
+                                        <input name="plans_user_id" value="<?php echo $user_id; ?>" class="form-control" id="user_id" disabled hidden>
                                     </div>
                                 </div>
 
@@ -473,11 +591,11 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                     
                                     <?php 
                                     $id = $_GET['details_id'];
-                                    $select_filter = " SELECT * FROM renewal_tbl WHERE id = $id ";
+                                    $select_filter = " SELECT * FROM plans WHERE id = $id ";
                                     $select_filter_result = mysqli_query($conn, $select_filter);
                                     $row = mysqli_fetch_assoc($select_filter_result)
                                     ?>
-                                    <a href="./delete_renewal.php?delete_id='<?php echo $row['id'] ?>'" class="delete btn btn-block btn-outline-danger"> Delete </a>
+                                    <a href="./delete_plans.php?delete_id='<?php echo $row['id'] ?>'" class="delete btn btn-block btn-outline-danger"> Delete </a>
 
                                     <a href="#" class="btn btn-block btn-outline-success" id="print_application"> Convert to PDF </a>
 

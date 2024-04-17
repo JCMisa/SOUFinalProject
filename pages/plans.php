@@ -87,6 +87,41 @@ if(isset($_POST['submit'])){
     }
 }
 
+
+if(isset($_POST['save']))
+{
+    $filename = $_FILES['application_file']['name'];
+    $destination = '../application_uploads/' . $filename;
+    $extension = pathinfo($filename, PATHINFO_EXTENSION);
+    $file = $_FILES['application_file']['tmp_name'];
+    $size = $_FILES['application_file']['size'];
+
+    if(!in_array($extension, ['PDF', 'pdf', 'png', 'zip', 'docx'])) {
+        echo "You cannot upload files of this type";
+    }
+    else {
+        $current_year = (new DateTime)->format("Y");
+        $select = " SELECT * FROM application_upload WHERE form_type = 'plan_of_activities' && year = '$current_year' && user_id = $user_id; ";
+        $result = mysqli_query($conn, $select);
+        if(move_uploaded_file($file, $destination) && !mysqli_num_rows($result) > 0) {
+            $status = $_POST['status_upload'];
+            $form_type = $_POST['form_type'];
+            $year = (new DateTime)->format("Y");
+
+            $sql = " INSERT INTO application_upload (name, size, downloads, uploader, status, year, user_id, form_type) VALUES('$filename', '$size', 0, '$user_name', '$status', '$year', $user_id, '$form_type'); ";
+
+            if(mysqli_query($conn, $sql)) {
+                echo "file uploaded successfully";
+                header("Location: ./plans.php");
+            }else{
+                echo "failed to upload file";
+            }
+        }else {
+            header('Location: ./error_pages/conflict.php');
+        }
+    }
+}
+
 ?>
 
 
@@ -294,83 +329,39 @@ if(isset($_POST['submit'])){
                     </thead>
                     <tbody>
                         <?php
-                            $sql = " SELECT plans.id AS plan_id, 
-                            plans.organization, 
-                            plans.president, 
-                            plans.secretary, 
-                            plans.year, 
-                            plans.status, 
-                            objectives.objective,
-                            activities.activity,
-                            brief_description.description,
-                            persons_involved.person,
-                            target_date.date,
-                            target_budget.budget
-                            FROM plans 
-                            INNER JOIN objectives ON plans.id = objectives.plan_id
-                            INNER JOIN activities ON plans.id = activities.plan_id
-                            INNER JOIN brief_description ON plans.id = brief_description.plan_id
-                            INNER JOIN persons_involved ON plans.id = persons_involved.plan_id
-                            INNER JOIN target_date ON plans.id = target_date.plan_id
-                            INNER JOIN target_budget ON plans.id = target_budget.plan_id
-                            WHERE user_id = $user_id
-                            ; ";
-
+                            $sql = "SELECT * FROM plans WHERE user_id = $user_id";
                             $result = mysqli_query($conn, $sql);
 
                             if(mysqli_num_rows($result) > 0) {
-                                $plans = array();
 
-                                while($row = mysqli_fetch_assoc($result))
+                                while($plan = mysqli_fetch_assoc($result))
                                 {
-                                    if(!isset($plans[$row['plan_id']])) {
-                                        $plans[$row['plan_id']] = array(
-                                            'organization' => $row['organization'],
-                                            'president' => $row['president'],
-                                            'secretary' => $row['secretary'],
-                                            'year' => $row['year'],
-                                            'status' => $row['status'],
-                                            'objectives' => array(),
-                                            'activities' => array(),
-                                            'brief_description' => array(),
-                                            'persons_involved' => array(),
-                                            'target_date' => array(),
-                                            'target_budget' => array()
-                                        );
-                                    }
+                                    $sql2 = "SELECT objective FROM objectives WHERE plan_id = " . $plan['id'];
+                                    $result2 = mysqli_query($conn, $sql2);
+                                    $objectives = mysqli_fetch_all($result2, MYSQLI_ASSOC);
 
-                                    if (!in_array($row['objective'], $plans[$row['plan_id']]['objectives'])) {
-                                        $plans[$row['plan_id']]['objectives'][] = $row['objective'];
-                                    }
+                                    $sql3 = "SELECT activity FROM activities WHERE plan_id = " . $plan['id'];
+                                    $result3 = mysqli_query($conn, $sql3);
+                                    $activities = mysqli_fetch_all($result3, MYSQLI_ASSOC);
 
-                                    if (!in_array($row['activity'], $plans[$row['plan_id']]['activities'])) {
-                                        $plans[$row['plan_id']]['activities'][] = $row['activity'];
-                                    }
+                                    $sql4 = "SELECT description FROM brief_description WHERE plan_id = " . $plan['id'];
+                                    $result4 = mysqli_query($conn, $sql4);
+                                    $descriptions = mysqli_fetch_all($result4, MYSQLI_ASSOC);
 
-                                    if (!in_array($row['description'], $plans[$row['plan_id']]['brief_description'])) {
-                                        $plans[$row['plan_id']]['brief_description'][] = $row['description'];
-                                    }
+                                    $sql5 = "SELECT person FROM persons_involved WHERE plan_id = " . $plan['id'];
+                                    $result5 = mysqli_query($conn, $sql5);
+                                    $people = mysqli_fetch_all($result5, MYSQLI_ASSOC);
 
-                                    if (!in_array($row['person'], $plans[$row['plan_id']]['persons_involved'])) {
-                                        $plans[$row['plan_id']]['persons_involved'][] = $row['person'];
-                                    }
+                                    $sql6 = "SELECT date FROM target_date WHERE plan_id = " . $plan['id'];
+                                    $result6 = mysqli_query($conn, $sql6);
+                                    $dates = mysqli_fetch_all($result6, MYSQLI_ASSOC);
 
-                                    if (!in_array($row['date'], $plans[$row['plan_id']]['target_date'])) {
-                                        $plans[$row['plan_id']]['target_date'][] = $row['date'];
-                                    }
-
-                                    if (!in_array($row['budget'], $plans[$row['plan_id']]['target_budget'])) {
-                                        $plans[$row['plan_id']]['target_budget'][] = $row['budget'];
-                                    }
-                                    // array_push($plans[$row['plan_id']]['target_budget'], $row['budget']);
-                                    
-                                }
-
-                                foreach ($plans as $plan_id => $plan)
-                                {
+                                    $sql7 = "SELECT budget FROM target_budget WHERE plan_id = " . $plan['id'];
+                                    $result7 = mysqli_query($conn, $sql7);
+                                    $budgets = mysqli_fetch_all($result7, MYSQLI_ASSOC);
                         ?>
                                     <tr>
-                                        <td> <?php echo $plan_id ?> </td>
+                                        <td> <?php echo $plan['id'] ?> </td>
                                         <td> <?php echo $plan['organization'] ?> </td>
                                         <td> <?php echo $plan['president'] ?> </td>
                                         <td> <?php echo $plan['secretary'] ?> </td>
@@ -387,16 +378,64 @@ if(isset($_POST['submit'])){
                                                 }
                                             ?> 
                                         </td>
-                                        <td> <?php echo implode("<hr>", $plan['objectives']) ?> </td>
-                                        <td> <?php echo implode("<hr>", $plan['activities']) ?> </td>
-                                        <td> <?php echo implode("<hr>", $plan['brief_description']) ?> </td>
-                                        <td> <?php echo implode("<hr>", $plan['persons_involved']) ?> </td>
-                                        <td> <?php echo implode("<hr>", $plan['target_date']) ?> </td>
-                                        <td> <?php echo implode("<hr>", $plan['target_budget']) ?> </td>
+                                        <td> 
+                                            <?php 
+                                                foreach($objectives as $objective)
+                                                {
+                                                    echo $objective['objective'];
+                                                    echo "<hr>";
+                                                } 
+                                            ?> 
+                                        </td>
+                                        <td> 
+                                            <?php 
+                                                foreach($activities as $activity)
+                                                {
+                                                    echo $activity['activity'];
+                                                    echo "<hr>";
+                                                } 
+                                            ?> 
+                                        </td>
+                                        <td> 
+                                            <?php 
+                                                foreach($descriptions as $description)
+                                                {
+                                                    echo $description['description'];
+                                                    echo "<hr>";
+                                                } 
+                                            ?> 
+                                        </td>
+                                        <td> 
+                                            <?php 
+                                                foreach($people as $person)
+                                                {
+                                                    echo $person['person'];
+                                                    echo "<hr>";
+                                                } 
+                                            ?> 
+                                        </td>
+                                        <td> 
+                                            <?php 
+                                                foreach($dates as $date)
+                                                {
+                                                    echo $date['date'];
+                                                    echo "<hr>";
+                                                } 
+                                            ?> 
+                                        </td>
+                                        <td> 
+                                            <?php 
+                                                foreach($budgets as $budget)
+                                                {
+                                                    echo $budget['budget'];
+                                                    echo "<hr>";
+                                                } 
+                                            ?> 
+                                        </td>
 
-                                        <td> <a href="./details_renewal.php?details_id='<?php echo $plan_id ?>'" class="btn btn-block btn-outline-warning"> View </a> </td>
-                                        <td> <a href="./update_plans.php?update_id='<?php echo $plan_id ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
-                                        <td> <a href="./delete_plans.php?delete_id='<?php echo $plan_id ?>'" class="delete btn btn-block btn-outline-danger"> Delete </a> </td>
+                                        <td> <a href="./details_plans.php?details_id='<?php echo $plan['id'] ?>'" class="btn btn-block btn-outline-warning"> View </a> </td>
+                                        <td> <a href="./update_plans.php?update_id='<?php echo $plan['id'] ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
+                                        <td> <a href="./delete_plans.php?delete_id='<?php echo $plan['id'] ?>'" class="delete btn btn-block btn-outline-danger"> Delete </a> </td>
                                     </tr>
                         <?php
                                 }
@@ -426,6 +465,123 @@ if(isset($_POST['submit'])){
             </div>
             </div>
 
+
+            <br>
+            <br>
+            <br>
+
+
+            <!-- submission -->
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Upload Plan of Activities Form (With Signature)</h3>
+                </div>
+                <form action="" method="post" enctype="multipart/form-data">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <input type="text" name="status_upload" class="form-control" value="pending" hidden>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <select name="form_type" multiple class="custom-select" hidden>
+                                    <option value="application" disabled>Application</option>
+                                    <option value="renewal" disabled>Renewal</option>
+                                    <option value="commitment" disabled>Commitment</option>
+                                    <option value="plan_of_activities" selected>Plan of Activities</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputFile">Upload File</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" name="application_file" id="application_file">
+                                </div>
+                                <div class="input-group-append">
+                                    <button type="submit" name="save" class="input-group-text btn btn-block bg-gradient-success btn-sm">Upload</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Plans Submission List</h3>
+                </div>
+
+                <div class="card-body">
+                    <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>File Name</th>
+                                <th>Status</th>
+                                <th>Submission Year</th>
+                                <th>Uploader</th>
+                                <th>Form Type</th>
+                                <th>Size</th>
+                                <th>Attempts</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                $select_filter = " SELECT * FROM application_upload WHERE user_id = '$user_id' AND form_type = 'plan_of_activities'; ";
+                                $select_filter_result = mysqli_query($conn, $select_filter);
+                                $resultCheck = mysqli_num_rows($select_filter_result);
+                                if($resultCheck > 0)
+                                {
+                                    while($row = mysqli_fetch_assoc($select_filter_result))
+                                    {
+                            ?>
+                                        <tr>
+                                            <td> <?php echo $row['id'] ?> </td>
+                                            <td> <?php echo $row['name'] ?> </td>
+                                            <td> 
+                                                <?php 
+                                                    if(strtolower($row['status']) === 'pending')
+                                                    {
+                                                        echo '<button type="button" class="btn btn-block bg-gradient-warning btn-sm">PENDING</button>';
+                                                    } else if(strtolower($row['status']) === 'success'){
+                                                        echo '<button type="button" class="btn btn-block bg-gradient-success btn-sm"> SUCCESS </button>';
+                                                    } else {
+                                                        echo '<button type="button" class="btn btn-block bg-gradient-danger btn-sm">FAILED</button>';
+                                                    }
+                                                ?> 
+                                            </td>
+                                            <td> <?php echo $row['year']; ?> </td>
+                                            <td> <?php echo $row['uploader'] ?> </td>
+                                            <td> <?php echo $row['form_type'] ?> </td>
+                                            <td> <?php echo $row['size'] / 1000 . "KB"; ?> </td>
+                                            <td> <?php echo $row['downloads'] ?> </td>
+                                            
+                                            <td> <a href="./delete_application_upload.php?delete_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-danger"> Delete </a>  </td>
+                                        </tr>
+                            <?php
+                                    }
+                                }
+                            ?>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>ID</th>
+                                <th>File Name</th>
+                                <th>Status</th>
+                                <th>Submission Year</th>
+                                <th>Uploader</th>
+                                <th>Form Type</th>
+                                <th>Size</th>
+                                <th>Attempts</th>
+                                <th>Delete</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->

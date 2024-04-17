@@ -21,11 +21,10 @@ $status_ac = $row['status'];
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
     $president = mysqli_real_escape_string($conn, $_POST['president']);
-    $year = $_POST['year'];
     $status = $_POST['status'];
     $application_user_id = $user_id;
 
-    $query = " UPDATE application_tbl SET id = $id, organization = '$organization', president = '$president', year = '$year', status = '$status' WHERE id = $id; "; 
+    $query = " UPDATE application_tbl SET id = $id, organization = '$organization', president = '$president', status = '$status' WHERE id = $id; "; 
     $result = mysqli_query($conn, $query);
 
     if($result){
@@ -116,23 +115,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                 </div>
                 
                 <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Academic Year</label>
-                            <select name="year" multiple class="custom-select" value="<?php echo $year_ac; ?>">
-                                <?php
-                                $currentYear = (new DateTime)->format("Y");
-                                $startYear = 2024; // Set your desired start year
-                                $endYear = 2099; // Set your desired end year
-
-                                for ($year = $startYear; $year <= $endYear; $year++) {
-                                    $isDisabled = ($year !== (int)$currentYear) ? 'disabled' : '';
-                                    echo "<option selected value=\"$year\" $isDisabled>$year</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
+                    
 
                     <div class="form-group">
                         <input type="text" name="status" class="form-control" id="status" value="<?php echo $status_ac ?>" hidden>

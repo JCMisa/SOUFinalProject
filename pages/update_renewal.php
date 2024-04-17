@@ -22,12 +22,11 @@ $status_ac = $row['status'];
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
     $college = mysqli_real_escape_string($conn, $_POST['college']);
-    $year = $_POST['year'];
     $president = mysqli_real_escape_string($conn, $_POST['president']);
     $status = $_POST['status'];
     $renewal_user_id = $user_id;
 
-    $query = " UPDATE renewal_tbl SET id = $id, organization = '$organization', college = '$college', year = '$year', president = '$president', status = '$status' WHERE id = $id; "; 
+    $query = " UPDATE renewal_tbl SET id = $id, organization = '$organization', college = '$college', president = '$president', status = '$status' WHERE id = $id; "; 
     $result = mysqli_query($conn, $query);
 
     if($result){
@@ -142,23 +141,6 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                 <option value="COLLEGE OF TEACHER EDUCATION (CTE)" <?php if($college_ac === "COLLEGE OF TEACHER EDUCATION (CTE)") echo 'selected'; ?>>COLLEGE OF TEACHER EDUCATION (CTE)</option>
 
                                 <option value="SENIOR HIGH SCHOOL (SHS)" <?php if($college_ac === "SENIOR HIGH SCHOOL (SHS)") echo 'selected'; ?>>SENIOR HIGH SCHOOL (SHS)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Academic Year</label>
-                            <select name="year" multiple class="custom-select" value="<?php echo $year_ac; ?>">
-                                <?php
-                                $currentYear = (new DateTime)->format("Y");
-                                $startYear = 2024; // Set your desired start year
-                                $endYear = 2099; // Set your desired end year
-
-                                for ($year = $startYear; $year <= $endYear; $year++) {
-                                    $isDisabled = ($year !== (int)$currentYear) ? 'disabled' : '';
-                                    echo "<option selected value=\"$year\" $isDisabled>$year</option>";
-                                }
-                                ?>
                             </select>
                         </div>
                     </div>

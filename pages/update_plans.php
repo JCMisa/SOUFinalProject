@@ -54,10 +54,9 @@ if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
     $president = mysqli_real_escape_string($conn, $_POST['president']);
     $secretary = mysqli_real_escape_string($conn, $_POST['secretary']);
-    $year = $_POST['year'];
     $status = $_POST['status'];
 
-    $objectives = $_POST['objectives'];
+    // $objectives = $_POST['objectives'];
     $activities = $_POST['activities'];
     $descriptions = $_POST['descriptions'];
     $persons = $_POST['persons'];
@@ -66,43 +65,29 @@ if(isset($_POST['submit'])){
 
     $plans_user_id = $user_id;
 
-    $query = " UPDATE plans SET id = $id, organization = '$organization', president = '$president', secretary = '$secretary', year = '$year', status = '$status' WHERE id = $id; "; 
+    $query = " UPDATE plans SET id = $id, organization = '$organization', president = '$president', secretary = '$secretary', status = '$status' WHERE id = $id; "; 
     $result = mysqli_query($conn, $query);
 
-    // foreach ($objectives as $objective) {
-    //     $objective = mysqli_real_escape_string($conn, $objective);
-    //     $sql = " UPDATE objectives SET objective = $objective WHERE plan_id = $id; ";
-    //     $result = mysqli_query($conn, $sql);
-    // }
 
-    // foreach ($activities as $activity) {
-    //     $activity = mysqli_real_escape_string($conn, $activity);
-    //     $sql = " UPDATE activities SET activity = $activity WHERE plan_id = $id; ";
-    //     $result = mysqli_query($conn, $sql);
-    // }
+    // $sql = "SELECT id, objective FROM objectives WHERE plan_id = $id";
+    // $result = mysqli_query($conn, $sql);
+    
+    // $objectives = $_POST['objectives'];
+    // $i = 0;
+    // while($row = mysqli_fetch_assoc($result))
+    // {
+    //     $objective_id = $row['id'];
+    //     $objective = mysqli_real_escape_string($conn, $objectives[$i]);
 
-    // foreach ($descriptions as $description) {
-    //     $description = mysqli_real_escape_string($conn, $description);
-    //     $sql = " UPDATE brief_description SET description = $description WHERE plan_id = $id; ";
-    //     $result = mysqli_query($conn, $sql);
-    // }
+    //     $query2 = " UPDATE objectives SET objective = '$objective' WHERE id = $objective_id AND plan_id = $id; ";
+    //     $result2 = mysqli_query($conn, $query2);
 
-    // foreach ($persons as $person) {
-    //     $person = mysqli_real_escape_string($conn, $person);
-    //     $sql = " UPDATE persons_involved SET person = $person WHERE plan_id = $id; ";
-    //     $result = mysqli_query($conn, $sql);
-    // }
+    //     if($result2){
+    //         header('location:./plans.php');
+    //         die();
+    //     }
 
-    // foreach ($dates as $date) {
-    //     $date = mysqli_real_escape_string($conn, $date);
-    //     $sql = " UPDATE target_date SET date = $date WHERE plan_id = $id; ";
-    //     $result = mysqli_query($conn, $sql);
-    // }
-
-    // foreach ($budgets as $budget) {
-    //     $budget = mysqli_real_escape_string($conn, $budget);
-    //     $sql = " UPDATE target_budget SET budget = $budget WHERE plan_id = $id; ";
-    //     $result = mysqli_query($conn, $sql);
+    //     $i += 1;
     // }
 
     if($result){
@@ -183,82 +168,155 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
             <!-- form -->
             <form action="" method="post">
                 <div class="card-body">
-                    <div class="form-group">
-                        <label for="org">Organization Name</label>
-                        <input type="text" name="organization" class="form-control" id="org" placeholder="Organization Name" value="<?php echo $organization_ac; ?>">
-                    </div>
+                    <?php 
+                        $sql = "SELECT * FROM plans WHERE user_id = $user_id";
+                        $result = mysqli_query($conn, $sql);
 
-                    <div class="form-group">
-                        <label for="president">President Name</label>
-                        <input type="text" name="president" class="form-control" id="president" placeholder="Organization President Name" value="<?php echo $president_ac; ?>">
-                    </div>
+                        if(mysqli_num_rows($result) > 0) 
+                        {
+                            while($plan = mysqli_fetch_assoc($result))
+                            {
+                                $sql2 = "SELECT objective FROM objectives WHERE plan_id = " . $plan['id'];
+                                $result2 = mysqli_query($conn, $sql2);
+                                $objectives = mysqli_fetch_all($result2, MYSQLI_ASSOC);
 
-                    <div class="form-group">
-                        <label for="secretary">Secretary Name</label>
-                        <input type="text" name="secretary" class="form-control" id="secretary" placeholder="Organization Secretary Name" value="<?php echo $secretary_ac; ?>">
-                    </div>
+                                $sql3 = "SELECT activity FROM activities WHERE plan_id = " . $plan['id'];
+                                $result3 = mysqli_query($conn, $sql3);
+                                $activities = mysqli_fetch_all($result3, MYSQLI_ASSOC);
 
+                                $sql4 = "SELECT description FROM brief_description WHERE plan_id = " . $plan['id'];
+                                $result4 = mysqli_query($conn, $sql4);
+                                $descriptions = mysqli_fetch_all($result4, MYSQLI_ASSOC);
 
+                                $sql5 = "SELECT person FROM persons_involved WHERE plan_id = " . $plan['id'];
+                                $result5 = mysqli_query($conn, $sql5);
+                                $people = mysqli_fetch_all($result5, MYSQLI_ASSOC);
 
+                                $sql6 = "SELECT date FROM target_date WHERE plan_id = " . $plan['id'];
+                                $result6 = mysqli_query($conn, $sql6);
+                                $dates = mysqli_fetch_all($result6, MYSQLI_ASSOC);
 
+                                $sql7 = "SELECT budget FROM target_budget WHERE plan_id = " . $plan['id'];
+                                $result7 = mysqli_query($conn, $sql7);
+                                $budgets = mysqli_fetch_all($result7, MYSQLI_ASSOC);
+                    ?> 
+                                <div class="form-group">
+                                    <label for="org">Organization Name</label>
+                                    <input type="text" name="organization" class="form-control" id="org" placeholder="Organization Name" value="<?php echo $plan['organization']; ?>">
+                                </div>
 
+                                <div class="form-group">
+                                    <label for="president">President Name</label>
+                                    <input type="text" name="president" class="form-control" id="president" placeholder="Organization President Name" value="<?php echo $plan['president']; ?>">
+                                </div>
 
-                    <div class="row">
-                        <div class="col-sm-2">
-                            <div class="form-group" id="objectiveContainer">
-                                <label for="objectives">Objective</label>
-                                <textarea name="objectives[]" class="form-control" id="objectives" rows="3" cols="50">
-                                    <?php echo $objectives_ac; ?>
-                                </textarea>
-                            </div>
-                            <button type="button" onclick="addObjective()" class="btn btn-block btn-outline-info">Add More</button>
-                        </div>
+                                <div class="form-group">
+                                    <label for="secretary">Secretary Name</label>
+                                    <input type="text" name="secretary" class="form-control" id="secretary" placeholder="Organization Secretary Name" value="<?php echo $plan['secretary']; ?>">
+                                </div>
 
-                        <div class="col-sm-2">
-                            <div class="form-group" id="activityContainer">
-                                <label for="activities">Activity</label>
-                                <textarea name="activities[]" class="form-control" id="activities" rows="3" cols="50">
-                                    <?php echo $activities_ac; ?>
-                                </textarea>
-                            </div>
-                            <button type="button" onclick="addActivity()" class="btn btn-block btn-outline-info">Add More</button>
-                        </div>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <?php 
+                                            foreach($objectives as $objective)
+                                            {
+                                        ?> 
+                                                <div class="form-group" id="objectiveContainer">
+                                                    <label for="objectives">Objective</label>
+                                                    <textarea name="objectives[]" class="form-control" id="objectives" rows="3" cols="50" disabled>
+                                                        <?php echo $objective['objective']; ?>
+                                                    </textarea>
+                                                </div>
+                                                <button disabled type="button" onclick="addObjective()" class="btn btn-block btn-outline-info">Add More</button>
+                                        <?php 
+                                            }
+                                        ?>
+                                    </div>
 
-                        <div class="col-sm-2">
-                            <div class="form-group" id="descriptionContainer">
-                                <label for="descriptions">Description</label>
-                                <textarea name="descriptions[]" class="form-control" id="descriptions" rows="3" cols="50">
-                                    <?php echo $descriptions_ac; ?>
-                                </textarea>
-                            </div>
-                            <button type="button" onclick="addDescription()" class="btn btn-block btn-outline-info">Add More</button>
-                        </div>
+                                    <div class="col-sm-2">
+                                        <?php 
+                                            foreach($activities as $activity)
+                                            {
+                                        ?>
+                                                <div class="form-group" id="activityContainer">
+                                                    <label for="activities">Activity</label>
+                                                    <textarea name="activities[]" class="form-control" id="activities" rows="3" cols="50" disabled>
+                                                        <?php echo $activity['activity']; ?>
+                                                    </textarea>
+                                                </div>
+                                                <button disabled type="button" onclick="addActivity()" class="btn btn-block btn-outline-info">Add More</button>
+                                        <?php 
+                                            }
+                                        ?>
+                                    </div>
 
-                        <div class="col-sm-2">
-                            <div class="form-group" id="personContainer">
-                                <label for="persons">Person Involved</label>
-                                <input type="text" name="persons[]" class="form-control" id="persons" placeholder="Person Involved" value="<?php echo $persons_ac; ?>">
-                            </div>
-                            <button type="button" onclick="addPerson()" class="btn btn-block btn-outline-info">Add More</button>
-                        </div>
+                                    <div class="col-sm-2">
+                                        <?php 
+                                            foreach($descriptions as $description)
+                                            {
+                                        ?>
+                                                <div class="form-group" id="descriptionContainer">
+                                                    <label for="descriptions">Description</label>
+                                                    <textarea name="descriptions[]" class="form-control" id="descriptions" rows="3" cols="50" disabled>
+                                                        <?php echo $description['description']; ?>
+                                                    </textarea>
+                                                </div>
+                                                <button disabled type="button" onclick="addDescription()" class="btn btn-block btn-outline-info">Add More</button>
+                                        <?php 
+                                            }
+                                        ?>
+                                    </div>
 
-                        <div class="col-sm-2">
-                            <div class="form-group" id="dateContainer">
-                                <label for="dates">Target Date</label>
-                                <input type="date" name="dates[]" class="form-control" id="dates" value="<?php echo $dates_ac; ?>">
-                            </div>
-                            <button type="button" onclick="addDate()" class="btn btn-block btn-outline-info">Add More</button>
-                        </div>
+                                    <div class="col-sm-2">
+                                        <?php 
+                                            foreach($people as $person)
+                                            {
+                                        ?>
+                                                <div class="form-group" id="personContainer">
+                                                    <label for="persons">Person Involved</label>
+                                                    <input disabled type="text" name="persons[]" class="form-control" id="persons" placeholder="Person Involved" value="<?php echo $person['person']; ?>">
+                                                </div>
+                                                <button disabled type="button" onclick="addPerson()" class="btn btn-block btn-outline-info">Add More</button>
+                                        <?php 
+                                            }
+                                        ?>
+                                    </div>
 
-                        <div class="col-sm-2">
-                            <div class="form-group" id="budgetContainer">
-                                <label for="budgets">Budget</label>
-                                <input type="number" name="budgets[]" class="form-control" id="budgets" placeholder="Php 0.00" value="<?php echo $budgets_ac; ?>">
-                            </div>
-                            <button type="button" onclick="addBudget()" class="btn btn-block btn-outline-info">Add More</button>
-                        </div>
-                    </div>
+                                    <div class="col-sm-2">
+                                        <?php 
+                                            foreach($dates as $date)
+                                            {
+                                        ?>
+                                                <div class="form-group" id="dateContainer">
+                                                    <label for="dates">Target Date</label>
+                                                    <input disabled type="date" name="dates[]" class="form-control" id="dates" value="<?php echo $date['date']; ?>">
+                                                </div>
+                                                <button disabled type="button" onclick="addDate()" class="btn btn-block btn-outline-info">Add More</button>
+                                        <?php 
+                                            }
+                                        ?>
+                                    </div>
 
+                                    <div class="col-sm-2">
+                                        <?php 
+                                            foreach($budgets as $budget)
+                                            {
+                                        ?>
+                                                 <div class="form-group" id="budgetContainer">
+                                                    <label for="budgets">Budget</label>
+                                                    <input disabled type="number" name="budgets[]" class="form-control" id="budgets" placeholder="Php 0.00" value="<?php echo $budget['budget']; ?>">
+                                                </div>
+                                                <button disabled type="button" onclick="addBudget()" class="btn btn-block btn-outline-info">Add More</button>
+                                        <?php 
+                                            }
+                                        ?>
+                                    </div>
+
+                                </div>
+                    <?php 
+                            }
+                        }
+                    ?>
                     
 
 
@@ -268,24 +326,6 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
 
                     <div class="form-group">
                         <input type="text" name="status" class="form-control" id="status" placeholder="Current Status" value="<?php echo $status_ac; ?>" hidden>
-                    </div>
-
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Academic Year</label>
-                            <select name="year" multiple class="custom-select">
-                                <?php
-                                $currentYear = (new DateTime)->format("Y");
-                                $startYear = 2024; // start year
-                                $endYear = 2099; // end year
-
-                                for ($year = $startYear; $year <= $endYear; $year++) {
-                                    $isDisabled = ($year !== (int)$currentYear) ? 'disabled' : '';
-                                    echo "<option selected value=\"$year\" $isDisabled>$year</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
                     </div>
                 </div>
 
@@ -312,7 +352,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
 
 <!-- jQuery -->
 <?php include_once './reusable/jquery.php'; ?>
-<script>
+<!-- <script>
     function addObjective() {
         var container = document.querySelector("#objectiveContainer");
         var textarea =document.createElement("textarea");
@@ -389,6 +429,6 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
         container.appendChild(document.createElement("br"));
         container.appendChild(input);
     }
-</script>
+</script> -->
 </body>
 </html>

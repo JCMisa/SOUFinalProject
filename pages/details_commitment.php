@@ -28,11 +28,10 @@ if(isset($_POST['submit'])){
     $contact = mysqli_real_escape_string($conn, $_POST['contact']);
     $college = mysqli_real_escape_string($conn, $_POST['college']);
     $rank = mysqli_real_escape_string($conn, $_POST['rank']);
-    $year = $_POST['year'];
     $commitment_user_id = $user_id;
     $status = $_POST['status'];
 
-    $query = " UPDATE commitment_tbl SET id = $id, organization = '$organization', adviser = '$adviser', address = '$address', contact = '$contact', college = '$college', rank = '$rank', year = '$year', status = '$status' WHERE id = $id; "; 
+    $query = " UPDATE commitment_tbl SET id = $id, organization = '$organization', adviser = '$adviser', address = '$address', contact = '$contact', college = '$college', rank = '$rank', status = '$status' WHERE id = $id; "; 
     $result = mysqli_query($conn, $query);
 
     if($result){
@@ -486,46 +485,14 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                             </div>
                                         </div>
 
-                                    
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label>Academic Year</label>
-                                                <select name="year" multiple class="custom-select" value="<?php echo $year_ac; ?>">
-                                                    <?php
-                                                    $currentYear = (new DateTime)->format("Y");
-                                                    $startYear = 2024; // Set your desired start year
-                                                    $endYear = 2099; // Set your desired end year
-
-                                                    for ($year = $startYear; $year <= $endYear; $year++) {
-                                                        $isDisabled = ($year !== (int)$currentYear) ? 'disabled' : '';
-                                                        echo "<option selected value=\"$year\" $isDisabled>$year</option>";
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
 
                                         <div class="form-group">
                                             <input name="commitment_user_id" value="<?php echo $user_id; ?>" class="form-control" id="user_id" disabled hidden>
                                         </div>
 
-                                        <?php
-                                        if($user_type === 'super_admin')
-                                        {
-                                            echo <<<SHOWSTATUS
-                                                <div class="form-group">
-                                                    <label for="status">Status</label>
-                                                    <input type="text" name="status" class="form-control" id="status" value="$status_ac">
-                                                </div>
-                                            SHOWSTATUS;
-                                        } else {
-                                            echo <<<SHOWSTATUS
-                                                <div class="form-group">
-                                                    <input type="text" name="status" class="form-control" id="status" value="$status_ac" hidden>
-                                                </div>
-                                            SHOWSTATUS;
-                                        }
-                                        ?>
+                                        <div class="form-group">
+                                            <input type="text" name="status" class="form-control" id="status" value="$status_ac" hidden>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -533,8 +500,8 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                                     <button type="submit" name="submit" class="btn btn-block btn-outline-info"> Edit </button>
                                     
                                     <?php 
-                                    $commitment_user_id = $user_id;
-                                    $select_filter = " SELECT * FROM commitment_tbl WHERE user_id = '$commitment_user_id' ";
+                                    $id = $_GET['details_id'];
+                                    $select_filter = " SELECT * FROM commitment_tbl WHERE id = $id ";
                                     $select_filter_result = mysqli_query($conn, $select_filter);
                                     $row = mysqli_fetch_assoc($select_filter_result)
                                     ?>

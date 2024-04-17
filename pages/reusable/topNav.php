@@ -1,3 +1,52 @@
+<?php
+@include '../configurations/config.php';
+
+if(isset($_POST["search"]))
+{
+  $keyword = $_POST['keyword'];
+
+  if(
+    stripos($keyword, 'Application') !== false ||
+    stripos($keyword, 'App') !== false
+    )
+  {
+    header('location: ./application.php');
+    die();
+  }
+  else if(
+    stripos($keyword, 'Renewal') !== false ||
+    stripos($keyword, 'Ren') !== false
+    )
+  {
+    header('location: ./renewal.php');
+    die();
+  }
+  else if(
+    stripos($keyword, 'Commitment') !== false ||
+    stripos($keyword, 'Com') !== false
+    )
+  {
+    header('location: ./commitment.php');
+    die();
+  }
+  else if(
+    stripos($keyword, 'Plan') !== false ||
+    stripos($keyword, 'Act') !== false
+    )
+  {
+    header('location: ./plans.php');
+    die();
+  }
+  else
+  {
+    header('location: ./error_pages/error.php');
+    die();
+  }
+}
+?>
+
+
+
 <!-- Top Navbar -->
   <nav id="top" class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
@@ -33,11 +82,11 @@
           <i class="fas fa-search"></i>
         </a>
         <div class="navbar-search-block">
-          <form class="form-inline">
+          <form class="form-inline" method="post">
             <div class="input-group input-group-sm">
-              <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+              <input class="form-control form-control-navbar" type="search" name="keyword" placeholder="Search" id="search" aria-label="Search">
               <div class="input-group-append">
-                <button class="btn btn-navbar" type="submit">
+                <button class="btn btn-navbar" type="submit" name="search">
                   <i class="fas fa-search"></i>
                 </button>
                 <button class="btn btn-navbar" type="button" data-widget="navbar-search">
