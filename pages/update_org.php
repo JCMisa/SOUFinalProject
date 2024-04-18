@@ -17,6 +17,7 @@ $organization_ac = $row['name'];
 
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
+    $organization = htmlspecialchars($organization);
 
     $query = " UPDATE organizations SET name = '$organization' WHERE id = $id; "; 
     $result = mysqli_query($conn, $query);

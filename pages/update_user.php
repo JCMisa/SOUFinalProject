@@ -21,8 +21,14 @@ $user_type_ac = $row['user_type'];
 
 if(isset($_POST['submit'])){
     $name = mysqli_real_escape_string($conn, $_POST['name']);
+    $name = htmlspecialchars($name);
+
     $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $pass = $_POST['password'];
+    $email = htmlspecialchars($email);
+
+    $pass = mysqli_real_escape_string($conn, $_POST['password']);
+    $pass = htmlspecialchars($pass);
+
     $user_type = $_POST['user_type'];
 
     $query = " UPDATE user_tbl SET id = $id, name = '$name', email = '$email', password = '$pass', user_type = '$user_type' WHERE id = $id; "; 

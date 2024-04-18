@@ -8,9 +8,17 @@ if(isset($_SESSION['user_id'])){
 
 if(isset($_POST['submit'])){
     $name = mysqli_real_escape_string($conn, $_POST['name']);
+    $name = htmlspecialchars($name);
+
     $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $pass = $_POST['password'];
-    $cpass = $_POST['cpassword'];
+    $email = htmlspecialchars($email);
+
+    $pass = mysqli_real_escape_string($conn, $_POST['password']);
+    $pass = htmlspecialchars($pass);
+
+    $cpass = mysqli_real_escape_string($conn, $_POST['cpassword']);
+    $cpass = htmlspecialchars($cpass);
+
     $organization = $_POST['organization'];
     $user_type = $_POST['user_type'];
 

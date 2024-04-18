@@ -4,6 +4,11 @@
 
 session_start();
 
+$nameError = "";
+$emailError = "";
+$passError = "";
+$cPassError = "";
+$orgError = "";
 if(isset($_POST['submit'])){ //checks if input with type of submit is inside a form with method of post (if submit input is clicked, then condition will be true)
 
    $name = mysqli_real_escape_string($conn, $_POST['name']);
@@ -13,35 +18,47 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
    $organization = $_POST['organization'];
    $user_type = $_POST['user_type'];
 
-   $select = " SELECT * FROM user_tbl WHERE email = '$email' && password = '$pass' ";
+    if(empty($name))
+    {
+      $nameError = "Name should not be empty.";
+    }
+    if(strlen($pass) < 6)
+    {
+      $passError = "Password must be 6 characters and above.";
+    }
 
-   $result = mysqli_query($conn, $select);
+    $name = htmlspecialchars($name);
+    $email = htmlspecialchars($email);
+    $pass = htmlspecialchars($pass);
+    $cpass = htmlspecialchars($cpass);
 
-   if(mysqli_num_rows($result) > 0){
+    $select = " SELECT * FROM user_tbl WHERE email = '$email' && password = '$pass' ";
+    $result = mysqli_query($conn, $select);
 
-      $error[] = 'user already exist!';
-
-   }else{
-
+    if(mysqli_num_rows($result) > 0)
+    {
+      $emailError = "Email and password is already in use.";
+    }
+    else
+    {
       if($pass != $cpass){
-         $error[] = 'password not matched!';
+        $cPassError = "Password not matched!";
       }else{
-         $insert = "INSERT INTO user_tbl(name, email, password, user_type) VALUES('$name','$email','$pass','$user_type')";
-         mysqli_query($conn, $insert);
+        $insert = "INSERT INTO user_tbl(name, email, password, user_type) VALUES('$name','$email','$pass','$user_type')";
+        mysqli_query($conn, $insert);
 
-         $user_id = mysqli_insert_id($conn);
+        $user_id = mysqli_insert_id($conn);
 
-         foreach ($organization as $org) {
+        foreach ($organization as $org) {
             $org = mysqli_real_escape_string($conn, $org);
             $sql = " INSERT INTO organization_tbl (user_id, organization) VALUES ('$user_id', '$org'); ";
             $result = mysqli_query($conn, $sql);
           }
 
-         header('location:login.php');
-         die();
+        header('location:login.php');
+        die();
       }
-   }
-
+    }
 };
 
 ?>
@@ -98,37 +115,53 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
       <p class="login-box-msg">Register a new account</p>
 
       <form action="" method="post">
+
         <div class="input-group mb-3">
-          <input type="text" name="name" class="form-control" placeholder="Username">
+          <input type="text" name="name" class="form-control" placeholder="Username" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
             </div>
           </div>
         </div>
+        <div class="input-group mb-3" id="name-error">
+           <span style="color: red; font-size: 12px;"><?php echo $nameError ?></span>
+        </div>
+
         <div class="input-group mb-3">
-          <input type="email" name="email" class="form-control" placeholder="Email">
+          <input type="email" name="email" class="form-control" placeholder="Email" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
             </div>
           </div>
         </div>
+        <div class="input-group mb-3" id="email-error">
+           <span style="color: red; font-size: 12px;"><?php echo $emailError ?></span>
+        </div>
+
         <div class="input-group mb-3">
-          <input type="password" name="password" class="form-control" placeholder="Password">
+          <input type="password" name="password" class="form-control" placeholder="Password" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
             </div>
           </div>
         </div>
+        <div class="input-group mb-3" id="pass-error">
+           <span style="color: red; font-size: 12px;"><?php echo $passError ?></span>
+        </div>
+
         <div class="input-group mb-3">
-          <input type="password" name="cpassword" class="form-control" placeholder="Confirm password">
+          <input type="password" name="cpassword" class="form-control" placeholder="Confirm password" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
             </div>
           </div>
+        </div>
+        <div class="input-group mb-3" id="c-pass-error">
+           <span style="color: red; font-size: 12px;"><?php echo $cPassError ?></span>
         </div>
 
         <div class="input-group mb-3">
@@ -159,14 +192,6 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
         </div>
 
         <div class="row">
-          <!-- <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="agreeTerms" name="terms" value="agree">
-              <label for="agreeTerms">
-               I agree to the <a href="#">terms</a>
-              </label>
-            </div>
-          </div> -->
           <!-- /.col -->
           <div class="col-4">
             <button type="submit" name="submit" class="btn btn-primary btn-block">Register</button>
@@ -174,18 +199,6 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
           <!-- /.col -->
         </div>
       </form>
-
-      <!-- <div class="social-auth-links text-center">
-        <p>- OR -</p>
-        <a href="#" class="btn btn-block btn-primary">
-          <i class="fab fa-facebook mr-2"></i>
-          Sign up using Facebook
-        </a>
-        <a href="#" class="btn btn-block btn-danger">
-          <i class="fab fa-google-plus mr-2"></i>
-          Sign up using Google+
-        </a>
-      </div> -->
 
       <a href="login.php" class="text-center">I already have an account</a>
     </div>
@@ -221,6 +234,28 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
         select.options[index].selected = !select.options[index].selected;
         return false;
     });
+
+
+
+    let nameError = document.getElementById("name-error");
+    setTimeout(() => {
+      nameError.style.display = 'none';
+    }, 6000);
+
+    let emailError = document.getElementById("email-error");
+    setTimeout(() => {
+      emailError.style.display = 'none';
+    }, 6000);
+
+    let passError = document.getElementById("pass-error");
+    setTimeout(() => {
+      passError.style.display = 'none';
+    }, 6000);
+
+    let cPassError = document.getElementById("c-pass-error");
+    setTimeout(() => {
+      cPassError.style.display = 'none';
+    }, 6000);
   </script>
 </body>
 </html>

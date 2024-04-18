@@ -52,8 +52,14 @@ $budgets_ac = $row['budget'];
 
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
+    $organization = htmlspecialchars($organization);
+
     $president = mysqli_real_escape_string($conn, $_POST['president']);
+    $president = htmlspecialchars($president);
+
     $secretary = mysqli_real_escape_string($conn, $_POST['secretary']);
+    $secretary = htmlspecialchars($secretary);
+
     $status = $_POST['status'];
 
     // $objectives = $_POST['objectives'];

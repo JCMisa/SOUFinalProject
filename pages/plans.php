@@ -15,10 +15,17 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
 
 
 if(isset($_POST['submit'])){
-    $organization = $_POST['organization'];
+    $organization = mysqli_real_escape_string($conn, $_POST['organization']);
+    $organization = htmlspecialchars($organization);
+    
     $year = $_POST['year'];
-    $president = $_POST['president'];
-    $secretary = $_POST['secretary'];
+
+    $president = mysqli_real_escape_string($conn, $_POST['president']);
+    $president = htmlspecialchars($president);
+
+    $secretary = mysqli_real_escape_string($conn, $_POST['secretary']);
+    $secretary = htmlspecialchars($secretary);
+
     $status = $_POST['status'];
     $plans_user_id = $user_id;
 
@@ -191,17 +198,17 @@ if(isset($_POST['save']))
                 <div class="card-body">
                     <div class="form-group">
                         <label for="org">Organization Name</label>
-                        <input type="text" name="organization" class="form-control" id="org" placeholder="Organization Name">
+                        <input type="text" name="organization" class="form-control" id="org" placeholder="Organization Name" required>
                     </div>
 
                     <div class="form-group">
                         <label for="president">President Name</label>
-                        <input type="text" name="president" class="form-control" id="president" placeholder="Organization President Name">
+                        <input type="text" name="president" class="form-control" id="president" placeholder="Organization President Name" required>
                     </div>
 
                     <div class="form-group">
                         <label for="secretary">Secretary Name</label>
-                        <input type="text" name="secretary" class="form-control" id="secretary" placeholder="Organization Secretary Name">
+                        <input type="text" name="secretary" class="form-control" id="secretary" placeholder="Organization Secretary Name" required>
                     </div>
 
 

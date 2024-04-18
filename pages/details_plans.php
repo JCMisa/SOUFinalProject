@@ -29,8 +29,14 @@ $objectives = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
+    $organization = htmlspecialchars($organization);
+
     $president = mysqli_real_escape_string($conn, $_POST['president']);
+    $president = htmlspecialchars($president);
+
     $secretary = mysqli_real_escape_string($conn, $_POST['secretary']);
+    $secretary = htmlspecialchars($secretary);
+
     $status = $_POST['status'];
     $plans_user_id = $user_id;
 
@@ -316,7 +322,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
 
             .renewal-footer .footer ul {
                 margin-top: 10px;
-                gap: 350px;
+                gap: 320px;
             }
         }
     </style>

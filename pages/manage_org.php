@@ -8,6 +8,7 @@ if(isset($_SESSION['user_id'])){
 
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
+    $organization = htmlspecialchars($organization);
 
     $select = " SELECT * FROM organizations WHERE name = '$organization'; ";
     $result = mysqli_query($conn, $select);

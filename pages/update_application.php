@@ -20,7 +20,11 @@ $status_ac = $row['status'];
 
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
+    $organization = htmlspecialchars($organization);
+
     $president = mysqli_real_escape_string($conn, $_POST['president']);
+    $president = htmlspecialchars($president);
+
     $status = $_POST['status'];
     $application_user_id = $user_id;
 

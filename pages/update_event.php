@@ -17,8 +17,11 @@ $title_ac = $row['title'];
 $description_ac = $row['description'];
 
 if(isset($_POST['submit'])){
-    $title = $_POST['title'];
-    $description = $_POST['description'];
+    $title = mysqli_real_escape_string($conn, $_POST['title']);
+    $title = htmlspecialchars($title);
+
+    $description = mysqli_real_escape_string($conn, $_POST['description']);
+    $description = htmlspecialchars($description);
 
     $query = " UPDATE events_tbl SET id = $id, title = '$title', description = '$description' WHERE id = $id; "; 
     $result = mysqli_query($conn, $query);

@@ -6,7 +6,11 @@ if(isset($_SESSION['user_id'])){
 if(isset($_POST['submit']))
 {
     $title = mysqli_real_escape_string($conn, $_POST['event_title']);
+    $title = htmlspecialchars($title);
+
     $description = mysqli_real_escape_string($conn, $_POST['event_description']);
+    $description = htmlspecialchars($description);
+
     $date = $_POST['date'];
     if($_FILES["image"]["error"] === 4)
     {
@@ -194,7 +198,7 @@ if(isset($_POST['submit']))
                     <label for="exampleInputFile">Event Image</label>
                     <div class="input-group">
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="exampleInputFile" name="image" accept=".jpg, .jpeg, .png">
+                            <input type="file" class="custom-file-input" id="exampleInputFile" name="image" accept=".jpg, .jpeg, .png" <?php echo $isDisabled ?>>
                             <label class="custom-file-label" for="exampleInputFile">Choose file</label>
                         </div>
                     </div>

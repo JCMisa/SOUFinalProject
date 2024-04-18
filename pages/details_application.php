@@ -19,7 +19,11 @@ $status_ac = $row['status'];
 
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
+    $organization = htmlspecialchars($organization);
+
     $president = mysqli_real_escape_string($conn, $_POST['president']);
+    $president = htmlspecialchars($president);
+    
     $status = $_POST['status'];
     $application_user_id = $user_id;
 
@@ -264,13 +268,17 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
                 margin-right: 40px;
             }
 
+            .application-footer .approval {
+                margin-top: -20px;
+            }
+
             .application-footer {
                 margin-top: 3rem;
             }
 
             .application-footer .footer ul {
-                margin-top: 10px;
-                gap: 350px;
+                margin-top: -20px;
+                gap: 320px;
             }
         }
     </style>

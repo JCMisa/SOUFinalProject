@@ -21,8 +21,14 @@ $status_ac = $row['status'];
 
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
+    $organization = htmlspecialchars($organization);
+
     $college = mysqli_real_escape_string($conn, $_POST['college']);
+    $college = htmlspecialchars($college);
+
     $president = mysqli_real_escape_string($conn, $_POST['president']);
+    $president = htmlspecialchars($president);
+
     $status = $_POST['status'];
     $renewal_user_id = $user_id;
 

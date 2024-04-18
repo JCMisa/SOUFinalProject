@@ -23,9 +23,17 @@ $status_ac = $row['status'];
 
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
+    $organization = htmlspecialchars($organization);
+
     $adviser = mysqli_real_escape_string($conn, $_POST['adviser']);
+    $adviser = htmlspecialchars($adviser);
+
     $address = mysqli_real_escape_string($conn, $_POST['address']);
+    $address = htmlspecialchars($address);
+
     $contact = mysqli_real_escape_string($conn, $_POST['contact']);
+    $contact = htmlspecialchars($contact);
+    
     $college = mysqli_real_escape_string($conn, $_POST['college']);
     $rank = mysqli_real_escape_string($conn, $_POST['rank']);
     $commitment_user_id = $user_id;
@@ -164,7 +172,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
         }
 
         .commitment-body .noted {
-            margin-top: 100px;
+            margin-top: 150px;
         }
 
         .commitment-footer {
@@ -234,7 +242,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
             }
 
             .commitment-body .noted {
-                margin-top: 30rem;
+                margin-top: 380px;
             }
 
             .commitment-body .noted .indent {
@@ -247,7 +255,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
 
             .commitment-footer .footer ul {
                 margin-top: 10px;
-                gap: 350px;
+                gap: 320px;
             }
         }
     </style>

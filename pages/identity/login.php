@@ -4,13 +4,13 @@
 
 session_start();
 
+$loginError = "";
 if(isset($_POST['submit'])){
 
-   $name = mysqli_real_escape_string($conn, $_POST['name']);
    $email = mysqli_real_escape_string($conn, $_POST['email']);
+   $email = htmlspecialchars($email);
    $pass = mysqli_real_escape_string($conn, $_POST['password']);
-   $cpass = mysqli_real_escape_string($conn, $_POST['cpassword']);
-   $user_type = mysqli_real_escape_string($conn, $_POST['user_type']);
+   $pass = htmlspecialchars($pass);
 
    $select = " SELECT * FROM user_tbl WHERE email = '$email' && password = '$pass' ";
 
@@ -26,7 +26,7 @@ if(isset($_POST['submit'])){
       header('location:../index.php');
       die();
    }else{
-      $error[] = 'incorrect email or password!';
+      $loginError = "Account does not exist!";
    }
 
 };
@@ -82,16 +82,21 @@ if(isset($_POST['submit'])){
         <p class="login-box-msg">Sign in to start your session</p>
 
         <form action="" method="post">
+          <div class="input-group mb-3" id="login-error">
+            <span style="color: red; font-size: 12px;"><?php echo $loginError ?></span>
+          </div>
+
           <div class="input-group mb-3">
-            <input type="email" name="email" class="form-control" placeholder="Email">
+            <input type="email" name="email" class="form-control" placeholder="Email" required>
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-envelope"></span>
               </div>
             </div>
           </div>
+
           <div class="input-group mb-3">
-            <input type="password" name="password" class="form-control" placeholder="Password">
+            <input type="password" name="password" class="form-control" placeholder="Password" required>
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-lock"></span>
@@ -135,6 +140,13 @@ if(isset($_POST['submit'])){
   <script src="../js/app.min.js"></script>
   <script src="../js/graphs.js"></script>
   <script src="../js/customize.js"></script>
+
+  <script>
+    let loginError = document.getElementById("login-error");
+    setTimeout(() => {
+      loginError.style.display = 'none';
+    }, 6000);
+  </script>
 </body>
 
 </html>

@@ -24,11 +24,23 @@ $status_ac = $row['status'];
 
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
+    $organization = htmlspecialchars($organization);
+
     $adviser = mysqli_real_escape_string($conn, $_POST['adviser']);
+    $adviser = htmlspecialchars($adviser);
+
     $address = mysqli_real_escape_string($conn, $_POST['address']);
+    $address = htmlspecialchars($address);
+
     $contact = mysqli_real_escape_string($conn, $_POST['contact']);
+    $contact = htmlspecialchars($contact);
+
     $college = mysqli_real_escape_string($conn, $_POST['college']);
+    $college = htmlspecialchars($college);
+
     $rank = mysqli_real_escape_string($conn, $_POST['rank']);
+    $rank = htmlspecialchars($rank);
+
     $commitment_user_id = $user_id;
     $status = $_POST['status'];
 

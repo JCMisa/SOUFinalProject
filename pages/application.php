@@ -15,7 +15,9 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
 
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
+    $organization = htmlspecialchars($organization);
     $president = mysqli_real_escape_string($conn, $_POST['president']);
+    $president = htmlspecialchars($president);
     $year = $_POST['year'];
     $status = $_POST['status'];
     $application_user_id = $user_id;
@@ -183,11 +185,11 @@ if(isset($_POST['save']))
             <div class="card-body">
                 <div class="form-group">
                     <label for="org">Organization Name</label>
-                    <input type="text" name="organization" class="form-control" id="org" placeholder="Organization Name">
+                    <input type="text" name="organization" class="form-control" id="org" placeholder="Organization Name" required>
                 </div>
                 <div class="form-group">
                     <label for="pres">President Name</label>
-                    <input type="text" name="president" class="form-control" id="pres" placeholder="Organization President Name">
+                    <input type="text" name="president" class="form-control" id="pres" placeholder="Organization President Name" required>
                 </div>
                 
                 <div class="col-sm-6">

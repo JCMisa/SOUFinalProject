@@ -15,9 +15,17 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
 
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
+    $organization = htmlspecialchars($organization);
+
     $adviser = mysqli_real_escape_string($conn, $_POST['adviser']);
+    $adviser = htmlspecialchars($adviser);
+
     $address = mysqli_real_escape_string($conn, $_POST['address']);
+    $address = htmlspecialchars($address);
+
     $contact = mysqli_real_escape_string($conn, $_POST['contact']);
+    $contact = htmlspecialchars($contact);
+    
     $college = mysqli_real_escape_string($conn, $_POST['college']);
     $rank = mysqli_real_escape_string($conn, $_POST['rank']);
     $year = $_POST['year'];
@@ -152,19 +160,19 @@ if(isset($_POST['save']))
             <div class="card-body">
                 <div class="form-group">
                     <label for="org">Organization Name</label>
-                    <input type="text" name="organization" class="form-control" id="org" placeholder="Organization Name">
+                    <input type="text" name="organization" class="form-control" id="org" placeholder="Organization Name" required>
                 </div>
                 <div class="form-group">
                     <label for="adviser">Adviser Name</label>
-                    <input type="text" name="adviser" class="form-control" id="adviser" placeholder="Adviser Name">
+                    <input type="text" name="adviser" class="form-control" id="adviser" placeholder="Adviser Name" required>
                 </div>
                 <div class="form-group">
                     <label for="address">Home Address</label>
-                    <input type="text" name="address" class="form-control" id="address" placeholder="Home Address">
+                    <input type="text" name="address" class="form-control" id="address" placeholder="Home Address" required>
                 </div>
                 <div class="form-group">
                     <label for="contact">Contact No.</label>
-                    <input type="text" name="contact" class="form-control" id="contact" placeholder="Contact No.">
+                    <input type="text" name="contact" class="form-control" id="contact" placeholder="Contact No." required>
                 </div>
                 <div class="form-group">
                     <input type="text" name="status" class="form-control" id="status" placeholder="Current Status" value="pending" hidden>

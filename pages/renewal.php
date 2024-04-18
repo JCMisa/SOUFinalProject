@@ -15,9 +15,16 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
 
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
+    $organization = htmlspecialchars($organization);
+
     $college = mysqli_real_escape_string($conn, $_POST['college']);
+    $college = htmlspecialchars($college);
+
     $year = $_POST['year'];
+
     $president = mysqli_real_escape_string($conn, $_POST['president']);
+    $president = htmlspecialchars($president);
+
     $status = $_POST['status'];
     $renewal_user_id = $user_id;
     
@@ -141,11 +148,11 @@ if(isset($_POST['save']))
             <div class="card-body">
                 <div class="form-group">
                     <label for="org">Organization Name</label>
-                    <input type="text" name="organization" class="form-control" id="org" placeholder="Organization Name">
+                    <input type="text" name="organization" class="form-control" id="org" placeholder="Organization Name" required>
                 </div>
                 <div class="form-group">
                     <label for="president">President Name</label>
-                    <input type="text" name="president" class="form-control" id="president" placeholder="Organization President Name">
+                    <input type="text" name="president" class="form-control" id="president" placeholder="Organization President Name" required>
                 </div>
                 <div class="form-group">
                     <input type="text" name="status" class="form-control" id="status" placeholder="Current Status" value="pending" hidden>
