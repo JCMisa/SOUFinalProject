@@ -54,7 +54,30 @@
 <script src="../js/app.min.js"></script>
 <script src="../js/graphs.js"></script>
 <script src="../js/customize.js"></script>
-<!-- <script src="../js/sweetAlert.js"></script> -->
+<!-- show password -->
+<script>
+    let eyeIcon = document.getElementById('eye-icon');
+    let password = document.getElementById('password');
+
+    let cEyeIcon = document.getElementById('c-eye-icon');
+    let cPassword = document.getElementById('c-password');
+
+    eyeIcon.addEventListener('click', function(){
+        if(password.type === 'password'){
+            password.type = 'text';
+        }else {
+            password.type = 'password';
+        }
+    })
+
+    cEyeIcon.addEventListener('click', function(){
+        if(cPassword.type === 'password'){
+            cPassword.type = 'text';
+        }else {
+            cPassword.type = 'password';
+        }
+    })
+</script>
 
 
 

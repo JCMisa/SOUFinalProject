@@ -69,9 +69,10 @@ if(isset($_GET['details_id'])){
     $status = $row['status'];
 }
 
-if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
+if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SESSION['image'])){
   $user_type = $_SESSION['user_type'];
   $user_name = $_SESSION['user_name'];
+  $user_image = $_SESSION['image'];
 }
 ?>
 

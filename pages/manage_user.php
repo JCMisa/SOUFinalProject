@@ -22,6 +22,27 @@ if(isset($_POST['submit'])){
     $organization = $_POST['organization'];
     $user_type = $_POST['user_type'];
 
+    $fileName = $_FILES["image"]["name"];
+    $fileSize = $_FILES["image"]["size"];
+    $tmpName = $_FILES["image"]["tmp_name"];
+
+    $validImageExtension = ['jpg', 'jpeg', 'png'];
+    $imageExtension = explode('.', $fileName);
+    $imageExtension = strtolower(end($imageExtension));
+    if(!in_array($imageExtension, $validImageExtension))
+    {
+        echo " <script> alert('Invalid Image Type'); </script> ";
+    }
+    else if($fileSize > 2000000)
+    {
+        echo " <script> alert('Image Size is Too Large'); </script> ";
+    }
+
+    $newImageName = uniqid('', true) . '.' . $imageExtension;
+    move_uploaded_file($tmpName, './profile_images/'.$newImageName);
+
+
+
     $select = " SELECT * FROM user_tbl WHERE email = '$email' && password = '$pass' ";
     $result = mysqli_query($conn, $select);
 
@@ -33,7 +54,7 @@ if(isset($_POST['submit'])){
         if($pass != $cpass){
             $error[] = 'password not matched!';
         }else{
-            $insert = "INSERT INTO user_tbl(name, email, password, user_type) VALUES('$name','$email','$pass','$user_type')";
+            $insert = "INSERT INTO user_tbl(name, email, password, user_type, image) VALUES('$name','$email','$pass','$user_type', '$newImageName')";
             mysqli_query($conn, $insert);
 
             $user_id = mysqli_insert_id($conn);
@@ -50,9 +71,10 @@ if(isset($_POST['submit'])){
     }
 };
 
-if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
+if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SESSION['image'])){
   $user_type = $_SESSION['user_type'];
   $user_name = $_SESSION['user_name'];
+  $user_image = $_SESSION['image'];
 }
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
@@ -71,6 +93,20 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SOU Management System</title>
     <?php include_once './reusable/head.php'; ?>
+
+    <style>
+        .password-input {
+            position: relative;
+        }
+
+        .form-group-append {
+            position: absolute;
+            right: 10px;
+            top: 70%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -123,7 +159,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
             <!-- Main content -->
             
             <!-- form -->
-            <form action="" method="post">
+            <form action="" method="post" enctype="multipart/form-data">
                 <h5 class="m-0">Create Account</h5>
             <div class="card-body">
                 <div class="form-group">
@@ -134,13 +170,29 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                     <label for="email">Email</label>
                     <input type="email" name="email" class="form-control" id="email" placeholder="sample@email.com">
                 </div>
-                <div class="form-group">
+                <div class="form-group password-input">
                     <label for="password">Password</label>
                     <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+                    <div class="form-group-append" id="eye-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group password-input">
                     <label for="password">Confirm Password</label>
-                    <input type="password" name="cpassword" class="form-control" placeholder="Confirm password">
+                    <input type="password" name="cpassword" class="form-control" id="c-password" placeholder="Confirm password">
+                    <div class="form-group-append" id="c-eye-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleInputFile">Profile Picture</label>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="exampleInputFile" name="image" accept=".jpg, .jpeg, .png">
+                            <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="row">
@@ -201,6 +253,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                             <th>Email</th>
                             <th>Password</th>
                             <th>Organization</th>
+                            <th>Profile</th>
                             <th>Role</th>
                             <th>View</th>
                             <th>Edit</th>
@@ -214,6 +267,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                             user_tbl.email, 
                             user_tbl.password, 
                             user_tbl.user_type,
+                            user_tbl.image,
                             organization_tbl.organization
                             FROM user_tbl 
                             INNER JOIN organization_tbl ON user_tbl.id = organization_tbl.user_id
@@ -234,7 +288,8 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                                             'email' => $row['email'],
                                             'password' => $row['password'],
                                             'user_type' => $row['user_type'],
-                                            'organization_tbl' => array()
+                                            'image' => $row['image'],
+                                            'organization_tbl' => array(),
                                         );
                                     }
 
@@ -251,6 +306,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                                         <td> <?php echo $user['email'] ?> </td>
                                         <td> <?php echo $user['password'] ?> </td>
                                         <td> <?php echo implode("<hr>", $user['organization_tbl']) ?> </td>
+                                        <td> <img src="<?php echo './profile_images/'.$user['image'] ?>" alt="profile" width="40px" height="40px" /> </td>
                                         <td> <?php echo $user['user_type'] ?> </td>
 
                                         <td> <a href="./details_user.php?details_id=<?php echo $user_id ?>" class="btn btn-block btn-outline-warning"> View </a> </td>
@@ -268,6 +324,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                             <th>Email</th>
                             <th>Password</th>
                             <th>Organization</th>
+                            <th>Profile</th>
                             <th>Role</th>
                             <th>View</th>
                             <th>Edit</th>

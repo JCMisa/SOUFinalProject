@@ -17,6 +17,7 @@ $name_ac = $row['name'];
 $email_ac = $row['email'];
 $password_ac = $row['password'];
 $user_type_ac = $row['user_type'];
+$image_ac = $row['image'];
 
 
 if(isset($_POST['submit'])){
@@ -31,11 +32,51 @@ if(isset($_POST['submit'])){
 
     $user_type = $_POST['user_type'];
 
-    $query = " UPDATE user_tbl SET id = $id, name = '$name', email = '$email', password = '$pass', user_type = '$user_type' WHERE id = $id; "; 
+    $new_image = $_FILES['image']['name'];
+    $fileSize = $_FILES["image"]["size"];
+    $tmpName = $_FILES["image"]["tmp_name"];
+
+    $validImageExtension = ['jpg', 'jpeg', 'png'];
+    $imageExtension = explode('.', $new_image);
+    $imageExtension = strtolower(end($imageExtension));
+    if(!in_array($imageExtension, $validImageExtension))
+    {
+        echo " <script> alert('Invalid Image Type'); </script> ";
+    }
+    else if($fileSize > 2000000)
+    {
+        echo " <script> alert('Image Size is Too Large'); </script> ";
+    }
+
+    $newImageName = uniqid('', true) . '.' . $imageExtension;
+    $old_image = $image_ac;
+
+    if($new_image != '')
+    {
+        $update_filename = $newImageName;
+    }
+    else
+    {
+        $update_filename = $old_image;
+    }
+
+    if(file_exists("profile_images/".$newImageName))
+    {
+        echo "<script> alert('Image already exists'); </script>";
+        header('location: ./manage_user.php');
+        die();
+    }
+
+    $query = " UPDATE user_tbl SET id = $id, name = '$name', email = '$email', password = '$pass', user_type = '$user_type', image = '$update_filename' WHERE id = $id; "; 
     $result = mysqli_query($conn, $query);
 
     if($result){
-        header('location:./manage_user.php?');
+        if($_FILES['image']['name'] != '')
+        {
+            move_uploaded_file($tmpName, './profile_images/'.$newImageName);
+            unlink("./profile_images/".$old_image);
+        }
+        header('location:./manage_user.php');
         die();
     }else{
         die('Connect Error (' . mysqli_connect_errno() . ') '. mysqli_connect_error());
@@ -58,11 +99,13 @@ if(isset($_GET['update_id'])){
     $email = $row['email'];
     $pass = $row['password'];
     $user_type = $row['user_type'];
+    $image_ac = $row['image'];
 }
 
-if(isset($_SESSION['user_type']) && isset($_SESSION['user_name'])){
+if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SESSION['image'])){
   $user_type = $_SESSION['user_type'];
   $user_name = $_SESSION['user_name'];
+  $user_image = $_SESSION['image'];
 }
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
@@ -85,6 +128,20 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SOU Management System</title>
     <?php include_once './reusable/head.php'; ?>
+
+    <style>
+        .password-input {
+            position: relative;
+        }
+
+        .form-group-append {
+            position: absolute;
+            right: 10px;
+            top: 70%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 
@@ -136,7 +193,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
             
             <!-- Main content -->
             <!-- form -->
-            <form action="" method="post">
+            <form action="" method="post" enctype="multipart/form-data">
             <div class="card-body">
                 <div class="form-group">
                     <label for="name">Name</label>
@@ -146,9 +203,23 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                     <label for="email">Email</label>
                     <input type="email" name="email" class="form-control" id="email" placeholder="sample@email.com" value="<?php echo $email_ac; ?>">
                 </div>
-                <div class="form-group">
+                <div class="form-group password-input">
                     <label for="password">Password</label>
                     <input type="password" name="password" class="form-control" id="password" placeholder="Password" value="<?php echo $password_ac; ?>">
+                    <div class="form-group-append" id="eye-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleInputFile">Profile Picture</label>
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="exampleInputFile" name="image" accept=".jpg, .jpeg, .png" value="<?php echo $image_ac; ?>">
+                            <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                            <input hidden type="file" name="image_old" value="<?php echo $image_ac; ?>">
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="row">

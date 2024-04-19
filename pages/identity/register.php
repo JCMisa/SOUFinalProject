@@ -11,12 +11,31 @@ $cPassError = "";
 $orgError = "";
 if(isset($_POST['submit'])){ //checks if input with type of submit is inside a form with method of post (if submit input is clicked, then condition will be true)
 
-   $name = mysqli_real_escape_string($conn, $_POST['name']);
-   $email = mysqli_real_escape_string($conn, $_POST['email']); //real_esape is used to escape any special characters
-   $pass = mysqli_real_escape_string($conn, $_POST['password']);
-   $cpass = mysqli_real_escape_string($conn, $_POST['cpassword']);
-   $organization = $_POST['organization'];
-   $user_type = $_POST['user_type'];
+  $name = mysqli_real_escape_string($conn, $_POST['name']);
+  $email = mysqli_real_escape_string($conn, $_POST['email']); //real_esape is used to escape any special characters
+  $pass = mysqli_real_escape_string($conn, $_POST['password']);
+  $cpass = mysqli_real_escape_string($conn, $_POST['cpassword']);
+  $organization = $_POST['organization'];
+  $user_type = $_POST['user_type'];
+
+  $fileName = $_FILES["image"]["name"];
+  $fileSize = $_FILES["image"]["size"];
+  $tmpName = $_FILES["image"]["tmp_name"];
+
+  $validImageExtension = ['jpg', 'jpeg', 'png'];
+  $imageExtension = explode('.', $fileName);
+  $imageExtension = strtolower(end($imageExtension));
+  if(!in_array($imageExtension, $validImageExtension))
+  {
+      echo " <script> alert('Invalid Image Type'); </script> ";
+  }
+  else if($fileSize > 2000000)
+  {
+      echo " <script> alert('Image Size is Too Large'); </script> ";
+  }
+
+  $newImageName = uniqid('', true) . '.' . $imageExtension;
+  move_uploaded_file($tmpName, '../profile_images/'.$newImageName);
 
     if(empty($name))
     {
@@ -44,7 +63,7 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
       if($pass != $cpass){
         $cPassError = "Password not matched!";
       }else{
-        $insert = "INSERT INTO user_tbl(name, email, password, user_type) VALUES('$name','$email','$pass','$user_type')";
+        $insert = "INSERT INTO user_tbl(name, email, password, user_type, image) VALUES('$name','$email','$pass','$user_type', '$newImageName')";
         mysqli_query($conn, $insert);
 
         $user_id = mysqli_insert_id($conn);
@@ -114,7 +133,7 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
     <div class="card-body register-card-body">
       <p class="login-box-msg">Register a new account</p>
 
-      <form action="" method="post">
+      <form action="" method="post" enctype="multipart/form-data">
 
         <div class="input-group mb-3">
           <input type="text" name="name" class="form-control" placeholder="Username" required>
@@ -141,10 +160,10 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
         </div>
 
         <div class="input-group mb-3">
-          <input type="password" name="password" class="form-control" placeholder="Password" required>
+          <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
           <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
+            <div class="input-group-text" id="eye-icon">
+              <span class="fas fa-eye" style="cursor: pointer"></span>
             </div>
           </div>
         </div>
@@ -153,15 +172,25 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
         </div>
 
         <div class="input-group mb-3">
-          <input type="password" name="cpassword" class="form-control" placeholder="Confirm password" required>
+          <input type="password" name="cpassword" id="c-password" class="form-control" placeholder="Confirm password" required>
           <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
+            <div class="input-group-text" id="c-eye-icon">
+              <span class="fas fa-eye" style="cursor: pointer"></span>
             </div>
           </div>
         </div>
         <div class="input-group mb-3" id="c-pass-error">
            <span style="color: red; font-size: 12px;"><?php echo $cPassError ?></span>
+        </div>
+
+        <div class="input-group mb-3">
+            <label for="exampleInputFile">Profile Picture</label>
+            <div class="input-group">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="exampleInputFile" name="image" accept=".jpg, .jpeg, .png">
+                    <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                </div>
+            </div>
         </div>
 
         <div class="input-group mb-3">
@@ -256,6 +285,30 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
     setTimeout(() => {
       cPassError.style.display = 'none';
     }, 6000);
+
+
+    // <!-- show password -->
+    let eyeIcon = document.getElementById('eye-icon');
+    let password = document.getElementById('password');
+
+    let cEyeIcon = document.getElementById('c-eye-icon');
+    let cPassword = document.getElementById('c-password');
+
+    eyeIcon.addEventListener('click', function(){
+        if(password.type === 'password'){
+            password.type = 'text';
+        }else {
+            password.type = 'password';
+        }
+    })
+
+    cEyeIcon.addEventListener('click', function(){
+        if(cPassword.type === 'password'){
+            cPassword.type = 'text';
+        }else {
+            cPassword.type = 'password';
+        }
+    })
   </script>
 </body>
 </html>

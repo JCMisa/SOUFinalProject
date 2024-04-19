@@ -7,6 +7,15 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          <img src="profile_images/<?php echo $user_image ?>" class="img-circle elevation-2" alt="User Image" style="height: 35px;" />
+        </div>
+        <div class="info">
+          <a href="./manage_profile.php?id=<?php echo $user_id ?>" class="d-block"><?php echo $user_name ?></a>
+        </div>
+      </div>
+
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="input-group" data-widget="sidebar-search">

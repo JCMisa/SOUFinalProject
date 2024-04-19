@@ -23,6 +23,7 @@ if(isset($_POST['submit'])){
       $_SESSION['user_id'] = $row['id'];
       $_SESSION['user_name'] = $row['name'];
       $_SESSION['user_type'] = $row['user_type'];
+      $_SESSION['image'] = $row['image'];
       header('location:../index.php');
       die();
    }else{
@@ -65,13 +66,6 @@ if(isset($_POST['submit'])){
 </head>
 
 <body class="hold-transition login-page">
-  <?php
-      if(isset($error)){
-         foreach($error as $error){
-            echo '<span class="error-msg">'.$error.'</span>';
-         };
-      };
-  ?>
   <div class="login-box">
     <!-- /.login-logo -->
     <div class="card card-outline card-primary">
@@ -96,10 +90,10 @@ if(isset($_POST['submit'])){
           </div>
 
           <div class="input-group mb-3">
-            <input type="password" name="password" class="form-control" placeholder="Password" required>
+            <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
             <div class="input-group-append">
-              <div class="input-group-text">
-                <span class="fas fa-lock"></span>
+              <div class="input-group-text" id="eye-icon" style="cursor: pointer">
+                <span class="fas fa-eye"></span>
               </div>
             </div>
           </div>
@@ -146,6 +140,18 @@ if(isset($_POST['submit'])){
     setTimeout(() => {
       loginError.style.display = 'none';
     }, 6000);
+
+    // <!-- show password -->
+    let eyeIcon = document.getElementById('eye-icon');
+    let password = document.getElementById('password');
+
+    eyeIcon.addEventListener('click', function(){
+        if(password.type === 'password'){
+            password.type = 'text';
+        }else {
+            password.type = 'password';
+        }
+    })
   </script>
 </body>
 
