@@ -97,6 +97,7 @@ if(isset($_POST['submit'])){
     // }
 
     if($result){
+        $_SESSION['status'] = "Plan Updated Successfully";
         header('location:./plans.php');
         die();
     }else{

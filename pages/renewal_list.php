@@ -33,7 +33,6 @@
         <?php include_once './reusable/preloader.php'; ?>
 
         <!-- Navbar -->
-        <?php include_once './reusable/topNav.php'; ?>
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->

@@ -32,6 +32,7 @@ if(isset($_POST['submit'])){
     $result = mysqli_query($conn, $query);
 
     if($result){
+        $_SESSION['status'] = "Application Updated Successfully";
         header('location:./application.php');
         die();
     }else{

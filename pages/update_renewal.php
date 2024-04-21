@@ -36,6 +36,7 @@ if(isset($_POST['submit'])){
     $result = mysqli_query($conn, $query);
 
     if($result){
+        $_SESSION['status'] = "Renewal Updated Successfully";
         header('location:./renewal.php');
         die();
     }else{

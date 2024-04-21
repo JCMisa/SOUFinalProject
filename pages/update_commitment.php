@@ -48,6 +48,7 @@ if(isset($_POST['submit'])){
     $result = mysqli_query($conn, $query);
 
     if($result){
+        $_SESSION['status'] = "Commitment Updated Successfully";
         header('location:./commitment.php');
         die();
     }else{

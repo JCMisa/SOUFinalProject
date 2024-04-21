@@ -43,6 +43,32 @@ if(isset($_POST["search"]))
     die();
   }
 }
+
+if(isset($_POST['submit'])){
+  $id = mysqli_real_escape_string($conn, $_POST['id']);
+  $id = htmlspecialchars($id);
+
+  $query = "SELECT * FROM user_tbl WHERE id = '$id'";
+  $result = mysqli_query($conn, $query);
+
+  if(mysqli_num_rows($result) > 0){
+    $row = mysqli_fetch_array($result);
+
+    $_SESSION['user_id'] = $row['id'];
+    $_SESSION['user_name'] = $row['name'];
+    $_SESSION['user_email'] = $row['email'];
+    $_SESSION['user_type'] = $row['user_type'];
+    $_SESSION['image'] = $row['image'];
+    $_SESSION['organization'] = $row['organization'];
+    $_SESSION['birthday'] = $row['birthday'];
+
+    header('location:./index.php');
+    die();
+  }else{
+    $loginError = "Account does not exist!";
+  }
+};
+
 ?>
 
 
@@ -74,7 +100,53 @@ if(isset($_POST["search"]))
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-      <!-- mode -->
+      <!-- change account -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <i class="fa-solid fa-angle-down"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+            <?php 
+              $query1 = " SELECT * FROM user_tbl WHERE id = $user_id; ";
+              $result1 = mysqli_query($conn, $query1);
+              $row = mysqli_fetch_array($result1);
+              $user_email = $row['email'];
+
+              $query2 = " SELECT * FROM user_tbl WHERE email = '$user_email'; ";
+              $result2 = mysqli_query($conn, $query2);
+
+                $result_count = mysqli_num_rows($result2);
+
+                if($result_count > 0)
+                {
+                  while($row = mysqli_fetch_assoc($result2))
+                  {
+            ?>
+                    <form action="" method="post">
+                      <input type="number" hidden name="id" value="<?php echo $row['id']; ?>">
+                      <?php echo $row['id'] ?>
+
+                      <a href="#" class="dropdown-item">
+                        <div class="media">
+                          <img src="profile_images/<?php echo $row['image']; ?>" alt="User Avatar" class="img-size-50 mr-3 img-circle" style="width: 30px; height: 30px;">
+                          <div class="media-body">
+                            <h3 class="dropdown-item-title">
+                              <?php echo $row['name']; ?>
+                              <button type="submit" name="submit" class="btn float-right text-sm text-success"><i class="fa-solid fa-right-to-bracket"></i></button>
+                            </h3>
+                            <p class="text-sm"><?php echo $row['email']; ?></p>
+                            <p class="text-sm text-muted"><i class="fa-solid fa-school"></i> <?php echo $row['organization']; ?> </p>
+                          </div>
+                        </div>
+                      </a>
+                      <div class="dropdown-divider"></div>
+                    </form>
+            <?php 
+            }
+          }
+      ?>
+      </div>
+      </li>
 
       <!-- Navbar Search -->
       <li class="nav-item">

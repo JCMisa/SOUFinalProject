@@ -17,6 +17,7 @@ $name_ac = $row['name'];
 $email_ac = $row['email'];
 $password_ac = $row['password'];
 $user_type_ac = $row['user_type'];
+$image_ac = $row['image'];
 
 if(isset($_POST['submit'])){
     $name = mysqli_real_escape_string($conn, $_POST['name']);
@@ -150,11 +151,29 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                 <div class="card">
                     <div class="card-body row">
                         <div class="col-5">
-                            <p>Account ID: <?php echo $id ?></p>
-                            <p>Account Name: <?php echo $name ?></p>
-                            <p>Account Email: <?php echo $email ?></p>
-                            <p>Account Password: <?php echo $pass ?></p>
-                            <p>Account Role: <?php echo $user_role ?></p>
+                            <div class="container-fluid mt-5">
+                                <div class="card card-primary card-outline">
+                                    <div class="card-body box-profile">
+                                        <div class="text-center">
+                                            <img class="profile-user-img img-fluid img-circle" src="./profile_images/<?php echo $image_ac ?>" alt="User profile picture" style="height: 100px">
+                                        </div>
+                                        <h3 class="profile-username text-center"> <?php echo $name_ac ?> </h3>
+                                        <p class="text-muted text-center"> <?php echo $user_type_ac ?> </p>
+                                        <ul class="list-group list-group-unbordered mb-3">
+                                            <li class="list-group-item">
+                                                <b>ID</b> <a class="float-right"> <?php echo $id ?> </a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <b>Email</b> <a class="float-right"> <?php echo $email_ac ?> </a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <b>Password</b> <a class="float-right"><?php echo $password_ac ?> </a>
+                                            </li>
+                                        </ul>
+                                        <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="col-7">

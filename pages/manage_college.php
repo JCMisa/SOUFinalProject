@@ -7,26 +7,20 @@ if(isset($_SESSION['user_id'])){
 }
 
 if(isset($_POST['submit'])){
-    $organization = mysqli_real_escape_string($conn, $_POST['organization']);
-    $organization = htmlspecialchars($organization);
-
     $college = mysqli_real_escape_string($conn, $_POST['college']);
     $college = htmlspecialchars($college);
 
-    $dean = mysqli_real_escape_string($conn, $_POST['dean']);
-    $dean = htmlspecialchars($dean);
-
-    $select = " SELECT * FROM organizations WHERE name = '$organization'; ";
+    $select = " SELECT * FROM colleges WHERE name = '$college'; ";
     $result = mysqli_query($conn, $select);
 
     if(mysqli_num_rows($result) > 0){
-        $_SESSION['status'] = "Organization already exist";
-        $error[] = 'organization already exist!';
+        $_SESSION['status'] = "College already exist";
+        $error[] = 'college already exist!';
     }else{
-        $insert = " INSERT INTO organizations(name, college_belong, college_dean) VALUES('$organization', '$college', '$dean'); ";
+        $insert = " INSERT INTO colleges(name) VALUES('$college'); ";
         mysqli_query($conn, $insert);
-        $_SESSION['status'] = "Organization created successfully";
-        header('location:./manage_org.php');
+        $_SESSION['status'] = "College created successfully";
+        header('location:./manage_college.php');
         die();
     }
 };
@@ -99,7 +93,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                                 </div>
                             </a>
                             
-                            <h1 class="m-0">Manage Organizations</h1>
+                            <h1 class="m-0">Manage Colleges</h1>
                         </div>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
@@ -119,32 +113,8 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
             <form action="" method="post">
                 <div class="card-body">
                     <div class="form-group">
-                        <label for="organization">Organization Name</label>
-                        <input type="text" name="organization" class="form-control" id="organization" placeholder="Organization Name">
-                    </div>
-
-                    <div class="form-group">
-                        <?php 
-                            $sql = "SELECT id, name FROM colleges";
-                            $result = mysqli_query($conn, $sql);   
-                        ?>
-                        <label for="college">Select College</label>
-                        <select name="college" class="custom-select" id="college">
-                        <?php 
-                        if($resultCheck = mysqli_num_rows($result)) {
-                            while($row = mysqli_fetch_assoc($result)) {
-                        ?>
-                            <option value="<?php echo $row['name'] ?>"><?php echo $row['name'] ?></option>
-                        <?php 
-                            }
-                        }
-                        ?>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="dean">Dean Name</label>
-                        <input type="text" name="dean" class="form-control" id="dean" placeholder="Dean Name">
+                        <label for="college">College Name</label>
+                        <input type="text" name="college" class="form-control" id="college" placeholder="College Name">
                     </div>
                 </div>
 
@@ -168,16 +138,14 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>College Under</th>
-                            <th>Dean</th>
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                            $select_all_user = " SELECT * FROM organizations; "; 
-                            $result_all = mysqli_query($conn, $select_all_user);
+                            $select = " SELECT * FROM colleges; "; 
+                            $result_all = mysqli_query($conn, $select);
                             $resultCheck = mysqli_num_rows($result_all);
 
                             if($resultCheck > 0)
@@ -188,11 +156,8 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                                     <tr>
                                         <td> <?php echo $row['id'] ?> </td>
                                         <td> <?php echo $row['name'] ?> </td>
-                                        <td> <?php echo $row['college_belong'] ?> </td>
-                                        <td> <?php echo $row['college_dean'] ?> </td>
-
-                                        <td> <a href="./update_org.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
-                                        <td> <a href="./delete_org.php?delete_id='<?php echo $row['id'] ?>'" class="delete btn btn-block btn-outline-danger"> Delete </a> </td>
+                                        <td> <a href="./update_college.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
+                                        <td> <a href="./delete_college.php?delete_id='<?php echo $row['id'] ?>'" class="delete btn btn-block btn-outline-danger"> Delete </a> </td>
                                     </tr>
                         <?php
                                 }
@@ -203,8 +168,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>College Under</th>
-                            <th>Dean</th>
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>

@@ -76,6 +76,7 @@ if(isset($_POST['submit'])){
             move_uploaded_file($tmpName, './profile_images/'.$newImageName);
             unlink("./profile_images/".$old_image);
         }
+        $_SESSION['status'] = "Profile Updated Successfully";
         header('location:./manage_profile.php?id='.$id);
         die();
     }else{
@@ -131,6 +132,17 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
+            <?php
+                if(isset($_SESSION['status']))
+                {
+            ?>
+                    <div class="update-notif" style="z-index:100000; font-size:20px; background-color:lightgreen; padding: 10px 40px; position:fixed; top:5%; right:0; border-radius:5px;">
+                        <p style="color: green;"><?php echo $_SESSION['status'] ?></p>
+                    </div>
+            <?php
+                    unset($_SESSION['status']);
+                }
+            ?>
             <!-- Content Header (Page header) -->
             <div class="content-header">
                 <div class="container-fluid">

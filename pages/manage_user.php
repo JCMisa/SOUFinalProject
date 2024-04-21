@@ -6,7 +6,7 @@ if(isset($_SESSION['user_id'])){
     $user_id = $_SESSION['user_id'];
 }
 
-if(isset($_POST['submit'])){
+if(isset($_POST['create'])){
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $name = htmlspecialchars($name);
 
@@ -21,6 +21,8 @@ if(isset($_POST['submit'])){
 
     $organization = $_POST['organization'];
     $user_type = $_POST['user_type'];
+
+    $birthday = $_POST['birthday'];
 
     $fileName = $_FILES["image"]["name"];
     $fileSize = $_FILES["image"]["size"];
@@ -43,31 +45,16 @@ if(isset($_POST['submit'])){
 
 
 
-    $select = " SELECT * FROM user_tbl WHERE email = '$email' && password = '$pass' ";
-    $result = mysqli_query($conn, $select);
-
-    if(mysqli_num_rows($result) > 0){
-
-      $error[] = 'user already exist!';
+    if($pass != $cpass){
+        $error[] = 'password not matched!';
     }else{
+        $insert = "INSERT INTO user_tbl(name, email, password, user_type, organization, birthday, image) 
+        VALUES('$name','$email','$pass','$user_type', '$organization', '$birthday', '$newImageName')";
+        mysqli_query($conn, $insert);
 
-        if($pass != $cpass){
-            $error[] = 'password not matched!';
-        }else{
-            $insert = "INSERT INTO user_tbl(name, email, password, user_type, image) VALUES('$name','$email','$pass','$user_type', '$newImageName')";
-            mysqli_query($conn, $insert);
-
-            $user_id = mysqli_insert_id($conn);
-
-            foreach ($organization as $org) {
-                $org = mysqli_real_escape_string($conn, $org);
-                $sql = " INSERT INTO organization_tbl (user_id, organization) VALUES ('$user_id', '$org'); ";
-                $result = mysqli_query($conn, $sql);
-            }
-
-            header('location:./manage_user.php');
-            die();
-        }
+        $_SESSION['status'] = "Account Created Successfully";
+        header('location:./manage_user.php');
+        die();
     }
 };
 
@@ -124,6 +111,17 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
 
     <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
+            <?php
+                if(isset($_SESSION['status']))
+                {
+            ?>
+                    <div class="update-notif" style="z-index:100000; font-size:20px; background-color:lightgreen; padding: 10px 40px; position:fixed; top:5%; right:0; border-radius:5px;">
+                        <p style="color: green;"><?php echo $_SESSION['status'] ?></p>
+                    </div>
+            <?php
+                    unset($_SESSION['status']);
+                }
+            ?>
             <!-- Content Header (Page header) -->
             <div class="content-header">
                 <div class="container-fluid">
@@ -186,6 +184,11 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                 </div>
 
                 <div class="form-group">
+                    <label for="dates">Birth Date</label>
+                    <input type="date" name="birthday" class="form-control" id="dates">
+                </div>
+
+                <div class="form-group">
                     <label for="exampleInputFile">Profile Picture</label>
                     <div class="input-group">
                         <div class="custom-file">
@@ -194,12 +197,13 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                         </div>
                     </div>
                 </div>
+
                 
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Role</label>
-                            <select name="user_type" multiple class="custom-select">
+                            <select name="user_type" class="custom-select">
                                 <option value="user">user</option>
                                 <option value="admin">admin</option>
                                 <option value="super_admin">super admin</option>
@@ -214,8 +218,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                             $sql = "SELECT id, name FROM organizations";
                             $result = mysqli_query($conn, $sql);   
                             ?>
-                            <select name="organization[]" multiple class="custom-select" id="organizations">
-                                <option value="none" disabled>--Select Organization--</option>
+                            <select name="organization" class="custom-select" id="organizations">
                                 <?php 
                                 if($resultCheck = mysqli_num_rows($result)) {
                                 while($row = mysqli_fetch_assoc($result)) {
@@ -232,7 +235,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
             </div>
 
             <div class="card-footer">
-                <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" name="create" class="btn btn-primary">Submit</button>
             </div>
             </form>
 
@@ -253,6 +256,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                             <th>Email</th>
                             <th>Password</th>
                             <th>Organization</th>
+                            <th>BirthDate</th>
                             <th>Profile</th>
                             <th>Role</th>
                             <th>View</th>
@@ -262,56 +266,27 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                     </thead>
                     <tbody>
                         <?php
-                            $sql = " SELECT user_tbl.id AS user_id, 
-                            user_tbl.name, 
-                            user_tbl.email, 
-                            user_tbl.password, 
-                            user_tbl.user_type,
-                            user_tbl.image,
-                            organization_tbl.organization
-                            FROM user_tbl 
-                            INNER JOIN organization_tbl ON user_tbl.id = organization_tbl.user_id
-                            ; ";
+                            $sql = " SELECT * FROM user_tbl; ";
 
                             $result = mysqli_query($conn, $sql);
                             
-
-
                             if(mysqli_num_rows($result) > 0)
                             {
-                                $users = array();
                                 while($row = mysqli_fetch_assoc($result))
-                                {
-                                    if(!isset($users[$row['user_id']])) {
-                                        $users[$row['user_id']] = array(
-                                            'name' => $row['name'],
-                                            'email' => $row['email'],
-                                            'password' => $row['password'],
-                                            'user_type' => $row['user_type'],
-                                            'image' => $row['image'],
-                                            'organization_tbl' => array(),
-                                        );
-                                    }
-
-                                    if (!in_array($row['organization'], $users[$row['user_id']]['organization_tbl'])) {
-                                        $users[$row['user_id']]['organization_tbl'][] = $row['organization'];
-                                    }
-                                }
-
-                                foreach ($users as $user_id => $user)
                                 {
                         ?>
                                     <tr>
-                                        <td> <?php echo $user['name'] ?> </td>
-                                        <td> <?php echo $user['email'] ?> </td>
-                                        <td> <?php echo $user['password'] ?> </td>
-                                        <td> <?php echo implode("<hr>", $user['organization_tbl']) ?> </td>
-                                        <td> <img src="<?php echo './profile_images/'.$user['image'] ?>" alt="profile" width="40px" height="40px" /> </td>
-                                        <td> <?php echo $user['user_type'] ?> </td>
+                                        <td> <?php echo $row['name'] ?> </td>
+                                        <td> <?php echo $row['email'] ?> </td>
+                                        <td> <?php echo $row['password'] ?> </td>
+                                        <td> <?php echo $row['organization'] ?> </td>
+                                        <td> <?php echo $row['birthday'] ?> </td>
+                                        <td> <img src="<?php echo './profile_images/'.$row['image'] ?>" alt="profile" width="40px" height="40px" /> </td>
+                                        <td> <?php echo $row['user_type'] ?> </td>
 
-                                        <td> <a href="./details_user.php?details_id=<?php echo $user_id ?>" class="btn btn-block btn-outline-warning"> View </a> </td>
-                                        <td> <a href="./update_user.php?update_id='<?php echo $user_id ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
-                                        <td> <a href="./delete_user.php?delete_id='<?php echo $user_id ?>'" class="delete btn btn-block btn-outline-danger"> Delete </a> </td>
+                                        <td> <a href="./details_user.php?details_id=<?php echo $row['id'] ?>" class="btn btn-block btn-outline-warning"> View </a> </td>
+                                        <td> <a href="./update_user.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
+                                        <td> <a href="./delete_user.php?delete_id='<?php echo $row['id'] ?>'" class="delete btn btn-block btn-outline-danger"> Delete </a> </td>
                                     </tr>
                         <?php
                                 }
@@ -324,6 +299,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                             <th>Email</th>
                             <th>Password</th>
                             <th>Organization</th>
+                            <th>BirthDate</th>
                             <th>Profile</th>
                             <th>Role</th>
                             <th>View</th>
@@ -354,15 +330,5 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
 
 <!-- jQuery -->
 <?php include_once './reusable/jquery.php'; ?>
-<script>
-    var select = document.getElementById('organizations');
-    select.addEventListener('mousedown', function(e) {
-        e.preventDefault();
-        var select = this;
-        var index = Array.from(select.options).findIndex(option => option === e.target);
-        select.options[index].selected = !select.options[index].selected;
-        return false;
-    });
-</script>
 </body>
 </html>

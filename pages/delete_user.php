@@ -19,13 +19,10 @@ if(isset($_GET['delete_id'])){
     $sql5 = " DELETE FROM application_upload WHERE user_id = $id; "; //to also delete all records of user 
     $result5 = mysqli_query($conn, $sql5);
 
-    $sql6 = " DELETE FROM organization_tbl WHERE user_id = $id; "; //to also delete all records of user 
-    $result6 = mysqli_query($conn, $sql6);
-
     $sql7 = " DELETE FROM plans WHERE user_id = $id; "; //to also delete all records of user 
     $result7 = mysqli_query($conn, $sql7);
 
-    if($result && $result2 && $result3 && $result4 && $result5 && $result6 && $result7){
+    if($result && $result2 && $result3 && $result4 && $result5 && $result7){
         header('location:./manage_user.php');
         die();
     }else{

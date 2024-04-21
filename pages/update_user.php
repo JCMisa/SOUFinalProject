@@ -18,6 +18,8 @@ $email_ac = $row['email'];
 $password_ac = $row['password'];
 $user_type_ac = $row['user_type'];
 $image_ac = $row['image'];
+$organization_ac = $row['organization'];
+$birthday_ac = $row['birthday'];
 
 
 if(isset($_POST['submit'])){
@@ -31,6 +33,9 @@ if(isset($_POST['submit'])){
     $pass = htmlspecialchars($pass);
 
     $user_type = $_POST['user_type'];
+
+    $organization = $_POST['organization'];
+    $birthday = $_POST['birthday'];
 
     $new_image = $_FILES['image']['name'];
     $fileSize = $_FILES["image"]["size"];
@@ -67,7 +72,7 @@ if(isset($_POST['submit'])){
         die();
     }
 
-    $query = " UPDATE user_tbl SET id = $id, name = '$name', email = '$email', password = '$pass', user_type = '$user_type', image = '$update_filename' WHERE id = $id; "; 
+    $query = " UPDATE user_tbl SET id = $id, name = '$name', email = '$email', password = '$pass', user_type = '$user_type', organization = '$organization', birthday = '$birthday', image = '$update_filename' WHERE id = $id; "; 
     $result = mysqli_query($conn, $query);
 
     if($result){
@@ -76,6 +81,8 @@ if(isset($_POST['submit'])){
             move_uploaded_file($tmpName, './profile_images/'.$newImageName);
             unlink("./profile_images/".$old_image);
         }
+
+        $_SESSION['status'] = "User Updated Successfully";
         header('location:./manage_user.php');
         die();
     }else{
@@ -99,6 +106,8 @@ if(isset($_GET['update_id'])){
     $email = $row['email'];
     $pass = $row['password'];
     $user_type = $row['user_type'];
+    $organization = $row['organization'];
+    $birthday = $row['birthday'];
     $image_ac = $row['image'];
 }
 
@@ -212,6 +221,11 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                 </div>
 
                 <div class="form-group">
+                    <label for="dates">Birth Date</label>
+                    <input type="date" name="birthday" class="form-control" id="dates" value="<?php echo $birthday_ac; ?>">
+                </div>
+
+                <div class="form-group">
                     <label for="exampleInputFile">Profile Picture</label>
                     <div class="input-group">
                         <div class="custom-file">
@@ -226,26 +240,35 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Role</label>
-                            <select name="user_type" multiple class="custom-select" value="<?php echo $user_type_ac; ?>">>
+                            <select name="user_type" class="custom-select" value="<?php echo $user_type_ac; ?>">>
                                 <option value="user" <?php if($user_type_ac === "user") echo 'selected'; ?>>user</option>
                                 <option value="admin" <?php if($user_type_ac === "admin") echo 'selected'; ?>>admin</option>
                                 <option value="super_admin" <?php if($user_type_ac === "super_admin") echo 'selected'; ?>>super admin</option>
                             </select>
                         </div>
                     </div>
-                </div>
-                <!-- <div class="form-group">
-                    <label for="exampleInputFile">File input</label>
-                    <div class="input-group">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="exampleInputFile">
-                            <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                        </div>
-                        <div class="input-group-append">
-                            <span class="input-group-text">Upload</span>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Organization</label>
+                            <?php 
+                            $sql = "SELECT id, name FROM organizations";
+                            $result = mysqli_query($conn, $sql);   
+                            ?>
+                            <select name="organization" class="custom-select" id="organizations" value="<?php echo $organization_ac; ?>">>
+                                <?php 
+                                if($resultCheck = mysqli_num_rows($result)) {
+                                while($row = mysqli_fetch_assoc($result)) {
+                                ?>
+                                    <option value="<?php echo $row['name']?>" <?php if($organization_ac === $row['name']) echo 'selected'; ?>><?php echo $row['name'] ?></option>
+                                <?php 
+                                }
+                                }
+                                ?>
+                            </select>
                         </div>
                     </div>
-                </div> -->
+                </div>
             </div>
 
             <div class="card-footer">

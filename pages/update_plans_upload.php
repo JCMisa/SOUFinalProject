@@ -18,13 +18,15 @@ $uploader_user_id = $row['user_id'];
 
 if(isset($_POST['submit'])){
     $status = $_POST['status'];
+    $date_approved = date('m-d-Y');
 
-    $query = " UPDATE application_upload SET status = '$status' WHERE id = $id; "; 
+    $query = " UPDATE application_upload SET status = '$status', date_approved = '$date_approved' WHERE id = $id; "; 
     $query2 = " UPDATE plans SET status = '$status' WHERE user_id = $uploader_user_id AND year = '$year'; ";
     $result = mysqli_query($conn, $query);
     $result2 = mysqli_query($conn, $query2);
 
     if($result && $result2){
+        $_SESSION['status'] = "Status Updated Successfully";
         header('location:./plans_submission.php');
         die();
     }else{

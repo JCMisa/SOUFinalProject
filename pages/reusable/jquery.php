@@ -18,6 +18,7 @@
 
 
 
+
 <!-- sweet alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
@@ -50,10 +51,12 @@
 
 
 
+
 <!-- custom js -->
 <script src="../js/app.min.js"></script>
 <script src="../js/graphs.js"></script>
 <script src="../js/customize.js"></script>
+<script src="../js/bootstrap.bundle.min.js"></script>
 <!-- show password -->
 <script>
     let eyeIcon = document.getElementById('eye-icon');
@@ -112,3 +115,12 @@
   });
 </script>
 
+
+
+
+<script>
+  let updateNotif = document.querySelector('.update-notif');
+    setTimeout(() => {
+        updateNotif.style.display = 'none';
+    }, 5000);
+</script>

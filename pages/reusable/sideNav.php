@@ -57,41 +57,48 @@
             </a>
           </li>
           <!-- forms sidebar menu -->
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-edit"></i>
-              <p>
-                Forms
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="./application.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Application Form</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="renewal.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Renewal Form</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./commitment.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Commitment Form</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./plans.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Plan of Activities</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+          <?php 
+            if($user_type === 'super_admin' || $user_type === 'admin')
+            {
+              echo <<<FORMS
+                <li class="nav-item">
+                  <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-edit"></i>
+                    <p>
+                      Forms
+                      <i class="fas fa-angle-left right"></i>
+                    </p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                      <a href="./application.php" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Application Form</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="renewal.php" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Renewal Form</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="./commitment.php" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Commitment Form</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="./plans.php" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Plan of Activities</p>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              FORMS;
+            }
+          ?>
           <!-- form submissions sidebar menu -->
           <?php 
             if($user_type === 'super_admin')
@@ -203,6 +210,13 @@
                       <a href="./manage_org.php" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Organizations</p>
+                      </a>
+                    </li>
+
+                    <li class="nav-item">
+                      <a href="./manage_college.php" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Colleges</p>
                       </a>
                     </li>
                   </ul>

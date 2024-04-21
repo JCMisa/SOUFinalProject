@@ -37,7 +37,6 @@
         <?php include_once './reusable/preloader.php'; ?>
 
         <!-- Navbar -->
-        <?php include_once './reusable/topNav.php'; ?>
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
@@ -45,6 +44,17 @@
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
+            <?php
+                if(isset($_SESSION['status']))
+                {
+            ?>
+                    <div class="update-notif" style="z-index:100000; font-size:20px; background-color:lightgreen; padding: 10px 40px; position:fixed; top:5%; right:0; border-radius:5px;">
+                        <p style="color: green;"><?php echo $_SESSION['status'] ?></p>
+                    </div>
+            <?php
+                    unset($_SESSION['status']);
+                }
+            ?>
             <!-- Content Header (Page header) -->
             <div class="content-header">
             <div class="container-fluid">
@@ -93,6 +103,8 @@
                                 <th>File Name</th>
                                 <th>Status</th>
                                 <th>Submission Year</th>
+                                <th>Date Upload</th>
+                                <th>Date Approved</th>
                                 <th>Uploader</th>
                                 <th>Form Type</th>
                                 <th>Size</th>
@@ -120,6 +132,8 @@
                                     ?> 
                                 </td>
                                 <td> <?php echo $file['year']; ?> </td>
+                                <td> <?php echo $file['date_upload'] ?> </td>
+                                <td> <?php echo $file['date_approved'] ?> </td>
                                 <td> <?php echo $file['uploader']; ?> </td>
                                 <td> <?php echo $file['form_type']; ?> </td>
                                 <td> <?php echo $file['size'] / 1000 . "KB"; ?> </td>
@@ -144,6 +158,8 @@
                                 <th>File Name</th>
                                 <th>Status</th>
                                 <th>Submission Year</th>
+                                <th>Date Upload</th>
+                                <th>Date Approved</th>
                                 <th>Uploader</th>
                                 <th>Form Type</th>
                                 <th>Size</th>

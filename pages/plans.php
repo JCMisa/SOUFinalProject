@@ -14,6 +14,14 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
   $user_image = $_SESSION['image'];
 }
 
+$query = " SELECT * FROM user_tbl WHERE id = $user_id ";
+$result = mysqli_query($conn, $query);
+$result_count = mysqli_num_rows($result);
+if($result_count > 0){
+    $row = mysqli_fetch_assoc($result);
+
+    $organization_ac = $row['organization'];
+}
 
 if(isset($_POST['submit'])){
     $organization = mysqli_real_escape_string($conn, $_POST['organization']);
@@ -90,6 +98,7 @@ if(isset($_POST['submit'])){
             $result = mysqli_query($conn, $sql);
         }
 
+        $_SESSION['status'] = "Plan Created Successfully";
         header('location:./plans.php');
         die();
     }
@@ -115,8 +124,10 @@ if(isset($_POST['save']))
             $status = $_POST['status_upload'];
             $form_type = $_POST['form_type'];
             $year = (new DateTime)->format("Y");
+            $date_upload = date('m-d-Y');
+            $date_approved = "";
 
-            $sql = " INSERT INTO application_upload (name, size, downloads, uploader, status, year, user_id, form_type) VALUES('$filename', '$size', 0, '$user_name', '$status', '$year', $user_id, '$form_type'); ";
+            $sql = " INSERT INTO application_upload (name, size, downloads, uploader, status, year, user_id, form_type, date_upload, date_approved) VALUES('$filename', '$size', 0, '$user_name', '$status', '$year', $user_id, '$form_type', '$date_upload', '$date_approved'); ";
 
             if(mysqli_query($conn, $sql)) {
                 echo "file uploaded successfully";
@@ -161,6 +172,17 @@ if(isset($_POST['save']))
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
+            <?php
+                if(isset($_SESSION['status']))
+                {
+            ?>
+                    <div class="update-notif" style="z-index:100000; font-size:20px; background-color:lightgreen; padding: 10px 40px; position:fixed; top:5%; right:0; border-radius:5px;">
+                        <p style="color: green;"><?php echo $_SESSION['status'] ?></p>
+                    </div>
+            <?php
+                    unset($_SESSION['status']);
+                }
+            ?>
             <!-- Content Header (Page header) -->
             <div class="content-header">
             <div class="container-fluid">
@@ -198,8 +220,22 @@ if(isset($_POST['save']))
             <form action="" method="post">
                 <div class="card-body">
                     <div class="form-group">
-                        <label for="org">Organization Name</label>
-                        <input type="text" name="organization" class="form-control" id="org" placeholder="Organization Name" required>
+                        <?php 
+                            $sql = "SELECT id, name FROM organizations";
+                            $result = mysqli_query($conn, $sql);   
+                        ?>
+                        <label for="organization">Organization Name</label>
+                        <select name="organization" class="custom-select" id="organization" value="<?php echo $organization_ac ?>">
+                            <?php 
+                            if($resultCheck = mysqli_num_rows($result)) {
+                                while($row = mysqli_fetch_assoc($result)) {
+                            ?>
+                                <option value="<?php echo $row['name']?>" <?php if($organization_ac === $row['name']) echo 'selected'; ?>><?php echo $row['name'] ?></option>
+                            <?php 
+                                }
+                            }
+                            ?>
+                        </select>
                     </div>
 
                     <div class="form-group">
@@ -529,6 +565,8 @@ if(isset($_POST['save']))
                                 <th>File Name</th>
                                 <th>Status</th>
                                 <th>Submission Year</th>
+                                <th>Date Upload</th>
+                                <th>Date Approved</th>
                                 <th>Uploader</th>
                                 <th>Form Type</th>
                                 <th>Size</th>
@@ -562,6 +600,8 @@ if(isset($_POST['save']))
                                                 ?> 
                                             </td>
                                             <td> <?php echo $row['year']; ?> </td>
+                                            <td> <?php echo $row['date_upload'] ?> </td>
+                                            <td> <?php echo $row['date_approved'] ?> </td>
                                             <td> <?php echo $row['uploader'] ?> </td>
                                             <td> <?php echo $row['form_type'] ?> </td>
                                             <td> <?php echo $row['size'] / 1000 . "KB"; ?> </td>
@@ -580,6 +620,8 @@ if(isset($_POST['save']))
                                 <th>File Name</th>
                                 <th>Status</th>
                                 <th>Submission Year</th>
+                                <th>Date Upload</th>
+                                <th>Date Approved</th>
                                 <th>Uploader</th>
                                 <th>Form Type</th>
                                 <th>Size</th>

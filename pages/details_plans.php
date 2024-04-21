@@ -44,6 +44,7 @@ if(isset($_POST['submit'])){
     $result = mysqli_query($conn, $query);
 
     if($result){
+        $_SESSION['status'] = "Plan Updated Successfully";
         header('location:./plans.php');
         die();
     }else{

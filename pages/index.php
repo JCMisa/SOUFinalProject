@@ -2,11 +2,16 @@
 @include '../configurations/config.php';
 session_start();
 
-if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SESSION['image']) && isset($_SESSION['user_id'])){
+if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SESSION['image']) && isset($_SESSION['user_id']) && isset($_SESSION['user_email'])){
   $user_type = $_SESSION['user_type'];
   $user_name = $_SESSION['user_name'];
   $user_image = $_SESSION['image'];
   $user_id = $_SESSION['user_id'];
+  $user_email = $_SESSION['user_email'];
+}
+else {
+  header('location: ./identity/login.php');
+  die();
 }
 
 $name = "JC";
@@ -130,9 +135,52 @@ $name = "JC";
       $commitment_submissions_row = mysqli_fetch_array($commitment_submissions);
       $commitment_submissions_count = $commitment_submissions_row[0];
 
-      
 
-      if($user_type === 'super_admin' || $user_type === 'admin')
+      // get the total number of user registration depends on specific organization
+      $current_user = " SELECT * FROM user_tbl WHERE id = $user_id; ";
+      $result_current_user = mysqli_query($conn, $current_user);
+      $row = mysqli_fetch_assoc($result_current_user);
+      $organization = $row['organization'];
+
+      $registrations = mysqli_query($conn, " SELECT COUNT(*) FROM user_tbl WHERE organization = '$organization'; "); 
+      $registrations_row = mysqli_fetch_array($registrations);
+      $registration_count2 = $registrations_row[0];  
+      
+      // get the total number of commitment form submitted for admin dashboard
+      $commitments2 = mysqli_query($conn, " SELECT COUNT(*) FROM commitment_tbl WHERE organization = '$organization'; ");
+      $commitment2_row = mysqli_fetch_array($commitments2);
+      $commitments2_count = $commitment2_row[0];
+
+      // get the total number of application form submitted for admin dashboard
+      $application2 = mysqli_query($conn, " SELECT COUNT(*) FROM application_tbl WHERE organization = '$organization'; ");
+      $application2_row = mysqli_fetch_array($application2);
+      $application2_count = $application2_row[0];
+
+      // get the total number of renewal form submitted for admin dashboard
+      $renewal2 = mysqli_query($conn, " SELECT COUNT(*) FROM renewal_tbl WHERE organization = '$organization'; ");
+      $renewal2_row = mysqli_fetch_array($renewal2);
+      $renewal2_count = $renewal2_row[0];
+
+      // get the total number of plans form submitted for admin dashboard
+      $plan2 = mysqli_query($conn, " SELECT COUNT(*) FROM plans WHERE organization = '$organization'; ");
+      $plan2_row = mysqli_fetch_array($plan2);
+      $plan2_count = $plan2_row[0];
+
+      // get the number of user roles (user, admin, super_admin) base on organization
+      // users
+      $user_roles2 = mysqli_query($conn, " SELECT COUNT(*) FROM user_tbl WHERE user_type = 'user' AND organization = '$organization'; ");
+      $user_roles2_row = mysqli_fetch_array($user_roles2);
+      $user_roles2_count = $user_roles2_row[0];
+      // admins
+      $admin_roles2 = mysqli_query($conn, " SELECT COUNT(*) FROM user_tbl WHERE user_type = 'admin' AND organization = '$organization'; ");
+      $admin_roles2_row = mysqli_fetch_array($admin_roles2);
+      $admin_roles2_count = $admin_roles2_row[0];
+      // super admin
+      $super_admin2 = mysqli_query($conn, " SELECT COUNT(*) FROM user_tbl WHERE user_type = 'super_admin' AND organization = '$organization'; ");
+      $super_admin2_row = mysqli_fetch_array($super_admin2);
+      $super_admin2_count = $super_admin2_row[0];
+
+      if($user_type === 'super_admin')
       {
         echo 
           <<<CONTENT
@@ -378,79 +426,13 @@ $name = "JC";
               </section>
         CONTENT;
       }
+      else if($user_type === 'admin')
+      {
+        include_once './reusable/admin_dashboard.php';
+      }
       else 
       {
-        echo <<<USERCONTENT
-          <section class="content">
-            <div class="container-fluid">
-              <!-- Small boxes (Stat box) -->
-              <div class="row">
-                <div class="col-lg-3 col-6">
-                  <!-- small box -->
-                  <div class="small-box bg-warning">
-                    <div class="inner">
-                      <h3>$registration_count</h3>
-
-                      <p>User Registrations</p>
-                    </div>
-                    <div class="icon">
-                      <i class="ion ion-person-add"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                  </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                  <!-- small box -->
-                  <div class="small-box bg-success">
-                    <div class="inner">
-                      <h3>$commitments_count</h3>
-
-                      <p>Commitment Form</p>
-                    </div>
-                    <div class="icon">
-                      <i class="ion ion-stats-bars"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                  </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                  <!-- small box -->
-                  <div class="small-box bg-info">
-                    <div class="inner">
-                      <h3>$applications_count</h3>
-
-                      <p>Application</p>
-                    </div>
-                    <div class="icon">
-                      <i class="ion ion-plus"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                  </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                  <!-- small box -->
-                  <div class="small-box bg-danger">
-                    <div class="inner">
-                      <h3>$renewals_count</h3>
-
-                      <p>Renewal</p>
-                    </div>
-                    <div class="icon">
-                      <i class="ion ion-pie-graph"></i>
-                    </div>
-                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                  </div>
-                </div>
-                <!-- ./col -->
-              </div>
-              <!-- /.row -->
-              <!-- Main row -->
-            </div>
-          </section>
-        USERCONTENT;
+        include_once './reusable/organization_records.php';
       }
     ?>
 

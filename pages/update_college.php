@@ -9,30 +9,22 @@ if(isset($_SESSION['user_id'])){
 
 $id = $_GET['update_id'];
 
-$sql = " SELECT * FROM organizations WHERE id = $id; ";
+$sql = " SELECT * FROM colleges WHERE id = $id; ";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
 
-$organization_ac = $row['name'];
-$college_ac = $row['college_belong'];
-$dean_ac = $row['college_dean'];
+$college_ac = $row['name'];
 
 if(isset($_POST['submit'])){
-    $organization = mysqli_real_escape_string($conn, $_POST['organization']);
-    $organization = htmlspecialchars($organization);
-
     $college = mysqli_real_escape_string($conn, $_POST['college']);
     $college = htmlspecialchars($college);
 
-    $dean = mysqli_real_escape_string($conn, $_POST['dean']);
-    $dean = htmlspecialchars($dean);
-
-    $query = " UPDATE organizations SET name = '$organization', college_belong = '$college', college_dean = '$dean' WHERE id = $id; "; 
+    $query = " UPDATE colleges SET name = '$college' WHERE id = $id; "; 
     $result = mysqli_query($conn, $query);
 
     if($result){
-        $_SESSION['status'] = "Organization updated successfully";
-        header('location:./manage_org.php');
+        $_SESSION['status'] = "College updated successfully";
+        header('location:./manage_college.php');
         die();
     }else{
         die('Connect Error (' . mysqli_connect_errno() . ') '. mysqli_connect_error());
@@ -97,7 +89,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                                 </div>
                             </a>
                             
-                            <h1 class="m-0">Update Organization</h1>
+                            <h1 class="m-0">Update College</h1>
                         </div>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
@@ -116,32 +108,8 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
             <form action="" method="post">
             <div class="card-body">
                 <div class="form-group">
-                    <label for="org">Organization Name</label>
-                    <input type="text" name="organization" class="form-control" id="org" placeholder="Organization Name" value="<?php echo $organization_ac; ?>">
-                </div>
-
-                <div class="form-group">
-                    <?php 
-                        $sql = "SELECT id, name FROM colleges";
-                        $result = mysqli_query($conn, $sql);   
-                    ?>
-                    <label for="college">Select College</label>
-                    <select name="college" class="custom-select" id="college">
-                    <?php 
-                    if($resultCheck = mysqli_num_rows($result)) {
-                        while($row = mysqli_fetch_assoc($result)) {
-                    ?>
-                        <option value="<?php echo $row['name'] ?>"><?php echo $row['name'] ?></option>
-                    <?php 
-                        }
-                    }
-                    ?>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="dean">Dean Name</label>
-                    <input type="text" name="dean" class="form-control" id="dean" placeholder="Dean Name" value="<?php echo $dean_ac; ?>">
+                    <label for="college">College Name</label>
+                    <input type="text" name="college" class="form-control" id="college" placeholder="College Name" value="<?php echo $college_ac; ?>">
                 </div>
             </div>
 
