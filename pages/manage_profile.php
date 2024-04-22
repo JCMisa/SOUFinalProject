@@ -17,6 +17,8 @@ $name_ac = $row['name'];
 $email_ac = $row['email'];
 $password_ac = $row['password'];
 $user_type_ac = $row['user_type'];
+$organization_ac = $row['organization'];
+$birthday_ac = $row['birthday'];
 $image_ac = $row['image'];
 
 
@@ -31,6 +33,10 @@ if(isset($_POST['submit'])){
     $pass = htmlspecialchars($pass);
 
     $user_type = $_POST['user_type'];
+
+    $organization = $_POST['organization'];
+
+    $birthday = $_POST['birthday'];
 
     $new_image = $_FILES['image']['name'];
     $fileSize = $_FILES["image"]["size"];
@@ -67,7 +73,7 @@ if(isset($_POST['submit'])){
         die();
     }
 
-    $query = " UPDATE user_tbl SET id = $id, name = '$name', email = '$email', password = '$pass', user_type = '$user_type', image = '$update_filename' WHERE id = $id; "; 
+    $query = " UPDATE user_tbl SET id = $id, name = '$name', email = '$email', password = '$pass', user_type = '$user_type', organization = '$organization', birthday = '$birthday', image = '$update_filename' WHERE id = $id; "; 
     $result = mysqli_query($conn, $query);
 
     if($result){
@@ -136,8 +142,8 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
                 if(isset($_SESSION['status']))
                 {
             ?>
-                    <div class="update-notif" style="z-index:100000; font-size:20px; background-color:lightgreen; padding: 10px 40px; position:fixed; top:5%; right:0; border-radius:5px;">
-                        <p style="color: green;"><?php echo $_SESSION['status'] ?></p>
+                    <div class="update-notif" style="z-index:100000; font-size:20px; background-color: #4CAF50; padding: 10px 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7); position:fixed; top:5%; right:0; border-radius:5px;">
+                        <p style="color: white;"><?php echo $_SESSION['status'] ?></p>
                     </div>
             <?php
                     unset($_SESSION['status']);
@@ -198,6 +204,12 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
                                             <li class="list-group-item">
                                                 <b>Password</b> <a class="float-right"><?php echo $password_ac ?> </a>
                                             </li>
+                                            <li class="list-group-item">
+                                                <b>Birthday</b> <a class="float-right"><?php echo $birthday_ac ?> </a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <b>Organization</b> <a class="float-right"><?php echo $organization_ac ?> </a>
+                                            </li>
                                         </ul>
                                         <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
                                     </div>
@@ -226,6 +238,39 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
                                         <input type="password" name="password" class="form-control" id="password" placeholder="Password" value="<?php echo $password_ac; ?>">
                                         <div class="form-group-append" id="eye-icon">
                                             <i class="fas fa-eye"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <?php 
+                                            $isDisplayed = ($user_type !== 'super_admin') ? "none" : "";
+                                        ?>
+                                        <div class="col-sm-6" style="display: <?php echo $isDisplayed ?>">
+                                            <div class="form-group">
+                                                <label>Organization</label>
+                                                <?php 
+                                                $sql = "SELECT id, name FROM organizations";
+                                                $result = mysqli_query($conn, $sql);   
+                                                ?>
+                                                <select name="organization" class="custom-select" id="organizations" value="<?php echo $organization_ac; ?>">>
+                                                    <?php 
+                                                    if($resultCheck = mysqli_num_rows($result)) {
+                                                    while($row = mysqli_fetch_assoc($result)) {
+                                                    ?>
+                                                        <option value="<?php echo $row['name']?>" <?php if($organization_ac === $row['name']) echo 'selected'; ?>><?php echo $row['name'] ?></option>
+                                                    <?php 
+                                                    }
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="dates">Birth Date</label>
+                                                <input type="date" name="birthday" class="form-control" id="dates" value="<?php echo $birthday_ac; ?>">
+                                            </div>
                                         </div>
                                     </div>
                                     

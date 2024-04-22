@@ -83,7 +83,9 @@ if(isset($_POST['submit'])){
         }
 
         $_SESSION['status'] = "User Updated Successfully";
-        header('location:./manage_user.php');
+
+        $path_locator = ($user_type === 'super_admin') ? "./manage_user.php" : "./manage_members.php"; 
+        header('location: ' . $path_locator);
         die();
     }else{
         die('Connect Error (' . mysqli_connect_errno() . ') '. mysqli_connect_error());
@@ -117,7 +119,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
   $user_image = $_SESSION['image'];
 }
 
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin' && $_SESSION['user_type'] != 'admin') {
     // If the user is not an super admin, redirect them to a access denied page
     header('Location: ./error_pages/denied.php');
     die();
@@ -175,7 +177,10 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                     <div class="col-sm-6">
                         <!-- go back button -->
                         <div class="row">
-                            <a href="./manage_user.php" class="button">
+                            <?php
+                                $locator = ($user_type === 'super_admin') ? "./manage_user.php" : "./manage_members.php"; 
+                            ?>
+                            <a href="<?php echo $locator ?>" class="button">
                                 <div class="button-box">
                                     <span class="button-elem">
                                     <i class="bi bi-arrow-right"></i>
@@ -235,6 +240,10 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                         </div>
                     </div>
                 </div>
+
+                <?php 
+                    $isDisplayed = ($user_type !== 'super_admin') ? "none" : "";
+                ?>
                 
                 <div class="row">
                     <div class="col-sm-6">
@@ -243,13 +252,13 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                             <select name="user_type" class="custom-select" value="<?php echo $user_type_ac; ?>">>
                                 <option value="user" <?php if($user_type_ac === "user") echo 'selected'; ?>>user</option>
                                 <option value="admin" <?php if($user_type_ac === "admin") echo 'selected'; ?>>admin</option>
-                                <option value="super_admin" <?php if($user_type_ac === "super_admin") echo 'selected'; ?>>super admin</option>
+                                <option style="display: <?php echo $isDisplayed ?>" value="super_admin" <?php if($user_type_ac === "super_admin") echo 'selected'; ?>>super admin</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="col-sm-6">
-                        <div class="form-group">
+                        <div class="form-group" style="display: <?php echo $isDisplayed ?>">
                             <label>Organization</label>
                             <?php 
                             $sql = "SELECT id, name FROM organizations";

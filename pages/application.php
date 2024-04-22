@@ -166,7 +166,7 @@ if(isset($_POST['save']))
                 if(isset($_SESSION['status']))
                 {
             ?>
-                    <div class="update-notif" style="z-index:100000; font-size:20px; background-color:lightgreen; padding: 10px 40px; position:fixed; top:5%; right:0; border-radius:5px;">
+                    <div class="update-notif" style="z-index:100000; font-size:20px; background-color: #4CAF50; padding: 10px 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7); position:fixed; top:5%; right:0; border-radius:5px;">
                         <p style="color: green;"><?php echo $_SESSION['status'] ?></p>
                     </div>
             <?php

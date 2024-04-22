@@ -225,6 +225,23 @@
             }
           ?>
 
+          <!-- manage members for (admin) sidebar menu -->
+          <?php
+            if($user_type === 'admin')
+            {
+              echo <<<MANAGE_MEMS
+                <li class="nav-item">
+                  <a href="./manage_members.php" class="nav-link">
+                    <i class="nav-icon fa-solid fa-id-card-clip"></i>
+                    <p>
+                      Members
+                    </p>
+                  </a>
+                </li>
+              MANAGE_MEMS;
+            }
+          ?>
+
           <li class="nav-item">
             <a href="./identity/logout.php" class="nav-link">
               <i class="nav-icon fas fa-arrow-left"></i>

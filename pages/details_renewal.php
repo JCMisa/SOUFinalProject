@@ -198,7 +198,8 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
                 font-size: 20px;
                 width: 100vw;
                 height: 100vh;
-                padding-right: 47px;
+                padding-left: 50px;
+                padding-right: 100px;
             }
 
             .renewal-header {
@@ -289,7 +290,6 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
         <?php include_once './reusable/preloader.php'; ?>
 
         <!-- Navbar -->
-        <?php include_once './reusable/topNav.php'; ?>
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
@@ -400,8 +400,18 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
                                             <p>Adviser, Student Organization</p>
                                         </div>
 
+                                        <?php
+                                            $select_dean = " SELECT u.id, u.name, u.email, u.password, u.user_type, u.organization, u.birthday, u.image, o.college_dean
+                                            FROM user_tbl u
+                                            INNER JOIN organizations o ON u.organization = o.name
+                                            WHERE u.id = $user_id;
+                                            ";
+                                            $select_dean_result = mysqli_query($conn, $select_dean);
+                                            $row_dean = mysqli_fetch_assoc($select_dean_result);
+                                        ?>
+
                                         <div class="dean">
-                                            <p>____________________________</p>
+                                            <p class="underline"><?php echo $row_dean['college_dean'] ?></p>
                                             <p>Dean/Assoc. Dean of College</p>
                                         </div>
                                     </div>

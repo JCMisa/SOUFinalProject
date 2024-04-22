@@ -44,7 +44,7 @@ if(isset($_POST["search"]))
   }
 }
 
-if(isset($_POST['submit'])){
+if(isset($_POST['change_account'])){
   $id = mysqli_real_escape_string($conn, $_POST['id']);
   $id = htmlspecialchars($id);
 
@@ -132,7 +132,7 @@ if(isset($_POST['submit'])){
                           <div class="media-body">
                             <h3 class="dropdown-item-title">
                               <?php echo $row['name']; ?>
-                              <button type="submit" name="submit" class="btn float-right text-sm text-success"><i class="fa-solid fa-right-to-bracket"></i></button>
+                              <button type="submit" name="change_account" class="btn float-right text-sm text-success"><i class="fa-solid fa-right-to-bracket"></i></button>
                             </h3>
                             <p class="text-sm"><?php echo $row['email']; ?></p>
                             <p class="text-sm text-muted"><i class="fa-solid fa-school"></i> <?php echo $row['organization']; ?> </p>

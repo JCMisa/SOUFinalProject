@@ -173,7 +173,12 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
         }
 
         .application-body .dean {
+            margin-top: -40px;
             text-align: end;
+        }
+
+        .application-footer .approval {
+            margin-top: 50px;
         }
 
         .application-footer {
@@ -198,7 +203,8 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
                 font-size: 20px;
                 width: 100vw;
                 height: 100vh;
-                padding-right: 35px;
+                padding-left: 50px;
+                padding-right: 100px;
             }
 
             .application-header {
@@ -267,11 +273,12 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
             }
 
             .application-body .dean {
+                margin-top: -85px;
                 margin-right: 40px;
             }
 
             .application-footer .approval {
-                margin-top: -20px;
+                margin-top: 60px;
             }
 
             .application-footer {
@@ -279,8 +286,8 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
             }
 
             .application-footer .footer ul {
-                margin-top: -20px;
-                gap: 320px;
+                margin-top: 20px;
+                gap: 270px;
             }
         }
     </style>
@@ -292,7 +299,6 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
         <?php include_once './reusable/preloader.php'; ?>
 
         <!-- Navbar -->
-        <?php include_once './reusable/topNav.php'; ?>
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
@@ -415,8 +421,18 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
                                             <p>Adviser, Student Organization</p>
                                         </div>
 
+                                        <?php
+                                            $select_dean = " SELECT u.id, u.name, u.email, u.password, u.user_type, u.organization, u.birthday, u.image, o.college_dean
+                                            FROM user_tbl u
+                                            INNER JOIN organizations o ON u.organization = o.name
+                                            WHERE u.id = $user_id;
+                                            ";
+                                            $select_dean_result = mysqli_query($conn, $select_dean);
+                                            $row_dean = mysqli_fetch_assoc($select_dean_result);
+                                        ?>
+
                                         <div class="dean">
-                                            <p>____________________________</p>
+                                            <p class="underline"><?php echo $row_dean['college_dean'] ?></p>
                                             <p>Dean/Assoc. Dean of College</p>
                                         </div>
                                     </div>

@@ -6,24 +6,6 @@ if(isset($_SESSION['user_id'])){
     $user_id = $_SESSION['user_id'];
 }
 
-if(isset($_POST['submit'])){
-    $college = mysqli_real_escape_string($conn, $_POST['college']);
-    $college = htmlspecialchars($college);
-
-    $select = " SELECT * FROM colleges WHERE name = '$college'; ";
-    $result = mysqli_query($conn, $select);
-
-    if(mysqli_num_rows($result) > 0){
-        $_SESSION['status'] = "College already exist";
-        $error[] = 'college already exist!';
-    }else{
-        $insert = " INSERT INTO colleges(name) VALUES('$college'); ";
-        mysqli_query($conn, $insert);
-        $_SESSION['status'] = "College created successfully";
-        header('location:./manage_college.php');
-        die();
-    }
-};
 
 if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SESSION['image'])){
   $user_type = $_SESSION['user_type'];
@@ -31,7 +13,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
   $user_image = $_SESSION['image'];
 }
 
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin') {
         // If the user is not an super admin, redirect them to a access denied page
         header('Location: ./error_pages/denied.php');
         die();
@@ -47,6 +29,20 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SOU Management System</title>
     <?php include_once './reusable/head.php'; ?>
+
+    <style>
+        .password-input {
+            position: relative;
+        }
+
+        .form-group-append {
+            position: absolute;
+            right: 10px;
+            top: 70%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -93,7 +89,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                                 </div>
                             </a>
                             
-                            <h1 class="m-0">Manage Colleges</h1>
+                            <h1 class="m-0">Manage Account</h1>
                         </div>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
@@ -110,54 +106,56 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
             <!-- Main content -->
             
             <!-- form -->
-            <form action="" method="post">
-                <div class="card-body">
-                    <div class="form-group">
-                        <label for="college">College Name</label>
-                        <input type="text" name="college" class="form-control" id="college" placeholder="College Name">
-                    </div>
-                </div>
-
-                <div class="card-footer">
-                    <button type="submit" name="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </form>
-
-
-
-
+            
             <!-- table -->
             <div class="card">
             <div class="card-header">
-            <h3 class="card-title">Organizations List</h3>
+            <h3 class="card-title">Account List</h3>
             </div>
 
             <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Name</th>
+                            <th>Email</th>
+                            <th>Password</th>
+                            <th>Organization</th>
+                            <th>BirthDate</th>
+                            <th>Profile</th>
+                            <th>Role</th>
+                            <th>View</th>
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                            $select = " SELECT * FROM colleges; "; 
-                            $result_all = mysqli_query($conn, $select);
-                            $resultCheck = mysqli_num_rows($result_all);
+                            $sql = " SELECT * FROM user_tbl WHERE id = $user_id; ";
+                            $result = mysqli_query($conn, $sql);
+                            $row = mysqli_fetch_assoc($result);
+                            $current_loggedin_organization = $row['organization'];
 
-                            if($resultCheck > 0)
+                            $sql2 = " SELECT * FROM user_tbl WHERE user_type = 'user' AND organization = '$current_loggedin_organization'; ";
+                            $result2 = mysqli_query($conn, $sql2);
+                            
+                            if(mysqli_num_rows($result2) > 0)
                             {
-                                while($row = mysqli_fetch_assoc($result_all))
+                                while($row2 = mysqli_fetch_assoc($result2))
                                 {
                         ?>
                                     <tr>
-                                        <td> <?php echo $row['id'] ?> </td>
-                                        <td> <?php echo $row['name'] ?> </td>
-                                        <td> <a href="./update_college.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
-                                        <td> <a href="./delete_college.php?delete_id='<?php echo $row['id'] ?>'" class="delete btn btn-block btn-outline-danger"> Delete </a> </td>
+                                        <td> <?php echo $row2['name'] ?> </td>
+                                        <td> <?php echo $row2['email'] ?> </td>
+                                        <td> <?php echo $row2['password'] ?> </td>
+                                        <td> <?php echo $row2['organization'] ?> </td>
+                                        <td> <?php echo $row2['birthday'] ?> </td>
+                                        <td> <img src="<?php echo './profile_images/'.$row2['image'] ?>" alt="profile" width="40px" height="40px" /> </td>
+                                        <td> <?php echo $row2['user_type'] ?> </td>
+
+                                        <td> <a href="./details_user.php?details_id=<?php echo $row2['id'] ?>" class="btn btn-block btn-outline-warning"> View </a> </td>
+                                        <td> <a href="./update_user.php?update_id='<?php echo $row2['id'] ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
+                                        <td> <a href="./delete_user.php?delete_id='<?php echo $row2['id'] ?>'" class="delete btn btn-block btn-outline-danger"> Delete </a> </td>
                                     </tr>
                         <?php
                                 }
@@ -166,8 +164,14 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th>ID</th>
                             <th>Name</th>
+                            <th>Email</th>
+                            <th>Password</th>
+                            <th>Organization</th>
+                            <th>BirthDate</th>
+                            <th>Profile</th>
+                            <th>Role</th>
+                            <th>View</th>
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>

@@ -17,6 +17,8 @@ $name_ac = $row['name'];
 $email_ac = $row['email'];
 $password_ac = $row['password'];
 $user_type_ac = $row['user_type'];
+$organization_ac = $row['organization'];
+$birthday_ac = $row['birthday'];
 $image_ac = $row['image'];
 
 if(isset($_POST['submit'])){
@@ -31,11 +33,56 @@ if(isset($_POST['submit'])){
 
     $user_type = $_POST['user_type'];
 
-    $query = " UPDATE user_tbl SET id = $id, name = '$name', email = '$email', password = '$pass', user_type = '$user_type' WHERE id = $id; "; 
+    $organization = $_POST['organization'];
+
+    $birthday = $_POST['birthday'];
+
+    $new_image = $_FILES['image']['name'];
+    $fileSize = $_FILES["image"]["size"];
+    $tmpName = $_FILES["image"]["tmp_name"];
+
+    $validImageExtension = ['jpg', 'jpeg', 'png'];
+    $imageExtension = explode('.', $new_image);
+    $imageExtension = strtolower(end($imageExtension));
+    if(!in_array($imageExtension, $validImageExtension))
+    {
+        echo " <script> alert('Invalid Image Type'); </script> ";
+    }
+    else if($fileSize > 2000000)
+    {
+        echo " <script> alert('Image Size is Too Large'); </script> ";
+    }
+
+    $newImageName = uniqid('', true) . '.' . $imageExtension;
+    $old_image = $image_ac;
+
+    if($new_image != '')
+    {
+        $update_filename = $newImageName;
+    }
+    else
+    {
+        $update_filename = $old_image;
+    }
+
+    if(file_exists("profile_images/".$newImageName))
+    {
+        echo "<script> alert('Image already exists'); </script>";
+        header('location: ./manage_user.php');
+        die();
+    }
+
+    $query = " UPDATE user_tbl SET id = $id, name = '$name', email = '$email', password = '$pass', user_type = '$user_type', organization = '$organization', birthday = '$birthday', image = '$update_filename' WHERE id = $id; "; 
     $result = mysqli_query($conn, $query);
 
     if($result){
-        header('location:./details_user.php?details_id='. $id); //pass the id needed to access this page
+        if($_FILES['image']['name'] != '')
+        {
+            move_uploaded_file($tmpName, './profile_images/'.$newImageName);
+            unlink("./profile_images/".$old_image);
+        }
+        $_SESSION['status'] = "Profile Updated Successfully";
+        header('location:./details_user.php?details_id='. $id);
         die();
     }else{
         die('Connect Error (' . mysqli_connect_errno() . ') '. mysqli_connect_error());
@@ -58,6 +105,9 @@ if(isset($_GET['details_id'])){
     $email = $row['email'];
     $pass = $row['password'];
     $user_role = $row['user_type'];
+    $organization = $row['organization'];
+    $birthday = $row['birthday'];
+    $image = $row['image'];
 }
 
 if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SESSION['image'])){
@@ -66,7 +116,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
   $user_image = $_SESSION['image'];
 }
 
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin' && $_SESSION['user_type'] != 'admin') {
     // If the user is not an super admin, redirect them to a access denied page
     header('Location: ./error_pages/denied.php');
     die();
@@ -114,6 +164,17 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
+            <?php
+                if(isset($_SESSION['status']))
+                {
+            ?>
+                    <div class="update-notif" style="z-index:100000; font-size:20px; background-color: #4CAF50; padding: 10px 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7); position:fixed; top:5%; right:0; border-radius:5px;">
+                        <p style="color: white;"><?php echo $_SESSION['status'] ?></p>
+                    </div>
+            <?php
+                    unset($_SESSION['status']);
+                }
+            ?>
             <!-- Content Header (Page header) -->
             <div class="content-header">
                 <div class="container-fluid">
@@ -121,7 +182,10 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                     <div class="col-sm-6">
                         <!-- go back button -->
                         <div class="row">
-                            <a href="./manage_user.php" class="button">
+                            <?php
+                                $locator = ($user_type === 'super_admin') ? "./manage_user.php" : "./manage_members.php"; 
+                            ?>
+                            <a href="<?php echo $locator ?>" class="button">
                                 <div class="button-box">
                                     <span class="button-elem">
                                     <i class="bi bi-arrow-right"></i>
@@ -169,6 +233,12 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                                             <li class="list-group-item">
                                                 <b>Password</b> <a class="float-right"><?php echo $password_ac ?> </a>
                                             </li>
+                                            <li class="list-group-item">
+                                                <b>Birthday</b> <a class="float-right"><?php echo $birthday_ac ?> </a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <b>Organization</b> <a class="float-right"><?php echo $organization_ac ?> </a>
+                                            </li>
                                         </ul>
                                         <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
                                     </div>
@@ -177,7 +247,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                         </div>
 
                         <div class="col-7">
-                            <form action="" method="post">
+                            <form action="" method="post" enctype="multipart/form-data">
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="name">Name</label>
@@ -194,15 +264,57 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                                             <i class="fas fa-eye"></i>
                                         </div>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleInputFile">Profile Picture</label>
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="exampleInputFile" name="image" accept=".jpg, .jpeg, .png" value="<?php echo $image_ac; ?>">
+                                                <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                                <input hidden type="file" name="image_old" value="<?php echo $image_ac; ?>">
+                                            </div>
+                                        </div>
+                                    </div>
                                     
                                     <div class="row">
+                                        <?php 
+                                            $isDisplayed = ($user_type !== 'super_admin') ? "none" : "";
+                                        ?>
+                                        <div class="col-sm-6" style="display: <?php echo $isDisplayed ?>">
+                                            <div class="form-group">
+                                                <label>Organization</label>
+                                                <?php 
+                                                $sql = "SELECT id, name FROM organizations";
+                                                $result = mysqli_query($conn, $sql);   
+                                                ?>
+                                                <select name="organization" class="custom-select" id="organizations" value="<?php echo $organization_ac; ?>">>
+                                                    <?php 
+                                                    if($resultCheck = mysqli_num_rows($result)) {
+                                                    while($row = mysqli_fetch_assoc($result)) {
+                                                    ?>
+                                                        <option value="<?php echo $row['name']?>" <?php if($organization_ac === $row['name']) echo 'selected'; ?>><?php echo $row['name'] ?></option>
+                                                    <?php 
+                                                    }
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="dates">Birth Date</label>
+                                                <input type="date" name="birthday" class="form-control" id="dates" value="<?php echo $birthday_ac; ?>">
+                                            </div>
+                                        </div>
+
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label>Role</label>
                                                 <select name="user_type" multiple class="custom-select" value="<?php echo $user_type_ac; ?>">>
                                                     <option value="user" <?php if($user_type_ac === "user") echo 'selected'; ?>>user</option>
                                                     <option value="admin" <?php if($user_type_ac === "admin") echo 'selected'; ?>>admin</option>
-                                                    <option value="super_admin" <?php if($user_type_ac === "super_admin") echo 'selected'; ?>>super admin</option>
+                                                    <option style="display: <?php echo $isDisplayed ?>" value="super_admin" <?php if($user_type_ac === "super_admin") echo 'selected'; ?>>super admin</option>
                                                 </select>
                                             </div>
                                         </div>
