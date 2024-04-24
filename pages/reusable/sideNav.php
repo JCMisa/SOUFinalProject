@@ -242,6 +242,23 @@
             }
           ?>
 
+          <!-- see members for (user) sidebar menu -->
+          <?php
+            if($user_type === 'user')
+            {
+              echo <<<SEE_MEMS
+                <li class="nav-item">
+                  <a href="./view_members.php" class="nav-link">
+                    <i class="nav-icon fa-solid fa-id-card-clip"></i>
+                    <p>
+                      View Members
+                    </p>
+                  </a>
+                </li>
+              SEE_MEMS;
+            }
+          ?>
+
           <li class="nav-item">
             <a href="./identity/logout.php" class="nav-link">
               <i class="nav-icon fas fa-arrow-left"></i>

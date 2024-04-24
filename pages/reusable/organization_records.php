@@ -6,7 +6,7 @@
             </div>
 
             <div class="card-body">
-                <table  class="table table-head-fixed table-striped" style="font-size: 12px;">
+                <table id="example4" class="table table-head-fixed table-striped" style="font-size: 12px;">
                     <thead>
                         <tr>
                             <th>Organization</th>
@@ -69,7 +69,7 @@
             </div>
 
             <div class="card-body">
-                <table class="table table-head-fixed table-striped" style="font-size: 12px;">
+                <table id="example3" class="table table-head-fixed table-striped" style="font-size: 12px;">
                     <thead>
                         <tr>
                             <th>Organization</th>

@@ -24,6 +24,9 @@ if(isset($_POST['create'])){
 
     $birthday = $_POST['birthday'];
 
+    $course = mysqli_real_escape_string($conn, $_POST['course']);
+    $course = htmlspecialchars($course);
+
     $fileName = $_FILES["image"]["name"];
     $fileSize = $_FILES["image"]["size"];
     $tmpName = $_FILES["image"]["tmp_name"];
@@ -48,8 +51,8 @@ if(isset($_POST['create'])){
     if($pass != $cpass){
         $error[] = 'password not matched!';
     }else{
-        $insert = "INSERT INTO user_tbl(name, email, password, user_type, organization, birthday, image) 
-        VALUES('$name','$email','$pass','$user_type', '$organization', '$birthday', '$newImageName')";
+        $insert = "INSERT INTO user_tbl(name, email, password, user_type, organization, birthday, image, course) 
+        VALUES('$name','$email','$pass','$user_type', '$organization', '$birthday', '$newImageName', '$course')";
         mysqli_query($conn, $insert);
 
         $_SESSION['status'] = "Account Created Successfully";
@@ -184,6 +187,11 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                 </div>
 
                 <div class="form-group">
+                    <label for="course">Course</label>
+                    <input type="text" name="course" class="form-control" id="course" placeholder="Course">
+                </div>
+
+                <div class="form-group">
                     <label for="dates">Birth Date</label>
                     <input type="date" name="birthday" class="form-control" id="dates">
                 </div>
@@ -256,6 +264,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                             <th>Email</th>
                             <th>Password</th>
                             <th>Organization</th>
+                            <th>Course</th>
                             <th>BirthDate</th>
                             <th>Profile</th>
                             <th>Role</th>
@@ -280,6 +289,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                                         <td> <?php echo $row['email'] ?> </td>
                                         <td> <?php echo $row['password'] ?> </td>
                                         <td> <?php echo $row['organization'] ?> </td>
+                                        <td> <?php echo $row['course'] ?> </td>
                                         <td> <?php echo $row['birthday'] ?> </td>
                                         <td> <img src="<?php echo './profile_images/'.$row['image'] ?>" alt="profile" width="40px" height="40px" /> </td>
                                         <td> <?php echo $row['user_type'] ?> </td>
@@ -299,6 +309,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                             <th>Email</th>
                             <th>Password</th>
                             <th>Organization</th>
+                            <th>Course</th>
                             <th>BirthDate</th>
                             <th>Profile</th>
                             <th>Role</th>

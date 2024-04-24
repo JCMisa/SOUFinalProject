@@ -101,20 +101,25 @@
 <script>
   $(function () {
     $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false
+      "responsive": true, "lengthChange": true, "autoWidth": false
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     $('#example2').DataTable({
       "paging": true,
-      "lengthChange": false,
-      "searching": false,
+      "lengthChange": true,
+      "searching": true,
       "ordering": true,
       "info": true,
       "autoWidth": false,
       "responsive": true,
     });
+    $("#example3").DataTable({
+      "responsive": true, "lengthChange": true, "autoWidth": false
+    }).buttons().container().appendTo('#example3_wrapper .col-md-6:eq(0)');
+    $("#example4").DataTable({
+      "responsive": true, "lengthChange": true, "autoWidth": false
+    }).buttons().container().appendTo('#example4_wrapper .col-md-6:eq(0)');
   });
 </script>
-
 
 
 

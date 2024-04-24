@@ -20,6 +20,7 @@ $user_type_ac = $row['user_type'];
 $organization_ac = $row['organization'];
 $birthday_ac = $row['birthday'];
 $image_ac = $row['image'];
+$course_ac = $row['course'];
 
 if(isset($_POST['submit'])){
     $name = mysqli_real_escape_string($conn, $_POST['name']);
@@ -36,6 +37,9 @@ if(isset($_POST['submit'])){
     $organization = $_POST['organization'];
 
     $birthday = $_POST['birthday'];
+
+    $course = mysqli_real_escape_string($conn, $_POST['course']);
+    $course = htmlspecialchars($course);
 
     $new_image = $_FILES['image']['name'];
     $fileSize = $_FILES["image"]["size"];
@@ -72,7 +76,7 @@ if(isset($_POST['submit'])){
         die();
     }
 
-    $query = " UPDATE user_tbl SET id = $id, name = '$name', email = '$email', password = '$pass', user_type = '$user_type', organization = '$organization', birthday = '$birthday', image = '$update_filename' WHERE id = $id; "; 
+    $query = " UPDATE user_tbl SET id = $id, name = '$name', email = '$email', password = '$pass', user_type = '$user_type', organization = '$organization', birthday = '$birthday', image = '$update_filename', course = '$course' WHERE id = $id; "; 
     $result = mysqli_query($conn, $query);
 
     if($result){
@@ -108,6 +112,7 @@ if(isset($_GET['details_id'])){
     $organization = $row['organization'];
     $birthday = $row['birthday'];
     $image = $row['image'];
+    $course = $row['course'];
 }
 
 if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SESSION['image'])){
@@ -239,6 +244,9 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin' &&
                                             <li class="list-group-item">
                                                 <b>Organization</b> <a class="float-right"><?php echo $organization_ac ?> </a>
                                             </li>
+                                            <li class="list-group-item">
+                                                <b>Course</b> <a class="float-right"><?php echo $course_ac ?> </a>
+                                            </li>
                                         </ul>
                                         <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
                                     </div>
@@ -274,6 +282,11 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin' &&
                                                 <input hidden type="file" name="image_old" value="<?php echo $image_ac; ?>">
                                             </div>
                                         </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="course">Course</label>
+                                        <input type="text" name="course" class="form-control" id="course" placeholder="Course" value="<?php echo $course_ac; ?>">
                                     </div>
                                     
                                     <div class="row">

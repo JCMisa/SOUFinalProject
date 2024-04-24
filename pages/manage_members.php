@@ -121,6 +121,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin') {
                             <th>Email</th>
                             <th>Password</th>
                             <th>Organization</th>
+                            <th>Course</th>
                             <th>BirthDate</th>
                             <th>Profile</th>
                             <th>Role</th>
@@ -149,6 +150,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin') {
                                         <td> <?php echo $row2['email'] ?> </td>
                                         <td> <?php echo $row2['password'] ?> </td>
                                         <td> <?php echo $row2['organization'] ?> </td>
+                                        <td> <?php echo $row2['course'] ?> </td>
                                         <td> <?php echo $row2['birthday'] ?> </td>
                                         <td> <img src="<?php echo './profile_images/'.$row2['image'] ?>" alt="profile" width="40px" height="40px" /> </td>
                                         <td> <?php echo $row2['user_type'] ?> </td>
@@ -168,6 +170,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin') {
                             <th>Email</th>
                             <th>Password</th>
                             <th>Organization</th>
+                            <th>Course</th>
                             <th>BirthDate</th>
                             <th>Profile</th>
                             <th>Role</th>

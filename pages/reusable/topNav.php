@@ -124,7 +124,6 @@ if(isset($_POST['change_account'])){
             ?>
                     <form action="" method="post">
                       <input type="number" hidden name="id" value="<?php echo $row['id']; ?>">
-                      <?php echo $row['id'] ?>
 
                       <a href="#" class="dropdown-item">
                         <div class="media">

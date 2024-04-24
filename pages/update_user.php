@@ -6,6 +6,12 @@ if(isset($_SESSION['user_id'])){
     $user_id = $_SESSION['user_id'];
 }
 
+if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SESSION['image'])){
+  $user_role = $_SESSION['user_type'];
+  $user_name = $_SESSION['user_name'];
+  $user_image = $_SESSION['image'];
+}
+
 
 $id = $_GET['update_id'];
 
@@ -20,6 +26,7 @@ $user_type_ac = $row['user_type'];
 $image_ac = $row['image'];
 $organization_ac = $row['organization'];
 $birthday_ac = $row['birthday'];
+$course_ac = $row['course'];
 
 
 if(isset($_POST['submit'])){
@@ -36,6 +43,9 @@ if(isset($_POST['submit'])){
 
     $organization = $_POST['organization'];
     $birthday = $_POST['birthday'];
+
+    $course = mysqli_real_escape_string($conn, $_POST['course']);
+    $course = htmlspecialchars($course);
 
     $new_image = $_FILES['image']['name'];
     $fileSize = $_FILES["image"]["size"];
@@ -72,7 +82,7 @@ if(isset($_POST['submit'])){
         die();
     }
 
-    $query = " UPDATE user_tbl SET id = $id, name = '$name', email = '$email', password = '$pass', user_type = '$user_type', organization = '$organization', birthday = '$birthday', image = '$update_filename' WHERE id = $id; "; 
+    $query = " UPDATE user_tbl SET id = $id, name = '$name', email = '$email', password = '$pass', user_type = '$user_type', organization = '$organization', birthday = '$birthday', image = '$update_filename', course = '$course' WHERE id = $id; "; 
     $result = mysqli_query($conn, $query);
 
     if($result){
@@ -84,7 +94,7 @@ if(isset($_POST['submit'])){
 
         $_SESSION['status'] = "User Updated Successfully";
 
-        $path_locator = ($user_type === 'super_admin') ? "./manage_user.php" : "./manage_members.php"; 
+        $path_locator = ($user_role === 'super_admin') ? "./manage_user.php" : "./manage_members.php"; 
         header('location: ' . $path_locator);
         die();
     }else{
@@ -111,12 +121,7 @@ if(isset($_GET['update_id'])){
     $organization = $row['organization'];
     $birthday = $row['birthday'];
     $image_ac = $row['image'];
-}
-
-if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SESSION['image'])){
-  $user_type = $_SESSION['user_type'];
-  $user_name = $_SESSION['user_name'];
-  $user_image = $_SESSION['image'];
+    $course_ac = $row['course'];
 }
 
 if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin' && $_SESSION['user_type'] != 'admin') {
@@ -178,7 +183,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin' &&
                         <!-- go back button -->
                         <div class="row">
                             <?php
-                                $locator = ($user_type === 'super_admin') ? "./manage_user.php" : "./manage_members.php"; 
+                                $locator = ($user_role === 'super_admin') ? "./manage_user.php" : "./manage_members.php"; 
                             ?>
                             <a href="<?php echo $locator ?>" class="button">
                                 <div class="button-box">
@@ -231,6 +236,11 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin' &&
                 </div>
 
                 <div class="form-group">
+                    <label for="course">Course</label>
+                    <input type="text" name="course" class="form-control" id="course" placeholder="Course" value="<?php echo $course_ac; ?>">
+                </div>
+
+                <div class="form-group">
                     <label for="exampleInputFile">Profile Picture</label>
                     <div class="input-group">
                         <div class="custom-file">
@@ -242,7 +252,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin' &&
                 </div>
 
                 <?php 
-                    $isDisplayed = ($user_type !== 'super_admin') ? "none" : "";
+                    $isDisplayed = ($user_role !== 'super_admin') ? "none" : "";
                 ?>
                 
                 <div class="row">

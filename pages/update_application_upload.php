@@ -106,7 +106,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                     <div class="col-sm-6">
                         <!-- go back button -->
                         <div class="row">
-                            <a href="./application.php" class="button">
+                            <a href="./application_submission.php" class="button">
                                 <div class="button-box">
                                     <span class="button-elem">
                                     <i class="bi bi-arrow-right"></i>

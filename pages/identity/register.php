@@ -17,6 +17,7 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
   $organization = $_POST['organization'];
   $user_type = $_POST['user_type'];
   $birthday = $_POST['birthday'];
+  $course = $_POST['course'];
 
   $fileName = $_FILES["image"]["name"];
   $fileSize = $_FILES["image"]["size"];
@@ -47,20 +48,20 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
     $pass = htmlspecialchars($pass);
     $cpass = htmlspecialchars($cpass);
 
-    $select = " SELECT * FROM user_tbl WHERE name = '$name'; ";
+    $select = " SELECT * FROM user_tbl WHERE name = '$name' AND email = '$email' AND organization = '$organization'; ";
     $result = mysqli_query($conn, $select);
 
     if(mysqli_num_rows($result) > 0)
     {
-      $nameError = "Username is already in use.";
+      $nameError = "Account with the same identity already exist in the same organization.";
     }
     else
     {
       if($pass != $cpass){
         $cPassError = "Password not matched!";
       }else{
-        $insert = "INSERT INTO user_tbl(name, email, password, user_type, organization, birthday, image) 
-        VALUES('$name','$email','$pass','$user_type', '$organization', '$birthday', '$newImageName')";
+        $insert = "INSERT INTO user_tbl(name, email, password, user_type, organization, birthday, image, course) 
+        VALUES('$name','$email','$pass','$user_type', '$organization', '$birthday', '$newImageName', '$course')";
         mysqli_query($conn, $insert);
 
         header('location:login.php');
@@ -127,6 +128,10 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
 
         <form action="" method="post" enctype="multipart/form-data">
 
+          <div class="input-group mb-3" id="name-error">
+              <span style="color: red; font-size: 12px;"><?php echo $nameError ?></span>
+          </div>
+
           <div class="input-group mb-3">
             <input type="text" name="name" class="form-control" placeholder="Username" required>
             <div class="input-group-append">
@@ -134,9 +139,6 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
                 <span class="fas fa-user"></span>
               </div>
             </div>
-          </div>
-          <div class="input-group mb-3" id="name-error">
-            <span style="color: red; font-size: 12px;"><?php echo $nameError ?></span>
           </div>
 
           <div class="input-group mb-3">
@@ -170,6 +172,16 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
           </div>
           <div class="input-group mb-3" id="c-pass-error">
             <span style="color: red; font-size: 12px;"><?php echo $cPassError ?></span>
+          </div>
+
+
+          <div class="input-group mb-3">
+            <input type="text" name="course" id="course" class="form-control" value="BS Information Technology" required>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-school"></span>
+              </div>
+            </div>
           </div>
 
 
