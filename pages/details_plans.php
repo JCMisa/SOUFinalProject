@@ -215,6 +215,8 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
             gap: 200px;
         }
 
+
+
         @media print {
             .renewal-form, .main-footer {
                 display: none;

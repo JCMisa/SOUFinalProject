@@ -229,16 +229,36 @@
           <?php
             if($user_type === 'admin')
             {
-              echo <<<MANAGE_MEMS
+              echo <<<ADMIN_MANAGE
                 <li class="nav-item">
-                  <a href="./manage_members.php" class="nav-link">
-                    <i class="nav-icon fa-solid fa-id-card-clip"></i>
+                  <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-copy"></i>
                     <p>
-                      Members
+                      Manage
+                      <i class="fas fa-angle-left right"></i>
                     </p>
                   </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                      <a href="./manage_members.php" class="nav-link">
+                        <i class="nav-icon fa-solid fa-id-card-clip"></i>
+                        <p>
+                          Members
+                        </p>
+                      </a>
+                    </li>
+
+                    <li class="nav-item">
+                      <a href="./manage_events.php" class="nav-link">
+                        <i class="nav-icon fa-solid fa-calendar-week"></i>
+                        <p>
+                          Events
+                        </p>
+                      </a>
+                    </li>
+                  </ul>
                 </li>
-              MANAGE_MEMS;
+              ADMIN_MANAGE;
             }
           ?>
 

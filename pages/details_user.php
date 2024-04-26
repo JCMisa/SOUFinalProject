@@ -121,7 +121,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
   $user_image = $_SESSION['image'];
 }
 
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin' && $_SESSION['user_type'] != 'admin') {
+if (!isset($_SESSION['user_type'])) {
     // If the user is not an super admin, redirect them to a access denied page
     header('Location: ./error_pages/denied.php');
     die();
@@ -188,7 +188,18 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin' &&
                         <!-- go back button -->
                         <div class="row">
                             <?php
-                                $locator = ($user_type === 'super_admin') ? "./manage_user.php" : "./manage_members.php"; 
+                                $locator = "";
+                                if($user_type === 'super_admin')
+                                {
+                                    $locator = "./manage_user.php";
+                                }
+                                else if($user_type === 'admin')
+                                {
+                                    $locator = "./manage_members.php";
+                                } 
+                                else {
+                                    $locator = "./view_members.php";
+                                }
                             ?>
                             <a href="<?php echo $locator ?>" class="button">
                                 <div class="button-box">
@@ -216,10 +227,14 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin' &&
             <!-- /.content-header -->
             
             <!-- Main content -->
+            <?php 
+                $isHidden = ($user_type === 'user') ? "none" : "";
+                $isUser = ($user_type === 'user') ? "col-12" : "col-5";
+            ?>
             <section class="content">
                 <div class="card">
                     <div class="card-body row">
-                        <div class="col-5">
+                        <div class="<?php echo $isUser ?>">
                             <div class="container-fluid mt-5">
                                 <div class="card card-primary card-outline">
                                     <div class="card-body box-profile">
@@ -229,13 +244,13 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin' &&
                                         <h3 class="profile-username text-center"> <?php echo $name_ac ?> </h3>
                                         <p class="text-muted text-center"> <?php echo $user_type_ac ?> </p>
                                         <ul class="list-group list-group-unbordered mb-3">
-                                            <li class="list-group-item">
+                                            <li class="list-group-item" style="display: <?php echo $isHidden ?>">
                                                 <b>ID</b> <a class="float-right"> <?php echo $id ?> </a>
                                             </li>
                                             <li class="list-group-item">
                                                 <b>Email</b> <a class="float-right"> <?php echo $email_ac ?> </a>
                                             </li>
-                                            <li class="list-group-item">
+                                            <li class="list-group-item" style="display: <?php echo $isHidden ?>">
                                                 <b>Password</b> <a class="float-right"><?php echo $password_ac ?> </a>
                                             </li>
                                             <li class="list-group-item">
@@ -254,7 +269,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin' &&
                             </div>
                         </div>
 
-                        <div class="col-7">
+                        <div class="col-7" style="display: <?php echo $isHidden ?>">
                             <form action="" method="post" enctype="multipart/form-data">
                                 <div class="card-body">
                                     <div class="form-group">

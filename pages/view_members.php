@@ -172,57 +172,51 @@ if (!isset($_SESSION['user_type'])) {
 
                 <div class="card-body">
                     <div class="row">
-                        <?php
-                            $select_user = " SELECT * FROM user_tbl WHERE user_type = 'user' AND organization = '$organization'; ";
-                            $result_user = mysqli_query($conn, $select_user);
-                            $result_user_count = mysqli_num_rows($result_user);
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Commitment Forms</h3>
+                                </div>
 
-                            if($result_user_count > 0)
-                            {
-                                while($row = mysqli_fetch_assoc($result_user))
-                                {
-                        ?>
-                                    <div class="col-md-4">
-                                        <div class="card card-widget widget-user">
-                                            <div class="widget-user-header bg-info">
-                                                <h3 class="widget-user-username"><?php echo $row['name'] ?></h3>
-                                                <h5 class="widget-user-desc">Member</h5>
-                                            </div>
-                                            <div class="widget-user-image">
-                                                <img class="img-circle elevation-2" style="width: 100px; height: 100px;" src="./profile_images/<?php echo $row['image'] ?>" alt="User Avatar">
-                                            </div>
-                                            <div class="card-footer">
-                                                <div class="row">
-                                                    <div class="col-sm-4 border-right">
-                                                        <div class="description-block">
-                                                            <h5 class="description-header" style="font-size: 10px;"><?php echo $row['birthday'] ?></h5>
-                                                            <span class="description-text">BIRTHDAY</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4 border-right">
-                                                        <div class="description-block">
-                                                            <h5 class="description-header" style="font-size: 10px;"><?php echo $row['email'] ?></h5>
-                                                            <span class="description-text">EMAIL</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="description-block">
-                                                            <h5 class="description-header" style="font-size: 10px;"><?php echo $row['course'] ?></h5>
-                                                            <span class="description-text">COURSE</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                        <?php 
-                                }
-                            }
-                        ?>
-                    </div>
+                                <div class="card-body">
+                                    <table id="example1" class="table table-head-fixed table-striped" style="font-size: 12px;">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Birthday</th>
+                                                <th>Course</th>
+                                                <th>View</th>
+                                            </tr>
+                                        </thead>
 
-                    <div class="row">
+                                        <tbody>
+                                            <?php 
+                                                $select_user = " SELECT * FROM user_tbl WHERE user_type = 'user' AND organization = '$organization'; ";
+                                                $result_user = mysqli_query($conn, $select_user);
+                                                $result_user_count = mysqli_num_rows($result_user);
 
+                                                if($result_user_count > 0)
+                                                {
+                                                    while($row = mysqli_fetch_assoc($result_user))
+                                                    {
+                                            ?>          
+                                                        <tr>
+                                                            <td> <?php echo $row['name'] ?> </td>
+                                                            <td> <?php echo $row['email'] ?> </td>
+                                                            <td> <?php echo $row['birthday'] ?> </td>
+                                                            <td> <?php echo $row['course'] ?> </td>
+                                                            <td> <a href="./details_user.php?details_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-warning"> View </a> </td>
+                                                        </tr>   
+                                            <?php 
+                                                    }
+                                                }
+                                            ?>   
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

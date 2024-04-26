@@ -2,12 +2,13 @@
 @include '../configurations/config.php';
 session_start();
 
-if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SESSION['image']) && isset($_SESSION['user_id']) && isset($_SESSION['user_email'])){
+if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SESSION['image']) && isset($_SESSION['user_id']) && isset($_SESSION['user_email']) && isset($_SESSION['organization'])){
   $user_type = $_SESSION['user_type'];
   $user_name = $_SESSION['user_name'];
   $user_image = $_SESSION['image'];
   $user_id = $_SESSION['user_id'];
   $user_email = $_SESSION['user_email'];
+  $user_organization = $_SESSION['organization'];
 }
 else {
   header('location: ./identity/login.php');
@@ -44,6 +45,45 @@ $name = "JC";
       ::-webkit-scrollbar-thumb:hover {
           background: #555;
       }
+
+      .plan-item::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.6);
+      }
+
+      .plan-content {
+        z-index: 999;
+        max-width: 80%;
+        overflow: scroll;
+        white-space: nowrap;
+      }
+
+      /* The scrollbar itself */
+      .plan-content::-webkit-scrollbar {
+        width: 100%;
+        height: 5px;
+      }
+
+      /* The scrollbar track */
+      .plan-content::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      /* The scrollbar thumb (the part you drag) */
+      .plan-content::-webkit-scrollbar-thumb {
+        background: #888;
+      }
+
+      /* The scrollbar thumb when you hover over it */
+      .plan-content::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+
     </style>
 </head>
 
@@ -429,10 +469,12 @@ $name = "JC";
       else if($user_type === 'admin')
       {
         include_once './reusable/admin_dashboard.php';
+        include_once './reusable/plan_activities.php';
       }
       else 
       {
         include_once './reusable/organization_records.php';
+        include_once './reusable/plan_activities.php';
       }
     ?>
 

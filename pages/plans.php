@@ -155,6 +155,16 @@ if(isset($_POST['save']))
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SOU Management System</title>
     <?php include_once './reusable/head.php'; ?>
+
+    <style>
+        td {
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">

@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Application Forms</h3>
@@ -62,7 +62,7 @@
 
 
 
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Renewal Forms</h3>
@@ -127,7 +127,7 @@
 
 
 
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Commitment Forms</h3>
@@ -198,7 +198,7 @@
 
 
 
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Plan of Activities Forms</h3>
