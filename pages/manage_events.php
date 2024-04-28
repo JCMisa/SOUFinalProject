@@ -68,6 +68,13 @@ if(isset($_POST['submit_event'])){
         }
     }
 };
+
+
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin') {
+    // If the user is not an super admin, redirect them to a access denied page
+    header('Location: ./error_pages/denied.php');
+    die();
+}
 ?>
 
 
@@ -206,7 +213,108 @@ if(isset($_POST['submit_event'])){
                 </div>
             </form>
             <!-- /.content -->
+
+
+
+            <!-- table -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Events List</h3>
+                </div>
+
+                <div class="card-body">
+                    <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Activity Name</th>
+                                <th>Time Start</th>
+                                <th>Time End</th>
+                                <th>Venue</th>
+                                <th>Event Type</th>
+                                <th>File Name</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                $sql_org = " SELECT * FROM manage_events; ";
+                                $result_org = mysqli_query($conn, $sql_org);
+                                $row_org = mysqli_fetch_assoc($result_org);
+                                $user_org = $row_org['organization'];
+
+                                $event_user_id = $user_id;
+                                $select_filter = " SELECT * FROM manage_events WHERE organization = '$user_org'; ";
+                                $select_filter_result = mysqli_query($conn, $select_filter);
+                                $resultCheck = mysqli_num_rows($select_filter_result);
+                                if($resultCheck > 0)
+                                {
+                                    while($row = mysqli_fetch_assoc($select_filter_result))
+                                    {
+                            ?>
+                                        <tr>
+                                            <td> <?php echo $row['name'] ?> </td>
+                                            <td> 
+                                                <?php 
+                                                    $datetime = $row['date_start'];
+
+                                                    $timestamp = strtotime($datetime);
+
+                                                    $formatted_datetime = date('Y-m-d h:iA', $timestamp);
+
+                                                    echo $formatted_datetime;
+                                                ?> 
+                                            </td>
+                                            <td>
+                                                <?php 
+                                                    $datetime = $row['date_end'];
+
+                                                    $timestamp = strtotime($datetime);
+
+                                                    $formatted_datetime = date('Y-m-d h:iA', $timestamp);
+
+                                                    echo $formatted_datetime;
+                                                ?> 
+                                            </td>
+                                            <td> <?php echo $row['venue'] ?> </td>
+                                            <td> <?php echo $row['event_type'] ?> </td>
+                                            <td> <?php echo $row['file'] ?> </td>
+                                            <td> 
+                                                <?php 
+                                                    if(strtolower($row['status']) === 'pending')
+                                                    {
+                                                        echo '<button type="button" class="btn btn-block bg-gradient-warning btn-sm">PENDING</button>';
+                                                    } else if(strtolower($row['status']) === 'success'){
+                                                        echo '<button type="button" class="btn btn-block bg-gradient-success btn-sm"> SUCCESS </button>';
+                                                    } else {
+                                                        echo '<button type="button" class="btn btn-block bg-gradient-danger btn-sm">FAILED</button>';
+                                                    }
+                                                ?> 
+                                            </td>
+                                        </tr>
+                            <?php
+                                    }
+                                }
+                            ?>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Activity Name</th>
+                                <th>Time Start</th>
+                                <th>Time End</th>
+                                <th>Venue</th>
+                                <th>Event Type</th>
+                                <th>File Name</th>
+                                <th>Status</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
         </div>
+
+
+
+
         <!-- /.content-wrapper -->
 
         <!-- footer -->
