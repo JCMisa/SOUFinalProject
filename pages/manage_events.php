@@ -237,7 +237,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'admin') {
                         </thead>
                         <tbody>
                             <?php
-                                $sql_org = " SELECT * FROM manage_events; ";
+                                $sql_org = " SELECT * FROM user_tbl WHERE id = $user_id; ";
                                 $result_org = mysqli_query($conn, $sql_org);
                                 $row_org = mysqli_fetch_assoc($result_org);
                                 $user_org = $row_org['organization'];

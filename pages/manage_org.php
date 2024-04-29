@@ -16,18 +16,31 @@ if(isset($_POST['submit'])){
     $dean = mysqli_real_escape_string($conn, $_POST['dean']);
     $dean = htmlspecialchars($dean);
 
+    $filename = $_FILES['org_file']['name'];
+    $destination = '../organization_uploads/' . $filename;
+    $extension = pathinfo($filename, PATHINFO_EXTENSION);
+    $file = $_FILES['org_file']['tmp_name'];
+    $size = $_FILES['org_file']['size'];
+
     $select = " SELECT * FROM organizations WHERE name = '$organization'; ";
     $result = mysqli_query($conn, $select);
 
     if(mysqli_num_rows($result) > 0){
         $_SESSION['status'] = "Organization already exist";
         $error[] = 'organization already exist!';
-    }else{
-        $insert = " INSERT INTO organizations(name, college_belong, college_dean) VALUES('$organization', '$college', '$dean'); ";
-        mysqli_query($conn, $insert);
-        $_SESSION['status'] = "Organization created successfully";
-        header('location:./manage_org.php');
-        die();
+    }
+
+    if(!in_array($extension, ['png', 'jpg', 'jpeg'])) {
+        echo "You cannot upload files of this type";
+    }
+    else{
+        if(move_uploaded_file($file, $destination)){
+            $insert = " INSERT INTO organizations(name, college_belong, college_dean, image) VALUES('$organization', '$college', '$dean', '$filename'); ";
+            mysqli_query($conn, $insert);
+            $_SESSION['status'] = "Organization created successfully";
+            header('location:./manage_org.php');
+            die();
+        }
     }
 };
 
@@ -37,7 +50,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
   $user_image = $_SESSION['image'];
 }
 
-if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
+if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin' && $_SESSION['user_type'] != 'admin') {
         // If the user is not an super admin, redirect them to a access denied page
         header('Location: ./error_pages/denied.php');
         die();
@@ -116,7 +129,10 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
             <!-- Main content -->
             
             <!-- form -->
-            <form action="" method="post">
+            <?php 
+                $isHidden = ($user_type !== "super_admin") ? 'none' : '';
+            ?>
+            <form action="" method="post" enctype="multipart/form-data" style="display: <?php echo $isHidden ?>">
                 <div class="card-body">
                     <div class="form-group">
                         <label for="organization">Organization Name</label>
@@ -146,6 +162,16 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                         <label for="dean">Dean Name</label>
                         <input type="text" name="dean" class="form-control" id="dean" placeholder="Dean Name">
                     </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputFile">Organization Image</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="org_file" id="org_file">
+                                <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card-footer">
@@ -170,13 +196,25 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                             <th>Name</th>
                             <th>College Under</th>
                             <th>Dean</th>
+                            <th>Image</th>
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                            $select_all_user = " SELECT * FROM organizations; "; 
+                            $sql_users = " SELECT * FROM user_tbl WHERE id = $user_id; ";
+                            $result_users = mysqli_query($conn, $sql_users);
+                            $row_users = mysqli_fetch_assoc($result_users);
+                            $user_org = $row_users['organization'];
+                            if($user_type === "admin"){
+                                $select_all_user = " SELECT * FROM organizations WHERE name = '$user_org'; "; 
+                            }
+                            else{
+                                $select_all_user = " SELECT * FROM organizations; "; 
+                            }
+
+                            
                             $result_all = mysqli_query($conn, $select_all_user);
                             $resultCheck = mysqli_num_rows($result_all);
 
@@ -190,6 +228,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                                         <td> <?php echo $row['name'] ?> </td>
                                         <td> <?php echo $row['college_belong'] ?> </td>
                                         <td> <?php echo $row['college_dean'] ?> </td>
+                                        <td> <img src="<?php echo '../organization_uploads/'.$row['image'] ?>" alt="profile" width="40px" height="40px" style="border-radius: 50px" /> </td>
 
                                         <td> <a href="./update_org.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
                                         <td> <a href="./delete_org.php?delete_id='<?php echo $row['id'] ?>'" class="delete btn btn-block btn-outline-danger"> Delete </a> </td>
@@ -205,6 +244,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                             <th>Name</th>
                             <th>College Under</th>
                             <th>Dean</th>
+                            <th>Image</th>
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>

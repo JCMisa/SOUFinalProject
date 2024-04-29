@@ -22,6 +22,16 @@
                         WHERE p.year = $currentYear AND p.organization = '$userOrganization'; ";
                     $result_desc = mysqli_query($conn, $sql_desc);
 
+                    $sql_users = " SELECT * FROM user_tbl WHERE id = $user_id; ";
+                    $result_users = mysqli_query($conn, $sql_users);
+                    $row_users = mysqli_fetch_assoc($result_users);
+                    $user_org = $row_users['organization'];
+
+                    $sql_image = " SELECT image FROM organizations WHERE name = '$user_org'; ";
+                    $result_image = mysqli_query($conn, $sql_image);
+                    $row_image = mysqli_fetch_assoc($result_image);
+
+
                     if (mysqli_num_rows($result_act) > 0 && mysqli_num_rows($result_desc) > 0) 
                     {
                         $activities = mysqli_fetch_all($result_act, MYSQLI_ASSOC);
@@ -33,7 +43,7 @@
                 ?>
                             <div class="col-md-12 col-lg-6 col-xl-4">
                                 <div class="plan-item card mb-2 bg-gradient-dark">
-                                    <img class="card-img-top" src="./profile_images/6621f62f831807.16544073.jpg" alt="Dist Photo 1">
+                                    <img class="card-img-top" src="../organization_uploads/<?php echo $row_image['image'] ?>" alt="Dist Photo 1">
                                     <div class="plan-content card-img-overlay d-flex flex-column justify-content-end">
                                         <h5 class="card-title text-primary text-white"> <?php echo $activities[$i]['activity'] ?> </h5>
 

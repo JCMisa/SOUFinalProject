@@ -63,6 +63,12 @@ $name = "JC";
         white-space: nowrap;
       }
 
+      td {
+        max-width: 100px;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
       /* The scrollbar itself */
       .plan-content::-webkit-scrollbar {
         width: 100%;
