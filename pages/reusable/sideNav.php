@@ -248,7 +248,7 @@
                   <ul class="nav nav-treeview">
                     <li class="nav-item">
                       <a href="./manage_members.php" class="nav-link">
-                        <i class="nav-icon fa-solid fa-id-card-clip"></i>
+                        <i class="far fa-circle nav-icon"></i>
                         <p>
                           Members
                         </p>
@@ -257,7 +257,7 @@
 
                     <li class="nav-item">
                       <a href="./manage_events.php" class="nav-link">
-                        <i class="nav-icon fa-solid fa-calendar-week"></i>
+                        <i class="far fa-circle nav-icon"></i>
                         <p>
                           Events
                         </p>
@@ -266,7 +266,7 @@
 
                     <li class="nav-item">
                       <a href="./manage_org.php" class="nav-link">
-                        <i class="nav-icon fa-solid fa-school"></i>
+                        <i class="far fa-circle nav-icon"></i>
                         <p>
                           Organization
                         </p>

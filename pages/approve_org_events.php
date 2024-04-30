@@ -79,7 +79,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                                 </div>
                             </a>
                             
-                            <h1 class="m-0">Manage Organizations</h1>
+                            <h1 class="m-0">Manage Events</h1>
                         </div>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
@@ -118,7 +118,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                                 <th>Status</th>
                                 <th>Organization</th>
                                 <th>Download</th>
-                                <th>Edit</th>
+                                <th>Status</th>
                                 <th>Delete</th>
                             </tr>
                         </thead>
@@ -154,9 +154,12 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                                             </td>
                                             <td> <?php echo $row['organization'] ?> </td>
 
-                                            <td> <a href="./update_org.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-success"> Download </a> </td>
-                                            <td> <a href="./update_org.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-info"> Edit </a> </td>
-                                            <td> <a href="./delete_org.php?delete_id='<?php echo $row['id'] ?>'" class="delete btn btn-block btn-outline-danger"> Delete </a> </td>
+                                            <?php 
+                                                $isBtnDisabled = ($row['status'] !== "pending") ? "disabled" : "";
+                                            ?>
+                                            <td> <a href="./download_event.php?file_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-success"> Download </a> </td>
+                                            <td> <a href="./update_event_status.php?update_id='<?php echo $row['id'] ?>'" class="btn btn-block btn-outline-info <?php echo $isBtnDisabled ?>"> Status </a> </td>
+                                            <td> <a href="./delete_activity.php?delete_id='<?php echo $row['id'] ?>'" class="delete btn btn-block btn-outline-danger"> Delete </a> </td>
                                         </tr>
                             <?php
                                     }
@@ -174,7 +177,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                                 <th>Status</th>
                                 <th>Organization</th>
                                 <th>Download</th>
-                                <th>Edit</th>
+                                <th>Status</th>
                                 <th>Delete</th>
                             </tr>
                         </tfoot>
