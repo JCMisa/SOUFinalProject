@@ -31,7 +31,7 @@ if(isset($_POST['submit'])){
     }
 
     if(!in_array($extension, ['png', 'jpg', 'jpeg'])) {
-        echo "You cannot upload files of this type";
+        $_SESSION['image_error'] = "Invalid image file type";
     }
     else{
         if(move_uploaded_file($file, $destination)){
@@ -92,6 +92,18 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin' &&
                     </div>
             <?php
                     unset($_SESSION['status']);
+                }
+            ?>
+
+            <?php
+                if(isset($_SESSION['image_error']))
+                {
+            ?>
+                    <div class="img-error-notif" style="z-index:100000; font-size:20px; background-color: #eb543d; padding: 10px 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7); position:fixed; top:5%; right:0; border-radius:5px;">
+                        <p style="color: white;"><?php echo $_SESSION['image_error'] ?></p>
+                    </div>
+            <?php
+                    unset($_SESSION['image_error']);
                 }
             ?>
             <!-- Content Header (Page header) -->
@@ -167,7 +179,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin' &&
                         <label for="exampleInputFile">Organization Image</label>
                         <div class="input-group">
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" name="org_file" id="org_file">
+                                <input type="file" class="custom-file-input" name="org_file" id="org_file" accept=".jpg, .jpeg, .png">
                                 <label class="custom-file-label" for="exampleInputFile">Choose file</label>
                             </div>
                         </div>

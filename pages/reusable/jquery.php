@@ -125,7 +125,17 @@
 
 <script>
   let updateNotif = document.querySelector('.update-notif');
-    setTimeout(() => {
-        updateNotif.style.display = 'none';
-    }, 5000);
+  setTimeout(() => {
+      updateNotif.style.display = 'none';
+  }, 5000);
+
+  let imgErrorNotif = document.querySelector('.img-error-notif');
+  setTimeout(() => {
+      imgErrorNotif.style.display = 'none';
+  }, 5000);
+
+  let imgSizeError = document.querySelector('.img-size-error');
+  setTimeout(() => {
+      imgSizeError.style.display = 'none';
+  }, 5000);
 </script>

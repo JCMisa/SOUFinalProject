@@ -77,7 +77,7 @@ if(isset($_POST['save']))
     $size = $_FILES['application_file']['size'];
 
     if(!in_array($extension, ['PDF', 'pdf', 'png', 'zip', 'docx'])) {
-        echo "You cannot upload files of this type";
+        $_SESSION['image_error'] = "Invalid file type";
     }
     else {
         $current_year = (new DateTime)->format("Y");
@@ -144,6 +144,18 @@ if(isset($_POST['save']))
                     </div>
             <?php
                     unset($_SESSION['status']);
+                }
+            ?>
+
+            <?php
+                if(isset($_SESSION['image_error']))
+                {
+            ?>
+                    <div class="img-error-notif" style="z-index:100000; font-size:20px; background-color: #eb543d; padding: 10px 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7); position:fixed; top:5%; right:0; border-radius:5px;">
+                        <p style="color: white;"><?php echo $_SESSION['image_error'] ?></p>
+                    </div>
+            <?php
+                    unset($_SESSION['image_error']);
                 }
             ?>
             <!-- Content Header (Page header) -->
@@ -433,7 +445,7 @@ if(isset($_POST['save']))
                             <label for="exampleInputFile">Upload File</label>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" name="application_file" id="application_file">
+                                    <input type="file" name="application_file" id="application_file" accept=".pdf, .docx, .zip">
                                 </div>
                                 <div class="input-group-append">
                                     <button type="submit" name="save" class="input-group-text btn btn-block bg-gradient-success btn-sm">Upload</button>

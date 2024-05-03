@@ -3,10 +3,11 @@
     session_start();
 
 
-    if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SESSION['image'])){
+    if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SESSION['image']) && isset($_SESSION['user_id'])){
         $user_type = $_SESSION['user_type'];
         $user_name = $_SESSION['user_name'];
         $user_image = $_SESSION['image'];
+        $user_id = $_SESSION['user_id'];
     }
 
     if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin' && $_SESSION['user_type'] != 'admin') {

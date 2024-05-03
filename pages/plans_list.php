@@ -3,10 +3,11 @@
     session_start();
 
 
-    if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SESSION['image'])){
+    if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SESSION['image']) && isset($_SESSION['user_id'])){
         $user_type = $_SESSION['user_type'];
         $user_name = $_SESSION['user_name'];
         $user_image = $_SESSION['image'];
+        $user_id = $_SESSION['user_id'];
     }
 
     if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin' && $_SESSION['user_type'] != 'admin') {
@@ -24,6 +25,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SOU Management System</title>
     <?php include_once './reusable/head.php'; ?>
+
+    <style>
+        td {
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">

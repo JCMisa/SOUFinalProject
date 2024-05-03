@@ -36,28 +36,29 @@ if(isset($_POST['create'])){
     $imageExtension = strtolower(end($imageExtension));
     if(!in_array($imageExtension, $validImageExtension))
     {
-        echo " <script> alert('Invalid Image Type'); </script> ";
+        $_SESSION['image_error'] = "Invalid image file type";
     }
     else if($fileSize > 2000000)
     {
-        echo " <script> alert('Image Size is Too Large'); </script> ";
+        $_SESSION['image_size_error'] = "Image size is too large";
     }
+    else{
+        $newImageName = uniqid('', true) . '.' . $imageExtension;
+        move_uploaded_file($tmpName, './profile_images/'.$newImageName);
 
-    $newImageName = uniqid('', true) . '.' . $imageExtension;
-    move_uploaded_file($tmpName, './profile_images/'.$newImageName);
 
 
+        if($pass != $cpass){
+            $error[] = 'password not matched!';
+        }else{
+            $insert = "INSERT INTO user_tbl(name, email, password, user_type, organization, birthday, image, course) 
+            VALUES('$name','$email','$pass','$user_type', '$organization', '$birthday', '$newImageName', '$course')";
+            mysqli_query($conn, $insert);
 
-    if($pass != $cpass){
-        $error[] = 'password not matched!';
-    }else{
-        $insert = "INSERT INTO user_tbl(name, email, password, user_type, organization, birthday, image, course) 
-        VALUES('$name','$email','$pass','$user_type', '$organization', '$birthday', '$newImageName', '$course')";
-        mysqli_query($conn, $insert);
-
-        $_SESSION['status'] = "Account Created Successfully";
-        header('location:./manage_user.php');
-        die();
+            $_SESSION['status'] = "Account Created Successfully";
+            header('location:./manage_user.php');
+            die();
+        }
     }
 };
 
@@ -123,6 +124,30 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                     </div>
             <?php
                     unset($_SESSION['status']);
+                }
+            ?>
+
+            <?php
+                if(isset($_SESSION['image_error']))
+                {
+            ?>
+                    <div class="img-error-notif" style="z-index:100000; font-size:20px; background-color: #eb543d; padding: 10px 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7); position:fixed; top:5%; right:0; border-radius:5px;">
+                        <p style="color: white;"><?php echo $_SESSION['image_error'] ?></p>
+                    </div>
+            <?php
+                    unset($_SESSION['image_error']);
+                }
+            ?>
+
+            <?php
+                if(isset($_SESSION['image_size_error']))
+                {
+            ?>
+                    <div class="img-size-error" style="z-index:100000; font-size:20px; background-color: #eb543d; padding: 10px 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7); position:fixed; top:5%; right:0; border-radius:5px;">
+                        <p style="color: white;"><?php echo $_SESSION['image_size_error'] ?></p>
+                    </div>
+            <?php
+                    unset($_SESSION['image_size_error']);
                 }
             ?>
             <!-- Content Header (Page header) -->
@@ -290,7 +315,23 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] != 'super_admin') {
                                         <td> <?php echo $row['password'] ?> </td>
                                         <td> <?php echo $row['organization'] ?> </td>
                                         <td> <?php echo $row['course'] ?> </td>
-                                        <td> <?php echo $row['birthday'] ?> </td>
+                                        <?php
+                                            $dbDate = strtotime($row['birthday']);
+                                            $dbDay = date('j', $dbDate);
+                                            $dbMonth = date('n', $dbDate);
+
+                                            $currentDay = date('j');
+                                            $currentMonth = date('n');
+
+                                            if($dbDay == $currentDay && $dbMonth == $currentMonth)
+                                            {
+                                                echo '<td style="color: green;">'. $row['birthday'] .'</td>';
+                                            }
+                                            else
+                                            {
+                                                echo '<td>' . $row['birthday'] . '</td>';
+                                            }
+                                        ?>
                                         <td> <img src="<?php echo './profile_images/'.$row['image'] ?>" alt="profile" width="40px" height="40px" /> </td>
                                         <td> <?php echo $row['user_type'] ?> </td>
 
