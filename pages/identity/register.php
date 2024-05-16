@@ -236,7 +236,7 @@ if(isset($_POST['submit'])){ //checks if input with type of submit is inside a f
 
           <div class="row">
             <!-- /.col -->
-            <div class="col-4">
+            <div class="col-12">
               <button type="submit" name="submit" class="btn btn-primary btn-block">Register</button>
             </div>
             <!-- /.col -->
