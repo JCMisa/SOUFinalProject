@@ -8,7 +8,7 @@ if(isset($_SESSION['user_id'])){
 
 $id = $_GET['details_id'];
 
-$sql = "SELECT * FROM plans WHERE user_id = $user_id";
+$sql = "SELECT * FROM plans WHERE id = $id";
 $result = mysqli_query($conn, $sql);
 $plan = mysqli_fetch_assoc($result);
 

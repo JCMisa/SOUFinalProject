@@ -82,7 +82,7 @@ if(isset($_POST['submit']))
     <div class="info-box bg-light">
     <div class="info-box-content">
     <span class="info-box-text text-center text-muted">Estimated students</span>
-    <span class="info-box-number text-center text-muted mb-0">2300</span>
+    <span class="info-box-number text-center text-muted mb-0">15,000</span>
     </div>
     </div>
     </div>
@@ -98,7 +98,7 @@ if(isset($_POST['submit']))
     <div class="info-box bg-light">
     <div class="info-box-content">
     <span class="info-box-text text-center text-muted">Number of Courses</span>
-    <span class="info-box-number text-center text-muted mb-0">20</span>
+    <span class="info-box-number text-center text-muted mb-0">30</span>
     </div>
     </div>
     </div>
