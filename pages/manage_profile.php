@@ -124,6 +124,18 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
             transform: translateY(-50%);
             cursor: pointer;
         }
+
+        @media (max-width: 800px) {
+            .profile-card {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+
+            .profile-form {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -189,7 +201,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
             <section class="content">
                 <div class="card">
                     <div class="card-body row">
-                        <div class="col-5">
+                        <div class="col-5 profile-card">
                             <div class="container-fluid mt-5">
                                 <div class="card card-primary card-outline">
                                     <div class="card-body box-profile">
@@ -229,7 +241,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
 
 
 
-                        <div class="col-7">
+                        <div class="col-7 profile-form">
                             <form action="" method="post" enctype="multipart/form-data">
                                 <div class="card-body">
                                     <div class="form-group">

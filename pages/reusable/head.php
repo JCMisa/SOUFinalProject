@@ -20,4 +20,19 @@
   <link rel="stylesheet" href="../app/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="../app/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
+  <style>
+
+    body::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+      }
+    body::-webkit-scrollbar-thumb {
+      background-color: #246ce0;
+    }
+
+    @media (max-width: 500px) {
+      
+    }
+  </style>
+
 

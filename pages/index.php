@@ -90,6 +90,12 @@ $name = "JC";
         background: #555;
       }
 
+      @media (max-width: 500px) {
+        .submission-stats {
+          display: none;
+        }
+      }
+
     </style>
 </head>
 
@@ -300,7 +306,7 @@ $name = "JC";
 
 
                   <!-- solid sales graph -->
-                  <div class="card bg-gradient-info">
+                  <div class="card bg-gradient-info submission-stats">
                     <div class="card-header border-0">
                       <h3 class="card-title">
                         <i class="fas fa-th mr-1"></i>

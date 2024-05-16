@@ -281,6 +281,18 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
                 gap: 310px;
             }
         }
+
+        @media(max-width: 800px) {
+            .ren-print {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+
+            .renewal-form {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -334,7 +346,7 @@ if(isset($_SESSION['user_type']) && isset($_SESSION['user_name']) && isset($_SES
             <section class="content">
                 <div class="card">
                     <div class="card-body row">
-                        <div class="col-5">
+                        <div class="col-5 ren-print">
                             <!-- commitment form, to be continued... -->
 
                             <div class="renewal-container">
