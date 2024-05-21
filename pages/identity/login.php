@@ -7,8 +7,8 @@ session_start();
 $loginError = "";
 if(isset($_POST['submit'])){
 
-   $name = mysqli_real_escape_string($conn, $_POST['name']);
-   $name = htmlspecialchars($name);
+  //  $name = mysqli_real_escape_string($conn, $_POST['name']);
+  //  $name = htmlspecialchars($name);
 
    $email = mysqli_real_escape_string($conn, $_POST['email']);
    $email = htmlspecialchars($email);
@@ -16,7 +16,7 @@ if(isset($_POST['submit'])){
    $pass = mysqli_real_escape_string($conn, $_POST['password']);
    $pass = htmlspecialchars($pass);
 
-   $select = " SELECT * FROM user_tbl WHERE name = '$name' && email = '$email' && password = '$pass' ";
+   $select = " SELECT * FROM user_tbl WHERE email = '$email' && password = '$pass' ";
 
    $result = mysqli_query($conn, $select);
 
@@ -88,14 +88,14 @@ if(isset($_POST['submit'])){
             <span style="color: red; font-size: 12px;"><?php echo $loginError ?></span>
           </div>
 
-          <div class="input-group mb-3">
+          <!-- <div class="input-group mb-3">
             <input type="text" name="name" class="form-control" placeholder="Username" required>
             <div class="input-group-append">
               <div class="input-group-text">
                 <span class="fas fa-id"></span>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <div class="input-group mb-3">
             <input type="email" name="email" class="form-control" placeholder="Email" required>

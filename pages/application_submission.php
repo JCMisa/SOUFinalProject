@@ -110,6 +110,7 @@
                                 <th>Form Type</th>
                                 <th>Size</th>
                                 <th>Attempts</th>
+                                <th>View</th>
                                 <th>Download</th>
                                 <th>Set Status</th>
                                 <th>Delete</th>
@@ -140,6 +141,9 @@
                                 <td> <?php echo $file['size'] / 1000 . "KB"; ?> </td>
                                 <td> <?php echo $file['downloads']; ?> </td>
 
+                                <td>
+                                    <a href="javascript:void(0)" onclick="window.open('./view_application_upload.php?file_id=<?php echo $file['id'] ?>&action=view', '_blank')" class="btn btn-block btn-outline-warning"> View </a> 
+                                </td>
                                 <td> 
                                     <a href="./download_application_upload.php?file_id='<?php echo $file['id'] ?>'" class="btn btn-block btn-outline-success"> Download </a> 
                                 </td>
@@ -165,6 +169,7 @@
                                 <th>Form Type</th>
                                 <th>Size</th>
                                 <th>Attempts</th>
+                                <th>View</th>
                                 <th>Download</th>
                                 <th>Set Status</th>
                                 <th>Delete</th>
